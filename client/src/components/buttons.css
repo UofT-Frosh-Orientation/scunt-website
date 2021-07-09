@@ -1,0 +1,360 @@
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+.button {
+  background-image: linear-gradient(to right, #FFC112,#FFC112, rgb(255, 226, 146), rgb(255, 233, 172), #FFC112, #FFC112);
+  background-size:400%;
+  text-align: center;
+  color: #6F1E88;
+  font-size: 20px;
+  border-radius: 10px;
+  padding-top: 8px;
+  padding-bottom: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: inline-block;
+  transition: background-position 0.8s, box-shadow 0.1s;
+  box-shadow: 0 0.2vw 0.5vw 0 #0000003b;
+  cursor: pointer;
+  user-select: none;
+  font-family: AvenirLTStd-Black;
+  border: #FFC112;
+  border-style: solid;
+}
+
+.button:hover{
+  background-position:100%;
+  transition-duration: 1s;
+}
+
+.button:active{
+  transition: box-shadow 0.1s;
+  box-shadow: 0 0.2vw 0.5vw 0 #00000000;
+}
+
+.buttonDisabled {
+  background-image: linear-gradient(to right, #fffeee9a,#fffeee9a, #fffeee9a, #ffffff9a, #ffffff9a, #ffffff9a);
+  border: #ffe9adb0;
+  border-style: solid;
+  box-shadow: 0 0.2vw 0.5vw 0 #00000000;
+  color: #6f1e88a9;
+}
+
+.buttonDisabled:active{
+  box-shadow: 0 0.2vw 0.5vw 0 #00000000;
+}
+
+.buttonSecondary{
+  background-image: linear-gradient(to right, #ffe9adb0,#ffe9adb0, #ffffff9a, #ffffff9a, #ffe9adb0, #ffe9adb0);
+  background-size:400%;
+  text-align: center;
+  color: #6F1E88;
+  font-size: 20px;
+  border-radius: 10px;
+  padding-top: 8px;
+  padding-bottom: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: inline-block;
+  transition: background-position 0.8s, box-shadow 0.1s;
+  box-shadow: 0 0.2vw 0.5vw 0 #0000001e;
+  cursor: pointer;
+  user-select: none;
+  font-family: AvenirLTStd-Black;
+  border: #FFC112;
+  border-style: solid;
+}
+
+.buttonSecondary:hover{
+  background-position:100%;
+  transition-duration: 1s;
+}
+
+.buttonSecondary:active{
+  box-shadow: 0 0.2vw 0.5vw 0 #00000000;
+  transition: box-shadow 0.1s;
+}
+
+.buttonLarge{
+  font-size: 26px;
+  padding-top: 13px;
+  padding-bottom: 12px;
+  padding-left: 28px;
+  padding-right: 28px;
+  border-radius: 12px;
+}
+
+@media only screen and (max-width: 767px) {
+  .button {
+    padding-top: 7px;
+    padding-bottom: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 16px;
+  }
+  .buttonSecondary{
+    padding-top: 7px;
+    padding-bottom: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 16px;
+  }
+  .buttonLarge {
+    font-size: 20px;
+    padding-top: 8px;
+    padding-bottom: 7px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+
+#dropdownMenuButton{
+  background-color: #f9e7ff;
+  border-radius: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  transition: color 0.5s, filter 0.5s, background-color 0.5s;
+  text-decoration: none;
+  font-size: 18px;
+  display: inline-block;
+  color:#000000;
+  text-decoration: none;
+  border: 2px solid #6f1e8893;
+  transition: border 0.5s;
+  text-decoration: none;
+  font-family: AvenirLTStd-Roman;
+}
+
+#dropdownMenuButton:hover, #dropdownMenuButton:focus {
+  border: 2px solid #6F1E88;
+  outline: none;
+}
+.dropdownMenuSelected .dropdown-toggle{
+  background-color:#6F1E88 !important;
+  color: white;
+}
+.dropdownMenuNotSelected .dropdown-toggle,
+.dropdownMenuNotSelected .dropdown-toggle:focus,
+.dropdownMenuNotSelected .dropdown-toggle:active{
+  background-color: transparent !important;
+  color: black !important;
+}
+
+#dropdownMenuButtonNavbar{
+  border-radius: 15px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  padding-right: 15px;
+  padding-left: 15px;
+  transition: color 0.5s, filter 0.5s, background-color 0.5s;
+  text-decoration: none;
+  font-size: 20px;
+  display: inline-block;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: border 0.5s;
+  text-decoration: none;
+  font-family: AvenirLTStd-Roman;
+}
+@media only screen and (max-width: 1080px) {
+  #dropdownMenuButtonNavbar{
+    padding-bottom: 6px;
+    padding-top: 6px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  #dropdownMenuButtonNavbar{
+    font-size: 16px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+
+#dropdownMenuButtonNavbar:hover, #dropdownMenuButtonNavbar:focus {
+  border: 2px solid #6F1E88;
+  outline: none;
+}
+
+.dropdown-menu{
+  padding:0px;
+  border-radius: 7px;
+}
+
+.dropdownMenu .dropdown-item:hover, .dropdownLink:hover {
+  background-color: #c5a3cf;
+}
+
+.dropdown-item{
+  text-decoration: none !important;
+  color: black !important;
+  padding:0px 0px;
+}
+
+.dropdown-item .textInfo{
+  padding:10px 20px;
+}
+
+.dropDownItemSelected{
+  background-color: #c78ada;
+}
+
+.dropdownMenu .dropdown .dropdown-menu {
+  transition:visibility 0.3s, opacity 0.33s;
+  opacity: 0;
+  visibility: hidden;
+  display: block;
+  overflow: hidden;
+  background-color: rgb(228, 228, 228);
+  box-shadow: 0 5px 10px 0 #0000002d;
+  animation: dropdownReverse 0.5s forwards;
+}
+
+@keyframes dropdown {
+  0%{transform: translateY(0px) scale(0.8);}
+  100%{transform: translateY(40px) scale(1);}
+}
+
+@keyframes dropdownReverse {
+  0%{transform: translateY(40px) scale(1);}
+  100%{transform: translateY(0px) scale(0.8);}
+}
+
+.dropdownMenu .dropdown.show .dropdown-menu {
+  transition: visibility 0s, opacity 0.33s;
+  opacity: 1;
+  visibility: visible;
+  animation: dropdown 0.5s forwards;
+}
+
+.dropdownMenu .dropdown-menu a {
+  color: black;
+  transition: all 0.2s;
+}
+.dropdownMenu .dropdown-menu a:hover {
+  transition: all 0.33s;
+}
+
+.linkLink{
+  text-decoration: none !important;
+}
+
+.buttonImage{
+  border: 2px solid #6f1e8869;
+  border-radius: 5px;
+  background-color: #fdf8ff;
+  display:inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s, border 0.3s;
+}
+
+.buttonImage:hover{
+  background-color: #f9e7ff;
+}
+
+.buttonImageSelected{
+  border: 3px solid #6f1e88b9;
+  background-color: #f5dcff;
+}
+
+.buttonImageSelected:hover{
+  border: 3px solid #6f1e88;
+  background-color: #f5dcff;
+}
+
+.buttonImageImage{
+  width:100px;
+  margin: 10px;
+  margin-bottom: 0px;
+}
+
+.buttonNavbar{
+  background-color: transparent;
+  border-radius: 15px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  padding-right: 15px;
+  padding-left: 15px;
+  transition: filter 0.5s, background-color 0.5s;
+  text-decoration: none;
+  display: inline-block;
+  border: 2px solid transparent;
+  transition: border 0.5s;
+  text-decoration: none;
+  cursor: pointer;
+}
+.buttonNavbarLabel{
+  color:#000000;
+}
+@media only screen and (max-width: 1080px) {
+  .buttonNavbar{
+    padding-bottom: 6px;
+    padding-top: 6px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .buttonNavbar{
+    font-size: 16px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+
+.buttonNavbarSelected{
+  background-color: #6F1E88;
+  transition:background-color 0.8s;
+}
+
+.buttonNavbarLabelSelected{
+  color: #ffffff;
+  transition: color 0.8s;
+}
+
+.buttonNavbar:hover{
+  border: 2px solid #6F1E88;
+}
+
+.buttonBubble{
+  padding: 10px 20px;
+  background-color: #6f1e883a;
+  border-radius: 10px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  margin: 10px 0px;
+}
+
+.buttonBubbleAccent{
+  border: solid 2px;
+  padding: 8px 20px;
+  border-color: #6f1e8854;
+  background-color: #6f1e880e;
+}
+
+.buttonBubble:hover{
+  background-color: #6f1e8875;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 5px 10px 0 #0000002d;
+}
+
+
+.noUnderline{
+  text-decoration: none !important;
+}

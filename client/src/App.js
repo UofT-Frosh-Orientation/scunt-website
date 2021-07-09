@@ -1,23 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { HeaderPage, HeaderParagraph, HeaderSection } from "./components/texts"
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <HeaderPage img={require("./assets/banners/about_us.svg").default}> Scunt 2021 </HeaderPage>
+      <HeaderSection> Missions </HeaderSection>
+      <HeaderParagraph> Welcome to Scunt! </HeaderParagraph>
     </div>
   );
 }
