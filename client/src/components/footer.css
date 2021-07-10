@@ -1,0 +1,23 @@
+.footer p{
+  margin:0;
+}
+.footer{
+  padding: 20px;
+  margin-top: 5vw;
+  border-radius: 15px 15px 0px 0px;
+  background-color: #6f1e8833;
+  box-shadow: 0 -5px 15px 0 #00000018;
+}
+
+.footerSocialMedias{
+  float:left;
+}
+
+@media only screen and (max-width: 767px) {
+  .footer{
+    padding: 20px;
+  }
+  .footerSocialMedias{
+    display: none;
+  }
+}

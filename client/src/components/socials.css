@@ -1,0 +1,148 @@
+
+.socialMediaIcon{
+  transition: filter 0.4s,
+}
+.socialMediaIcon:hover{
+  filter: drop-shadow(0px 2px 3px #6f1e888a);
+  transition: filter 0.2s,
+}
+
+.emailContactHeader{
+  background-color: #EBEBEB;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  margin: 0vw 1vw;
+  margin-top: 1vw;
+  text-align: center;
+  font-size: 27px;
+  font-family: AvenirLTStd-Black;
+  color: rgb(80, 80, 80);
+  border-radius: 10px 10px 0px 0px;
+}
+
+.emailContact{
+  background-color: whitesmoke;
+  padding-top:1.3vh;
+  padding-bottom: 1.3vh;
+  margin: 0vw 1vw;
+  text-align: center;
+  font-size: calc(36px);
+  color: #6F1E88;
+  font-family: AvenirLTStd-Black;
+  user-select: all;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.emailContact a{
+  color: #6F1E88;
+  text-decoration: underline;
+  text-decoration-color: transparent !important;
+  transition: text-decoration-color 0.4s
+}
+
+.emailContact a:hover{
+  color: #6F1E88;
+  text-decoration: underline !important;
+  text-decoration-color: #6F1E88;
+  transition: text-decoration-color 0.4s
+}
+
+
+@media only screen and (max-width: 767px) {
+  .emailContactHeader{
+    font-size: 17px;
+    margin: 0vw 1vw;
+    margin-top: 10px;
+  }
+
+  .emailContact{
+    font-size: 20px;
+    padding: 5px 10px;
+    margin: 0vw 1vw;
+  }
+}
+
+.socialIconLarge{
+  display: block;
+  width: 12vw;
+  height: 12vw;
+  transition: 0.6s;
+}
+
+.socialIconLarge img{
+  transform: translate(75%, 75%);
+  width:40%;
+  height:40%;
+  filter: invert(100%);
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.socialIconLarge:hover{
+  transition: 0.35s ;
+  width: 14.3vw;
+  height: 14.3vw;
+  margin-top: -2vw;
+  margin-bottom: -2vw;
+}
+
+.socialIconLarge > img{
+  transition: transform 0.4s, width 0.4s, height 0.4s
+}
+
+.socialIconLarge:hover > img{
+  transform: translate(115%, 115%);
+  width:30%;
+  height:30%;
+}
+
+.socialIconLarge:hover{
+  border-radius: 1.5vw;
+}
+
+
+@media only screen and (max-width: 767px) {
+  .socialIconLarge{
+    width: 25vw;
+    height: 25vw;
+    transition: 0s;
+  }
+  
+  .socialIconLarge:hover{
+    width: 25vw;
+    height: 25vw;
+  }
+
+  .socialIconLarge:hover > img{
+    transform: translate(75%, 75%);
+    width:40%;
+    height:40%;
+  }
+  
+  .socialIconLarge:hover{
+    border-radius: 0px;
+  }
+}
+
+.not-email-clickable{
+  user-select: none;
+}
+
+.clickable {
+  transition: background-color 0.6s
+}
+
+.clickable:hover {
+  background-color: #6f1e8809;
+  transition: background-color 0.2s
+}
+
+.clickable > div{
+  transition: transform 0.6s;
+}
+
+.clickable:hover > div{
+  transform: scale(1.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
