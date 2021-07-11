@@ -10,8 +10,13 @@
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
+    "react-lazy-load-image-component": "^1.5.1",
+    "react-particles-js": "^3.5.3",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-tsparticles": "^1.31.1",
     "react-wavify": "^1.5.2",
+    "tsparticles": "^1.31.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

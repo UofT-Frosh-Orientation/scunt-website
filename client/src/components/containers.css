@@ -1,0 +1,419 @@
+.accordionArrowOpen{
+  transform: rotate(180deg);
+  float:right;
+  transition: transform 0.5s;
+  width: 20px;
+  height:20px;
+  margin-top: 5px;
+}
+
+.accordionArrowClosed{
+  transform: rotate(0deg);
+  float:right;
+  transition: transform 0.5s;
+  width: 20px;
+  height:20px;
+  margin-top: 5px;
+}
+
+.accordionHeader {
+  padding-left:23px;
+  padding-right: 23px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  cursor: pointer;
+  background-color: #6f1e8827 !important;
+  transition: background-color 0.5s;
+}
+
+.accordionHeader:hover {
+  transition: background-color 0.5s;
+  background-color: #6f1e8815 !important;
+}
+
+.card {
+  background-color: #6f1e8815;
+}
+
+.popupModalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:100vw;
+  height:100vh;
+}
+
+.popupModalContainerAbsolute {
+  position: fixed;
+}
+
+.customPositionClassExample{
+  bottom: 30px;
+  right: 10px;
+  width: 500px;
+  height: 200px;
+}
+
+.customPositionClassExample2{
+  bottom: 30px;
+  right: 10px;
+}
+
+.popupModal {
+  max-width: 80%;
+  max-height: 75%;
+  background-color: #fcf2ff;
+  z-index: 100;
+  border-radius: 15px;
+  padding: 30px;
+  filter: drop-shadow(0px 3px 6px #6f1e8848);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.popupModalSmall {
+  border-radius: 15px;
+  padding: 0px;
+  padding: 10px;
+}
+
+.popupModal::-webkit-scrollbar {
+  width: 5px;
+}
+
+.popupModal::-webkit-scrollbar-track {
+  background: #00000000; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(182, 182, 182);
+}
+
+
+.popupModalBlur{
+  backdrop-filter: blur(10px);
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.popupModalClickBackground{
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.popupModalShownBlur {
+  opacity: 1;
+  animation: fadeIn 0.2s forwards;
+}
+
+.popupModalHiddenBlur {
+  opacity: 1;
+  animation: fadeOut 0.2s forwards;
+  pointer-events: none;
+}
+
+.popupModalShown {
+  opacity: 1;
+  animation: scaleIn 0.2s;
+}
+
+.popupModalHidden {
+  pointer-events: none;
+  animation: scaleOut 0.4s;
+  opacity: 0;
+}
+
+@keyframes scaleOut{
+  0% {opacity: 1; transform: scale(1)}
+  100% {opacity: 0; transform: scale(1.05)}
+}
+
+@keyframes scaleIn{
+  0% {opacity: 0; transform: scale(1.05)}
+  100% {opacity: 1; transform: scale(1)}
+}
+
+.popupModalExit {
+  width:55px;
+  height:55px;
+  position: absolute;
+  right:0px;
+  top:0px;
+  padding: 13px;
+  margin:10px;
+  transition: transform 0.5s;
+}
+
+.popupModalExit:hover {
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 767px) {
+  .popupModal {
+    max-width: 90%;
+    max-height: 80%;
+    margin-top: 40px;
+  }
+  .popupModalExit {
+    margin:0px;
+    width:50px;
+    height:50px;
+  }
+}
+
+.popupModalExitSmall {
+  width:27px;
+  height:27px;
+  right:-5px;
+  top:-2px;
+  padding: 6px;
+  margin: 0px;
+}
+
+.ticketInvertedCorner {
+  box-sizing:border-box;
+  position: relative;
+  background-color: #6F1E88;
+  min-height: 200px;
+  width: 100%;
+  border: solid #FFC112 5px;
+}
+
+.ticketWrapper {
+  overflow:hidden;
+  width: 100%;
+  height: 200px;
+  transition: transform 0.8s;
+}
+
+.ticketWrapperHover:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.ticketTop, .ticketBottom {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left:0;
+}
+
+.ticketTop:before, .ticketTop:after, .ticketBottom:before, .ticketBottom:after{
+  content:" ";
+  position:absolute;
+  width: 70px;
+  height: 70px;
+  background-color: #fff;
+  border: solid #FFC112 5px;
+  border-radius: 70px; 
+}
+
+.ticketTop:before {
+  top:-35px;
+  left:-35px;
+}
+
+.ticketTop:after {
+ top: -35px;
+ right: -35px;
+}
+
+.ticketBottom:before {
+  bottom:-35px;
+  left:-35px;
+}
+
+.ticketBottom:after {
+ bottom: -35px;
+ right: -35px; 
+}
+
+.ticketContainer{
+  height:170px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align: center;
+  margin:10px;
+}
+
+.ticketContainer > h1 {
+  font-size: 60px;
+}
+
+@media only screen and (max-width: 767px) {
+  .ticketContainer > h1 {
+    font-size: 45px;
+  }
+}
+
+.snackbarContainer{
+  position: fixed;
+  z-index: 300;
+  bottom:0;
+  left:0;
+  width:100vw;
+  background-color: #6f1e88;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -5px 12px 0 #00000048;
+  text-align: center;
+}
+
+.snackbarClear{
+  transition: transform 0.5s;
+  width:58px;
+  padding:20px;
+  position: absolute;
+  right:30px;
+  filter: invert(1);
+  z-index: 10;
+}
+
+.snackbarClear:hover{
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+
+.snackbarSlideUp{
+  animation: snackbarSlideUp 0.7s forwards ;
+}
+
+.snackbarSlideDown{
+  animation: snackbarSlideDown 0.7s forwards ;
+}
+
+@keyframes snackbarSlideUp{
+  0% {transform: translateY(100%)}
+  100% {transform: translateY(0px);}
+}
+
+@keyframes snackbarSlideDown{
+  0% {transform: translateY(0px)}
+  100% {transform: translateY(100%);}
+}
+
+@media only screen and (max-width: 767px) {
+  .snackbarClear{
+    right:10px;
+    width: 54px;
+  }
+}
+
+.aboutAccountHeader > h1 {
+  font-size: 70px;
+}
+
+@media only screen and (max-width: 767px) {
+  .aboutAccountHeader > h1 {
+    font-size: 45px;
+  }
+}
+
+.loadingAnimationContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingAnimation{
+  position: absolute;
+  border-radius: 100%;
+  border: 4px solid #6F1E88;
+  border-radius: 50%;
+  animation: scaleLoad 2s infinite;
+}
+
+@keyframes scaleLoad {
+  0%{transform: scale(0); opacity: 0;}
+  50%{opacity: 0.5;}
+  100%{transform: scale(1);  opacity: 0;}
+}
+
+.loadingAnimationDelay1 {
+  animation-delay: -0.5s;
+}
+
+.loadingAnimationDelay2 {
+  animation-delay: -1s;
+}
+
+.checkApprovedLabel{
+  opacity: 0
+}
+
+.checkApprovedLabelIn{
+  animation: checkInLabel 0.6s forwards;
+}
+
+@keyframes checkInLabel {
+  0%{opacity: 0; transform: scaleX(1.2);}
+  100%{opacity:1;}
+}
+
+.checkApproved{
+  width:50%;
+  height:50%;
+  filter: invert(1);
+}
+
+.checkApprovedIn{
+  animation: checkIn 2s infinite;
+}
+
+@keyframes checkIn {
+  0%{transform: scale(1);}
+  80%{transform: scale(0.8);}
+  100%{transform: scale(1);}
+}
+
+.checkApprovedContainer{
+  opacity:0;
+  border-radius: 1000px;
+  background-color: #3ca73c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkApprovedContainerIn{
+  animation: checkInContainer 0.7s forwards;
+}
+
+@keyframes checkInContainer {
+  0%{opacity:0; transform: scale(0.6);}
+  80%{transform: scale(1.1); box-shadow: 0 7px 5px 0 #00000067;}
+  100%{opacity: 1; transform: scale(1); box-shadow: 0 0px 10px 0 #0000006c;}
+}
+
+.containerNote{
+  padding: 20px;
+  background-color: #6f1e8815;
+  border-radius: 15px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-left: #6f1e88c7 solid 4px;
+  display: inline-block;
+  box-shadow: 0 5px 10px 0 #00000025;
+  transition: box-shadow 0.5s, border-left 0.5s, padding-left 0.5s;
+}
+
+.containerNote:hover{
+  box-shadow: 0 8px 10px 0 #00000036;
+  border-left: #6f1e88e3 solid 10px;
+  padding-left: 15px;
+}

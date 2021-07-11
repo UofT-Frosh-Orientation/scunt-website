@@ -1,0 +1,132 @@
+
+img {
+    max-width: 100%;
+  }
+
+/* ------------- Frosh Team --------------- */
+
+
+/* ------------ profilePicture  --------- */
+
+
+.profile {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+
+    
+}
+
+.profileImage {
+    display: block;
+    width: 100%;
+    height: auto;
+    
+    
+}
+
+.profileTitleContainer {
+    
+    bottom: 0;
+    
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #6f1e88;
+    width: 100%
+    
+}
+
+.waveOverlay{
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    bottom: 0;
+    
+  }
+
+.profileName {
+    position: relative;
+    
+    z-index: 1;
+    padding: 10px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+
+}
+
+.mobileName {
+    font-size: 24px;
+    text-align: center;
+}
+
+
+.profileOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #6f1e88ea;
+    overflow: hidden;
+   
+    width: 100%;
+    height: 0;
+    transition: 0.5s ease;
+
+    z-index: 2;
+  }
+
+  
+  .profile:hover .profileOverlay {
+    height: 100%;
+    overflow-y: auto;
+
+    z-index: 2;
+
+  }
+
+  .overlayText {
+    color: white;
+    font-size: 18px;
+
+    position: static;
+    
+    padding: 20px;
+    padding-left: 5px;
+    padding-right: 20px;
+
+    filter: drop-shadow(0.1vw 0.1vw 0.1vw rgba(0, 0, 0, 0.24));
+    font-family: AvenirLTStd-Roman;
+    
+    
+    text-align: left;
+
+
+  }
+
+  /* ------------- Responsive Design ---------- */
+
+  @media only screen and (max-width: 767px) { 
+
+    .profileTitleContainer {
+    
+        
+        padding-top: 0px;
+        padding-bottom: 10px;
+        
+        
+    }
+
+    .profileName {
+        
+        padding-bottom: 30px;
+        padding-top: 0px;
+        
+        
+    }
+
+    .mobileName {
+        font-size: 28px;
+    }
+
+  }
+ 
