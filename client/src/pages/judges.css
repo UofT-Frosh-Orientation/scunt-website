@@ -28,6 +28,10 @@
     margin: 1vw;
 
     overflow: hidden;
+    min-height: 25vw;
+    border-radius: 30px;
+    box-shadow: 0 5px 10px 5px #00000025;
+    transition: box-shadow 0.5s; 
     
 }
 
@@ -38,7 +42,6 @@
 }
 
 
-  
 
 
 

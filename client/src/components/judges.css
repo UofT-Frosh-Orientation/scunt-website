@@ -14,11 +14,6 @@ img {
     width: 100%;
     height: fit-content;
 
-    min-height: 25vw;
-    border-radius: 30px;
-    box-shadow: 0 5px 10px 5px #00000025;
-    transition: box-shadow 0.5s; 
-
     
 }
 
@@ -95,8 +90,8 @@ img {
 
     position: static;
     
-    padding: 25px;
-    padding-left: 10px;
+    padding: 20px;
+    padding-left: 5px;
     padding-right: 20px;
 
     filter: drop-shadow(0.1vw 0.1vw 0.1vw rgba(0, 0, 0, 0.24));
