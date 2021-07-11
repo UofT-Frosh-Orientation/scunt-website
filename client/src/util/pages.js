@@ -1,5 +1,6 @@
 import Missions from "../pages/missions"
 import Judges from "../pages/judges"
+import Rules from "../pages/rules"
 
 export const pages = {
   "main" : [
@@ -12,7 +13,12 @@ export const pages = {
       "title": "Judges",
       "link": "/",
       "component" : <Judges/>
-    }
+    },
+    {
+      "title": "Rules",
+      "link": "/",
+      "component" : <Rules/>
+    },
   ],
   "resources" : [
     

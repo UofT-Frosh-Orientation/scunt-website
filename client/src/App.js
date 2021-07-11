@@ -1,6 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Missions from "./pages/missions"
+
 import {BrowserRouter,Route,Redirect,Switch} from 'react-router-dom'
 import ScrollToTop from "./components/scrollToTop"
 import {pages} from "./util/pages"
@@ -9,10 +9,15 @@ import {TransitionGroup,CSSTransition} from 'react-transition-group'
 import Footer from "./components/footer"
 import {error404} from './pages/error404'
 
-function App() {
+
+export default function App() {
 
   const navbarRef = React.useRef();
 
+  React.useEffect(() => {
+    handlePageChange(window.location.pathname);
+    
+  }, []);
 
   function handlePageChange(link){
     navbarRef.current?.handlePageChange(link);
@@ -23,6 +28,7 @@ function App() {
       <Route render={({ location }) => {
         // console.log(location)
         //if(location.search.includes('froshLogin=true')) setLoginPopupState(true)
+        
         return (
         <div style={{position:"absolute",right:0, left:0, bottom:0, top:0}}>
 
@@ -35,20 +41,21 @@ function App() {
 
                 {[...pages["main"],...pages["resources"],...pages["hidden"]].map((item, index)=>{
                   
-                    return ( <Route path={item.link} exact render= { 
-                        ()=> {
-                      
-                        handlePageChange(item.link); return (
-                          
-                          <div style={{position:"absolute",right:0, left:0, bottom:0, top:0}}>
-                            {item.component}
-                            <Footer/>
-                          </div>
+                      return ( <Route path={item.link} exact render= { ()=> { 
+                        
+                        handlePageChange(item.link); 
+                        return (
+                            
+                            <div style={{position:"absolute",right:0, left:0, bottom:0, top:0}}>
+                              {item.component}
+                              <Footer/>
+                            </div>
 
-                        )
-                      }
-                    } key={item.link}/> 
-                    )
+                          )
+                        }
+                      } key={item.link}/> 
+                      )
+                    
                 } ) }
 
                 <Route path='/404' component={error404} />
@@ -64,4 +71,4 @@ function App() {
   );
 }
 
-export default App;
+

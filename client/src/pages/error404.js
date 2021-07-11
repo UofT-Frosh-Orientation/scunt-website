@@ -2,6 +2,8 @@ import React,{Component} from 'react'
 import {FroshWeekIcon} from "../components/socials"
 import Wave from 'react-wavify'
 import Particles from 'react-particles-js';
+//import { tsParticles } from "tsparticles";
+
 import {HeaderFancy, TextAccent} from "../components/texts"
 
 export class error404 extends Component {
