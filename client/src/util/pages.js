@@ -11,12 +11,12 @@ export const pages = {
     },
     {
       "title": "Judges",
-      "link": "/",
+      "link": "/judges",
       "component" : <Judges/>
     },
     {
       "title": "Rules",
-      "link": "/",
+      "link": "/rules",
       "component" : <Rules/>
     },
   ],

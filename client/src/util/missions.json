@@ -1,0 +1,19 @@
+{
+    "Missions": [
+        {
+            "title": "Event1 really long name test",
+            "points": "100",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n"
+        },
+        {
+            "title": "Event2",
+            "points": "200",
+            "description": "TestDescription 2"
+        },
+        {
+            "title": "Event3",
+            "points": "300",
+            "description": "TestDescription 3"
+        }
+    ]
+}
