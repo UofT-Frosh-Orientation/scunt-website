@@ -20,8 +20,8 @@
 }
 
 .judgesList > div {
-    flex: 20vw;
-    max-width: 30vw;
+    flex: 22vw;
+    max-width: 25vw;
     text-align: center;
     justify-content: space-between; 
 
