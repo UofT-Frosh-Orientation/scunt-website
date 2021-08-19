@@ -417,3 +417,42 @@
   border-left: #6f1e88e3 solid 10px;
   padding-left: 15px;
 }
+
+/* Scunt Specific Things */
+.mission-row {
+  background: #6f1e8815;
+  border-radius: 5px;
+  padding: 0.75rem 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.mission-row h6 {
+  font-family: AvenirLTStd-Black;
+  color: #6F1E88;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 0 0 1px 0;
+}
+
+.mission-row p {
+  font-size: 15px !important;
+  padding: 0;
+  margin: 0;
+}
+
+/* .mission-row .col-md-1,
+.mission-row .col-md-2,
+.mission-row .col-md-3,
+.mission-row .col-md-4,
+.mission-row .col-md-5,
+.mission-row .col-md-6,
+.mission-row .col-md-7,
+.mission-row .col-md-8,
+.mission-row .col-md-9,
+.mission-row .col-md-10,
+.mission-row .col-md-11,
+.mission-row .col-md-12,
+.mission-row .col {
+  vertical-align: middle;
+  text-align: center;
+} */

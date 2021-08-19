@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import {HeaderBold} from "./texts"
 import {FroshWeekIcon} from "./socials"
 import {pages} from "../util/pages"
-// import {LoginButton} from "./login"
+import {LoginButton} from "./login"
 
 
 export class Navbar extends Component {
@@ -20,17 +20,22 @@ export class Navbar extends Component {
     this.setState({open:state})
     this.firstOpen = false;
   }
-  /* setLoginPopupState = (state) => {
+  setLoginPopupState = (state) => {
     this.loginButton?.openLogin(state);
-  } */
+  }
   handlePageChange = (currentLink) => {
     let currentPage = this.getCurrentPageName(currentLink);
     this.setState({currentLink:currentLink, currentName: currentPage["title"], categorySelected: currentPage["category"]})
   }
-  /* handleLoginChange = (status, initials) => {
-    this.loginButton.setLoginStatus(status,initials)
-    this.setState({loginStatus: status, loginInitials: initials})
-  } */
+  handleLoginChange = (status, initials, accountType, name) => {
+    this.loginButton.setLoginStatus(status,initials,accountType,name)
+    this.setState({
+      loginStatus: status, 
+      loginInitials: initials,
+      loginAccountType: accountType, 
+      loginName: name
+    })
+  }
 
   getCurrentPageName = (currentLink) => {
     var keys = Object.keys(pages)
@@ -46,15 +51,15 @@ export class Navbar extends Component {
 
   
   render(){
-    let froshWeekIcon = <div onClick={()=>{this.setState({open:false})}} style={{position:"fixed", zIndex:210, left:"1.5%", top:"4px"}}>
+    const froshWeekIcon = <div onClick={()=>{this.setState({open:false})}} style={{position:"fixed", zIndex:210, left:"1.5%", top:"4px"}}>
       <FroshWeekIcon width="59px" height="59px" linkHome logo={require("../assets/logos/Main Logo/2T1 Octopus Logo transparent-04.png").default}/>
     </div>
-    /* let loginButton = <div onClick={()=>{this.setState({open:false})}} style={{position:"fixed", zIndex:211, right:"1.5%", top:"9px"}}>
+    const loginButton = <div onClick={()=>{this.setState({open:false})}} style={{position:"fixed", zIndex:211, right:"1.5%", top:"9px"}}>
       <LoginButton ref={(loginButton)=> this.loginButton = loginButton} handleLoginChange={this.props.handleLoginChange}/>
-    </div> */
+    </div>
     return(
       <>
-        
+        {loginButton}
         {froshWeekIcon}
         <div className="navbar" id="navbarLarge">
           {this.navbarPages["main"].map((item, index)=>{
