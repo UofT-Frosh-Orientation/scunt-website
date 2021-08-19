@@ -1,0 +1,65 @@
+{
+	"name": "frosh-backend-express",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"repository": "froshweek3.0",
+	"scripts": {
+		"test": "jest",
+		"start": "nodemon server.js",
+		"server": "npm run client-build && nodemon server.js",
+		"clean": "rm -rf node_modules",
+		"start-client": "cd client && npm run start",
+		"dev": "cd client && npm run build && cd .. && nodemon server.js",
+		"heroku-postbuild": "cd client && npm install && npm run build",
+		"client-clean": "cd client && rm -rf node_modules && rm -rf build",
+		"client-build": "cd client && npm install && npm run build"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"jest": {
+		"testEnvironment": "node",
+		"testPathIgnorePatterns": [
+			"/node_modules/",
+			"client"
+		]
+	},
+	"dependencies": {
+		"axios": "^0.21.1",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.19.0",
+		"concurrently": "^5.2.0",
+		"connect-flash": "^0.1.1",
+		"cors": "^2.8.5",
+		"crypto": "^1.0.1",
+		"email-validator": "^2.0.4",
+		"express": "^4.17.1",
+		"express-http-to-https": "^1.1.4",
+		"express-session": "^1.17.1",
+		"googleapis": "^76.0.0",
+		"heroku": "^7.42.1",
+		"mongoose": "^5.12.13",
+		"nodemailer": "^6.6.1",
+		"nodemon": "^2.0.4",
+		"openapi-types": "^9.0.3",
+		"passport": "^0.4.1",
+		"passport-local": "^1.0.0",
+		"path": "^0.12.7",
+		"pdfmake": "^0.1.71",
+		"query-string": "^6.13.1",
+		"rand-token": "^1.0.1",
+		"socket.io": "^2.4.1",
+		"socket.io-client": "^4.1.2",
+		"stripe": "^8.60.0",
+		"swagger-jsdoc": "^6.1.0",
+		"swagger-ui-express": "^4.1.6",
+		"tsparticles": "^1.33.3"
+	},
+	"devDependencies": {
+		"jest": "26.6.0",
+		"node-sass": "^4.14.1",
+		"node-sass-import": "^2.0.1",
+		"supertest": "^6.1.3"
+	}
+}

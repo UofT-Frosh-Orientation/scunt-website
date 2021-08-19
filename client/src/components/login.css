@@ -1,0 +1,84 @@
+.profileIcon{
+  border-radius: 30px;
+  background-color: #6F1E88;
+  color: #FFC112;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: AvenirLTStd-Roman;
+  font-size: 18px;
+  box-shadow: 0 5px 10px 0 #0000002d;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.4s, color 0.4s, box-shadow 0.4s;
+}
+.profileIcon:hover{
+  background-color: #FFC112;
+  color: #6F1E88;
+  box-shadow: 0 5px 10px 0 #00000011;
+  transition: background-color 0.4s, color 0.4s, box-shadow 0.4s;
+}
+
+.loginButton{
+  border-radius: 10px;
+  background-color: #6F1E88;
+  color: #FFC112;
+  height: 45px;
+  padding: 0px 20px;
+  margin-top: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: AvenirLTStd-Roman;
+  font-size: 17px;
+  box-shadow: 0 5px 10px 0 #0000002d;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.4s, color 0.4s, box-shadow 0.4s;
+}
+
+.loginButton:hover{
+  background-color: #FFC112;
+  color: #6F1E88;
+  box-shadow: 0 5px 10px 0 #00000011;
+  transition: background-color 0.4s, color 0.4s, box-shadow 0.4s;
+}
+
+@media only screen and (max-width: 1080px) {
+  .loginButton{
+    border-radius: 8px;
+    padding: 0px 10px;
+    margin-top: 0px;
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .loginButton{
+    border-radius: 8px;
+    padding: 0px 6px;
+    margin-top: 1px;
+    font-size: 15px;
+  }
+}
+.loginInfoModal{
+  top:60px;
+  right:10px;
+  min-width: 300px;
+}
+@media only screen and (max-width: 1080px) {
+  .loginInfoModal{
+    top:70px;
+    right:10px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .loginInfoModal{
+    top:20px;
+    right:10px;
+    min-width: 0px;
+  }
+}

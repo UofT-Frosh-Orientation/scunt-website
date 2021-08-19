@@ -90,6 +90,18 @@ code {
   text-align: center;
 }
 
+.page-outer {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0; 
+  top: 0;
+}
+
+.page-innter {
+  min-height: 100vh;
+}
+
 .page {
   position: absolute;
   left: 15px;

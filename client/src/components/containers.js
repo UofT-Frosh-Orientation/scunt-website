@@ -7,6 +7,8 @@ import {Button} from "./buttons"
 import Wave from 'react-wavify'
 import ReactCanvasConfetti from 'react-canvas-confetti';
 import {FroshWeekIcon} from "./socials"
+import { Col, Row } from 'react-bootstrap'
+import { FormCheckbox } from './forms'
 
 export class ContainerNote extends Component {
   render(){
@@ -342,3 +344,65 @@ export class Confetti extends React.Component {
     );
   }
 }
+
+export function MissionAdminContainer({
+  name,
+  number,
+  category,
+  totalPoints,
+  isViewable,
+  checkMission,
+  isSelected
+}) {
+  return <div className="mission-row">
+    <Row>
+      <Col md={1}>
+        <FormCheckbox 
+            option="" selected={isSelected}
+            onChange={checkMission} small />
+      </Col>
+      <Col md={1}>
+        <h6>{number}</h6>
+      </Col>
+      <Col md={7}>
+        <div className="mission-name">
+          <h6>{name}</h6>
+          <p>{category}</p>
+        </div>
+      </Col>
+      <Col md={2}> { totalPoints } </Col>
+      <Col md={1}> { isViewable ? '👀' : '🚫'} </Col>
+    </Row>
+  </div>
+}
+
+export function MissionGeneralContainer ({
+  name,
+  number,
+  category,
+  totalPoints
+}) {
+  return <div className="mission-row">
+    <Row>
+      <Col md={1}>
+        <h6>{number}</h6>
+      </Col>
+      <Col md={7}>
+        <h6>{name}</h6>
+      </Col>
+      <Col md={3}> {<p>{category}</p>} </Col>
+      <Col md={1}> { totalPoints } </Col>
+    </Row>
+  </div>
+}
+
+export function MissionFroshContainer ({
+  name,
+  number,
+  category,
+  status, 
+  submitter,
+  submissionLink,
+  achievedPoints,
+  totalPoints
+}) {}
