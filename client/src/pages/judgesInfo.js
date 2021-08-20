@@ -1,6 +1,6 @@
 import React from 'react'
 import { HeaderPage, HeaderParagraph} from "../components/texts"
-import "./judges.css"
+import "./judgesInfo.css"
 
 import {ProfilePicture} from "../components/judges";
 import {JUDGES_DATA} from "../util/judges.js";

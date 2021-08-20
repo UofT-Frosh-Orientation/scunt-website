@@ -1,5 +1,5 @@
 import Missions from "../pages/missions"
-import Judges from "../pages/judges"
+import Judges from "../pages/judgesInfo"
 import Rules from "../pages/rules"
 import ScuntAdminDasboard from "../admin/dashboard"
 import SignUpForm from "../judge/signupForm"

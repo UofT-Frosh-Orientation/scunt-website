@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { HeaderPage } from "../components/texts"
+import { HeaderPage, HeaderSection } from "../components/texts"
 import { Button } from '../components/buttons'
 import { FormDropdownMenu, FormTextBox } from '../components/forms'
 import { ContainerPopupModal, ContainerPopupModalConfirm, MissionAdminContainer } from '../components/containers'
@@ -45,14 +45,18 @@ export default function ScuntAdminDasboard () {
             <HeaderPage img={require("../assets/banners/about_us.svg").default}> Scunt Admin Panel </HeaderPage>
             <br/>
             <Container>
-                <h3>{accountInfo.name}</h3>
-                <p>{accountInfo.email}</p>
-                <div className="tabs">
-                    <Button primary={view === 'judges'} label="Judges" onClick={() => setView('judges')}/>
-                    <Button primary={view === 'missions'} label="Missions" onClick={() => setView('missions')}/>
-                    <Button primary={view === 'teams'} label="Teams" onClick={() => setView('teams')}/>
+                <HeaderSection>Your Account</HeaderSection> 
+                <div style={{textAlign:"center"}}>
+                    <h3>{accountInfo.name}: {accountInfo.email}</h3>
+                    <p>select one tab from below to edit data</p>
+                    <div className="tabs">
+                        <Button primary={view === 'judges'} label="Judges" onClick={() => setView('judges')}/>
+                        <Button primary={view === 'missions'} label="Missions" onClick={() => setView('missions')}/>
+                        <Button primary={view === 'teams'} label="Teams" onClick={() => setView('teams')}/>
+                    </div>
                 </div>
                 <br/>
+                <HeaderSection>{view}</HeaderSection> 
                 <div className="views">
                     { 
                         view === 'judges' && <JudgesView judges={judges} setJudges={setJudges}/> 
