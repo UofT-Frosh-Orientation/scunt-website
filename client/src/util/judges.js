@@ -151,7 +151,7 @@ export const JUDGES_DATA = [
        "I REALLY like shawarma (but NO tomato, extra onion and turnip)", 
        "Find me a calc tutor.", "Make Praxis 3 a robot course again!" ],
        
-       img : require("../assets/judges/Aidan_1000.png").default
+       img : require("../assets/judges/aidan_1000.png").default
        },
        
        {
