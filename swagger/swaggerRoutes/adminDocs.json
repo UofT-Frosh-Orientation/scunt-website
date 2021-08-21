@@ -1,0 +1,53 @@
+{
+    "createAdminAccount": {
+        "post": {
+            "summary": "Create a account for scunt admins",
+            "description": "only can be done through this endpoint, create an admin account to manage scunt",
+            "tags": ["admin"],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                               "email": {
+                                   "type": "string",
+                                   "example": "tech@orientation.skule.ca"
+                               },
+                               "password": {
+                                   "type": "string",
+                                   "example": "G*nxhlPcWE#xpZlYZMcO"
+                               },
+                               "name": {
+                                   "type": "string",
+                                   "example": "Tech Team"
+                               }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Sucess/Failure",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status":{
+                                        "type": "number"
+                                    },
+                                    "errorMsg":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

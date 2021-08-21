@@ -1,0 +1,247 @@
+textarea:hover,
+textarea:active,
+textarea:focus
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+
+@media only screen and (max-width: 767px) {
+  .formTextBoxWidth > input{
+    width:100%;
+  }
+}
+
+.formTextBox{
+  background-color: #fdf8ff;
+  border-radius: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  transition: border 0.5s, color 0.5s, filter 0.5s, background-color 0.5s;
+  text-decoration: none;
+  font-size: 18px;
+  display: inline-block;
+  border: 2px solid #6f1e8893;
+}
+
+.formTextBox:focus{
+  background-color: #f9e7ff;
+  border: 2px solid #6f1e88;
+  outline: none !important;
+}
+
+.formTextBox:hover{
+  border: 2px solid #6f1e88;
+}
+
+.formTextBoxDisabled{
+  background-color: #dadada;
+  border: 2px solid #6f1e8877;
+}
+
+.formTextBoxClear{
+  transition: transform 0.5s;
+  width:14px;
+  margin-left: -23px;
+  margin-top: -1px;
+  opacity:0;
+}
+
+.formTextBoxClear.date {
+  transform: scale(1.45);
+}
+
+.formTextBoxClear:hover{
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+
+.formTextBoxClear:hover.date {
+  transform: scale(1.45) rotate(90deg);
+}
+
+.formTextBoxEye{
+  transition: transform 0.3s;
+  width:20px;
+  margin-left: -30px;
+  margin-top: -1px;
+}
+
+.formTextBoxEye:hover{
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.textBoxLabelFadeIn{
+  animation: fadeIn 0.5s forwards, jumpIn 0.5s forwards
+}
+
+.textBoxLabelFadeInOnly{
+  animation: fadeIn 0.5s forwards
+}
+
+.textBoxLabelFadeOut{
+  animation: fadeOut 0.5s forwards
+}
+
+.textBoxLabelFadeOutOnly{
+  animation: fadeOut 0.5s forwards
+}
+
+@keyframes jumpIn{
+  0% {transform: translateY(20px) translateX(5px);}
+  100% {transform: translateY(0px);}
+}
+
+@keyframes fadeIn{
+  0% {opacity: 0}
+  100% {opacity:1}
+}
+
+@keyframes fadeOut{
+  0% {opacity: 1}
+  100% {opacity:0}
+}
+
+.requiredStar{
+  color:red;
+  font-size: 20px;
+  font-weight: 1000;
+  display: inline-block;
+  position: absolute;
+  transform: translateY(-5px) translateX(1px);
+  z-index: 10;
+}
+
+
+.radioButton:after {
+  transform: scale(1);
+  width: 17px;
+  height: 17px;
+  border-radius: 15px;
+  top: -4px;
+  left: -2px;
+  position: relative;
+  background-color: #ececec;
+  content: '';
+  display: inline-block;
+  border: 4px solid #b9b9b9;
+  transition: transform 0.5s, background-color 0.5s, border 0.5s;
+}
+
+.radioButton:hover:after{
+  background-color: #6F1E88;
+  cursor: pointer;
+}
+
+
+.radioButton:checked:after {
+  transform: scale(1.2);
+  background-color: #FFC112;
+  content: '';
+  display: inline-block;
+  border: 4px solid #6F1E88;
+}
+
+.radioButtonDisabled:after{
+  background-color: #b1b1b1;
+  border: 4px solid #919191;
+}
+
+.radioButtonDisabled:hover:after{
+  background-color: #b1b1b1;
+}
+
+.radioButtonDisabled:checked:after{
+  background-color: #868686;
+  border: 4px solid #535353;
+}
+
+.disabledLabel{
+  color: #7a7a7a;
+}
+
+
+
+.checkButton:after {
+  transform: scale(1);
+  width: 17px;
+  height: 17px;
+  border-radius: 3px;
+  top: -4px;
+  left: -2px;
+  position: relative;
+  background-color: #ececec;
+  content: '';
+  display: inline-block;
+  border: 4px solid #b9b9b9;
+  transition: transform 0.5s, background-color 0.5s, border 0.5s;
+}
+
+.checkButton:hover:after{
+  background-color: #6F1E88;
+  cursor: pointer;
+}
+
+
+.checkButton:checked:after {
+  transform: scale(1.2);
+  background-color: #FFC112;
+  content: '';
+  display: inline-block;
+  border: 3px solid #6F1E88;
+}
+
+.checkButtonDisabled:after,
+.checkButtonDisabled:hover:after {
+  background-color: #b1b1b1;
+  border: 4px solid #919191;
+}
+
+.checkButtonDisabled:checked:after{
+  background-color: #868686;
+  border: 4px solid #535353;
+}
+
+.checkButtonFadeIn{
+  animation: fadeIn 1s forwards;
+}
+
+.checkButtonFadeOut{
+  animation: fadeOut 0.2s forwards;
+}
+
+.checkMarkPosition{
+  pointer-events: none;
+  position: absolute;
+  width: 13px;
+  height: 16px;
+  padding: 2px;
+  z-index: 5;
+  margin-top: 7px;
+}
+
+@media only screen and (max-width: 767px) {
+  .checkMarkPosition{
+    margin-top: 4px;
+  }
+}
+
+.dropdownMenuDisabled{
+  border-radius: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  transition: border 0.5s, color 0.5s, filter 0.5s, background-color 0.5s;
+  text-decoration: none;
+  font-size: 18px;
+  display: inline-block;
+  border: 2px solid #6f1e8893;
+  background-color: #dadada;
+  border: 2px solid #6f1e8877;
+  color: gray;
+}
