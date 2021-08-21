@@ -7,7 +7,7 @@ import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import './dashboard.css'
 
-export default function TeamsAdminVeiw() {
+export default function TeamsAdminView() {
     const [accountInfo, setAccountInfo] = useState({})
     const [teams, setTeams] = useState([])
 

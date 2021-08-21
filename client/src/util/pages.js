@@ -3,9 +3,10 @@ import Judges from "../pages/judgesInfo"
 import Rules from "../pages/rules"
 // import ScuntAdminDasboard from "../admin/dashboard"
 import SignUpForm from "../pages/judge/signupForm"
+import JudgingPanel from "../pages/judge/judgingPanel"
 import MissionsAdminView from "../pages/admin/missions"
 import JudgesAdminView from "../pages/admin/judges"
-import TeamsAdminVeiw from "../pages/admin/teams"
+import TeamsAdminView from "../pages/admin/teams"
 import SubmitMission from "../pages/frosh/submitMission"
 import CompletedMissions from "../pages/frosh/completedMissions"
 
@@ -46,13 +47,19 @@ export const pages = {
     {
       "title": "Scunt Admin Teams",
       "link": "/admin/teams",
-      "component": <TeamsAdminVeiw/>,
+      "component": <TeamsAdminView/>,
       "protected": "admin"
     },
     {
       "title": "Judge Sign Up Form",
       "link": "/judge/signup",
       "component": <SignUpForm/>,
+    },
+    {
+      "title": "Judging Panel",
+      "link": "/judge/panel",
+      "component": <JudgingPanel/>,
+      // "protected": "judge",
     },
     {
       "title": "Frosh Submit",
