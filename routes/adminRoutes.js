@@ -22,35 +22,42 @@ module.exports = (app) => {
     const sheets = google.sheets({ version: 'v4', auth: jwt })
 
     app.post('/post/admin/create', async (req, res) => {
-        const adminData = req.body
-        const response = {
-			status: OK,
-			errorMsg: ""
-		}
+        if(req.isAuthenticated() && req.user.accountType === "admin") {
+            const adminData = req.body
+            const response = {
+                status: OK,
+                errorMsg: ""
+            }
 
-        if (!EmailValidator.validate(adminData.email)) {
-            response.status = NOT_ACCEPTED
-            response.errorMsg = INVALID_EMAIL
-            res.send(response)
-            return
-        }
+            if (!EmailValidator.validate(adminData.email)) {
+                response.status = NOT_ACCEPTED
+                response.errorMsg = INVALID_EMAIL
+                res.send(response)
+                return
+            }
 
-        /*Check if user already exists and add user otherwise*/
-        const user = await ScuntAdmin.findOne({ email: adminData.email })
-        if (user) {
-            response.status = NOT_ACCEPTED
-            response.errorMsg = DUPLICATE_EMAIL
-            res.send(response)
-            return
-        } else {
-            const newAdmin = new ScuntAdmin(adminData);
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(newAdmin.password, salt, (err, hash) => {
-                    newAdmin.password = hash;
-                    newAdmin.save();
-                    console.log("new admin account created");
-                    res.send(response)
+            /*Check if user already exists and add user otherwise*/
+            const user = await ScuntAdmin.findOne({ email: adminData.email })
+            if (user) {
+                response.status = NOT_ACCEPTED
+                response.errorMsg = DUPLICATE_EMAIL
+                res.send(response)
+                return
+            } else {
+                const newAdmin = new ScuntAdmin(adminData);
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(newAdmin.password, salt, (err, hash) => {
+                        newAdmin.password = hash;
+                        newAdmin.save();
+                        console.log("new admin account created");
+                        res.send(response)
+                    })
                 })
+            }
+        } else {
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: "Please login"
             })
         }
     })

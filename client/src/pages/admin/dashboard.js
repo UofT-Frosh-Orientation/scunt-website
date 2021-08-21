@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { HeaderPage, HeaderSection } from "../components/texts"
 import { Button } from '../components/buttons'
 import { FormDropdownMenu, FormTextBox } from '../components/forms'
-import { ContainerPopupModal, ContainerPopupModalConfirm, MissionAdminContainer } from '../components/containers'
+import { ContainerPopupModal, ContainerPopupModalConfirm, MissionAdminContainer, TeamInfo } from '../components/containers'
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import './dashboard.css'
@@ -65,6 +65,9 @@ export default function ScuntAdminDasboard () {
                         view === 'missions' && <MissionsView 
                             missions={missions} setMissions={setMissions}
                             categories={categories} setCategories={setCategories}/>
+                    }
+                    {
+                        view === "teams" && <Teams/>
                     }
                 </div>
             </Container>
@@ -317,5 +320,42 @@ function MissionsView ({ missions, categories, setCategories, setMissions }) {
                 { missionUploadErr && <p style={{color: 'orange'}}> {missionUploadErr} </p> }
             </ContainerPopupModal>
         </div>
+    )
+}
+
+function Teams() {
+    return(
+        <TeamInfo
+            name="Team 1"
+            score={100}
+            missionsCompleted={[1,2,3,4,5,6]}
+            participants={[
+                {
+                    email: "blah@gmail.com",
+                },
+                {
+                    email: "blah@gmail.com",
+                },
+                {
+                    email: "bloo@gmail.com",
+                },
+                {
+                    email: "gaga@gmail.com",
+                    warned: true
+                },
+                {
+                    email: "blah@gmail.com",
+                },
+                {
+                    email: "blah@gmail.com",
+                },
+                {
+                    email: "bloo@gmail.com",
+                },
+                {
+                    email: "gaga@gmail.com",
+                },
+            ]}
+        />
     )
 }

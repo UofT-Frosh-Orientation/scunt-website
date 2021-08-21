@@ -1,14 +1,14 @@
 // server.js
 const app = require("./app");
-
 const mongoose = require('mongoose');
 
-const mongoScuntURI = process.env.MONGO_SCUNT_URI || require("./config/secretKeys").mongoScuntURI;
+const mongoURI = process.env.MONGO_URI || require("./config/secretKeys").mongoURI;
 mongoose
-	.connect(mongoScuntURI, { useNewUrlParser: true })
-	.then(() => console.log('Scunt MongoDB Connected'))
+	.connect(mongoURI, { useNewUrlParser: true })
+	.then(() => console.log('MongoDB Connected'))
 	.catch((err) => console.log(err));
 mongoose.set('useNewUrlParser', true);
+
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);

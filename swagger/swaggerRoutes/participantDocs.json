@@ -1,1 +1,104 @@
-{}
+{
+    "submit": {
+        "post": {
+            "summary": "Submitting a mission",
+            "description": "testing submission endpoint - will be called on discord bot",
+            "tags": ["frosh"],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                               "email": {
+                                   "type": "string",
+                                   "example": "tech@orientation.skule.ca"
+                               },
+                               "discordUsername": {
+                                   "type": "string",
+                                   "example": "YuYing-Liang"
+                               },
+                               "missionNumber": {
+                                   "type": "number",
+                                   "example": 3
+                               },
+                               "teamNumber": {
+                                   "type": "number",
+                                   "example": 1
+                               },
+                               "submissionLink": {
+                                   "type": "string",
+                                   "example": "https://google.ca"
+                               }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Sucess/Failure",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status":{
+                                        "type": "number"
+                                    },
+                                    "errorMsg":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "submitMany": {
+        "post": {
+            "summary": "Submitting many missions (just for testing)",
+            "description": "just submitting a bunch of missions",
+            "tags": ["frosh"],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                               "numberOfMissions": {
+                                   "type": "number",
+                                   "example": 10
+                               }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Sucess/Failure",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status":{
+                                        "type": "number"
+                                    },
+                                    "errorMsg":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

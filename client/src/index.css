@@ -138,3 +138,7 @@ code {
     transform: scale(1);
   }
 }
+
+td {
+  vertical-align: middle;
+}

@@ -32,6 +32,8 @@ module.exports = {
 			// auth routes
 			// judge routes
 			// participant routes
+			"/post/submission": participantDocs.submit,
+			"/testing/post/submitMany": participantDocs.submitMany
 		}
 	},
 	apis: ["./routes/*.js"]

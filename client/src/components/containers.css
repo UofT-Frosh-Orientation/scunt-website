@@ -456,3 +456,24 @@
   vertical-align: middle;
   text-align: center;
 } */
+
+.team-info {
+  padding: 0.75rem 1.5rem;
+}
+
+.team-subheader {
+  width: 100%
+}
+
+.team-subheader .button,
+.team-subheader p {
+  display: inline-block;
+}
+
+.team-subheader p:last-child {
+  text-align: right;
+}
+
+.team-info span {
+  margin-right: 0.25rem
+}
