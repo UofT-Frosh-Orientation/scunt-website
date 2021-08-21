@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-const Mission = require('./Mission');
 
 const TeamSchema = new mongoose.Schema({
     name: {
         type: String,
+        required: true
+    },
+    number: {
+        type: Number,
         required: true
     },
     participants: {
@@ -16,7 +19,7 @@ const TeamSchema = new mongoose.Schema({
         default: 0
     }, 
     missionsCompleted: {
-        type: [Mission],
+        type: [Object], // should be SubmittedMission type
         required: true
     }
 })

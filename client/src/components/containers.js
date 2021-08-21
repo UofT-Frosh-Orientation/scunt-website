@@ -406,3 +406,23 @@ export function MissionFroshContainer ({
   achievedPoints,
   totalPoints
 }) {}
+
+export function TeamInfo ({
+  name,
+  participants,
+  score,
+  missionsCompleted
+}) {
+  return <ContainerAccordion
+    header={name}
+    id={`team-${name}`}
+  >
+    <div className="team-info">
+      <div className="team-subheader">
+        <Button primary={false} label={`Missions Completed 🏅: ${missionsCompleted.length}`} onClick={() => {}}/>
+        <p> Team Score: {score}pts </p>
+      </div>
+      { participants.map(p => <span style={{color: p.warned ? 'red' : 'purple'}}>{p.email},</span>) }
+    </div>
+  </ContainerAccordion>
+}

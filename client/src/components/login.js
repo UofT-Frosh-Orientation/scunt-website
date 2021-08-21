@@ -35,7 +35,9 @@ export class LoginButton extends Component {
           <p style={{textTransform: 'capitalize', margin: '2px 0 4px 0'}}>{this.state.accountType}</p>
           { 
             this.state.accountType === "admin" && <>
-              <ButtonBubble label="Dashboard" link="/admin/dashboard" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Manage Missions" link="/admin/missions" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Manage Judges" link="/admin/judges" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Manage Teams" link="/admin/teams" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Logout" accent link="/" onClick={()=>{this.infoPopup.setModalState(false); this.setLoginStatus(false,"", "", "")}}/>
             </>
           }
@@ -48,13 +50,13 @@ export class LoginButton extends Component {
           }
           { 
             this.state.accountType === "frosh" && <>
-              <ButtonBubble label="Completed Missions" link="/frosh/missions" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Submit" link="/frosh/submit" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Submitted & Completed Missions" link="/frosh/missions" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Logout" accent link="/" onClick={()=>{this.infoPopup.setModalState(false); this.setLoginStatus(false,"", "", "")}}/>
             </>
           }
         </ContainerPopupModal>
-        <Login ref={(login)=> this.login = login} handleLoginChange={this.props.handleLoginChange}/>
+        <Login ref={(login)=> this.login = login} handleLoginChange={this.props.handleLoginChange} infoPopup={this.infoPopup}/>
         {!this.state.status?
           <div className="loginButton" onClick={this.openLogin}>
             Login
@@ -92,6 +94,7 @@ export class Login extends Component {
         const { data } = await axios.get('/user/accountInfo')
         this.props.handleLoginChange(true, data.initials, data.accountType, data.name)
         this.popup.setModalState(false);
+        this.props.infoPopup.setModalState(true)
       } catch (err) {
         this.setState({
           loginError: "An error has occured"
@@ -103,29 +106,29 @@ export class Login extends Component {
       })
     }
   }
-  handleForgetPassword = async() => {
-    //input validation and error handling
-    const email = this.emailInput.getValue();
-    const msg = getEmailErrorMsg(email)
-    if(msg){
-      this.setState({
-        forgetPasswordError: msg
-      });
-      return;
-    }
+  // handleForgetPassword = async() => {
+  //   //input validation and error handling
+  //   const email = this.emailInput.getValue();
+  //   const msg = getEmailErrorMsg(email)
+  //   if(msg){
+  //     this.setState({
+  //       forgetPasswordError: msg
+  //     });
+  //     return;
+  //   }
 
-    const res = await axios.post('/forgotPassword', {
-      email: email, 
-    })
-    if(res.data === 'recovery email sent'){
-      alert("An link has been sent to you. Please check your email to reset your password.");
-      this.popup.setModalState(false);
-    }else{
-      this.setState({
-        forgetPasswordError: res.data
-      });
-    }
-  }
+  //   const res = await axios.post('/forgotPassword', {
+  //     email: email, 
+  //   })
+  //   if(res.data === 'recovery email sent'){
+  //     alert("An link has been sent to you. Please check your email to reset your password.");
+  //     this.popup.setModalState(false);
+  //   }else{
+  //     this.setState({
+  //       forgetPasswordError: res.data
+  //     });
+  //   }
+  // }
   render(){
     return (
       <ContainerPopupModal header={this.state.action} ref={(popup)=> this.popup = popup}>
@@ -138,7 +141,7 @@ export class Login extends Component {
           <FormTextBox onEnterKey={this.handleLogin} ref={(passwordInput)=> this.passwordInput= passwordInput} clearButton style={{width:"100%"}} type={"password"} label="Password"/>
           <div style={{height:"20px"}}/>
           <div style={{float:"right", marginRight:"-20px"}}><Button label="Login" onClick={this.handleLogin}/></div>
-          <p onClick={()=>{this.setState({action: 'Forgot Password'})}}><u>Forgot your password?</u></p>
+          {/* <p onClick={()=>{this.setState({action: 'Forgot Password'})}}><u>Forgot your password?</u></p> */}
         </> :
         <>
           <div style={{width:"400px"}}/>

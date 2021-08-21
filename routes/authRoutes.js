@@ -1,9 +1,9 @@
 module.exports = (app) => {
 
-	const bcrypt = require('bcryptjs');
 	const passport = require('passport');
     const Judge = require("../models/Judge");
     const ScuntAdmin = require("../models/ScuntAdmin");
+	const Frosh = require('../models/Frosh')
 
     app.post('/login', async (req, res, next) => {
 		const response = { registerStatus: false, errorMessage: '' };
@@ -17,15 +17,19 @@ module.exports = (app) => {
 			errors.push('Make sure all fields are completed.');
 		}
 
-		// const frosh = await Frosh.findOne({ email })
+		const frosh = await Frosh.findOne({ email })
         const judge = await Judge.findOne({ email })
         const admin = await ScuntAdmin.findOne({ email })
 
-		// if(frosh) {
-		// 	if (frosh.isDeleted) {
-		// 		errors.push('Your account has been deleted due to outstanding fees. Unfortunately if you want to participate in frosh again, you must re-register')
-		// 	}
-		// } else {
+		if(frosh) {
+			if (frosh.isDeleted) {
+				errors.push('Your account has been deleted due to outstanding fees. Unfortunately if you want to participate in frosh again, you must re-register.')
+			} else if (!frosh.isScunt || !frosh.scuntTeam) {
+				errors.push('You have not registered for scunt yet. To do so please login to your account on orientation.skule.ca and edit your account information to join Scunt.')
+			} else {
+				loginType = 'frosh'
+			}
+		} else {
             if (judge) {
 				if (!judge.isActivated) {
 					errors.push('Your judge account has not been activated.')
@@ -37,7 +41,7 @@ module.exports = (app) => {
             } else {
 			    errors.push('You have not registered for a scunt account yet.')
             }
-		// }
+		}
 
 		if (errors.length > 0) {
 			response.errorMessage = errors[0];
@@ -64,11 +68,7 @@ module.exports = (app) => {
     app.get('/user/signedIn', (req, res) => {
 		if (req.isAuthenticated()) {
 			const {accountType} = req.user
-			if(accountType) {
-				res.send(accountType);
-			}else{
-				res.send('');
-			}
+			res.send(accountType || (req.user.isScunt !== undefined ? 'frosh' : ''));
 		} else {
 			res.send(null);
 		}
@@ -91,11 +91,11 @@ module.exports = (app) => {
 
 	app.get('/user/accountInfo', (req, res) => {
 		if(req.isAuthenticated()) {
-			const fullName = req.user.name
+			const fullName = !req.user.accountType ? req.user.fullName : req.user.name
 			const names = fullName.toUpperCase().split(' ')
 			res.send({
 				initials: names.length === 1 ? names[0].charAt(0) : `${names[0].charAt(0)}${names[names.length-1].charAt(0)}`,
-				accountType: req.user.accountType,
+				accountType: req.user.accountType || "frosh",
 				name: fullName
 			})
 		} else {

@@ -1,9 +1,9 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap'
-import { Button } from '../components/buttons'
-import { FormTextBox } from '../components/forms'
-import { HeaderPage } from '../components/texts'
+import { Button } from '../../components/buttons'
+import { FormTextBox } from '../../components/forms'
+import { HeaderPage } from '../../components/texts'
 
 export default function SignUpForm() {
     const [judgeDetails, setJudgeDetails] = useState({
@@ -36,7 +36,7 @@ export default function SignUpForm() {
     return(
         <div>
             <br/>
-            <HeaderPage img={require("../assets/banners/about_us.svg").default}> Judge Sign Up Form </HeaderPage>
+            <HeaderPage img={require("../../assets/banners/about_us.svg").default}> Judge Sign Up Form </HeaderPage>
             <br/>
             <Container>
                 <h3>Please fill out the form below to access the scunt judge panel.</h3>

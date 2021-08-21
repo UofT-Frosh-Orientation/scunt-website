@@ -35,9 +35,17 @@ const SubmittedMissionSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 		default: 0
+	},
+	teamNumber: {
+		type: Number,
+		required: true
+	},
+	timeCreated:{
+		type: Date,
+		required: true
 	}
 })
 
-const SubmittedMission = mongoose.model('Mission', SubmittedMissionSchema);
+const SubmittedMission = mongoose.model('SubmittedMission', SubmittedMissionSchema);
 
 module.exports = SubmittedMission;
