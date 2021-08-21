@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from 'react-bootstrap'
 import { HeaderPage } from '../../components/texts'
 
-export default function completedMissions() {
+export default function CompletedMissions() {
     return(
         <div>
             <br/>

@@ -7,7 +7,7 @@ import MissionsAdminView from "../pages/admin/missions"
 import JudgesAdminView from "../pages/admin/judges"
 import TeamsAdminVeiw from "../pages/admin/teams"
 import SubmitMission from "../pages/frosh/submitMission"
-import completedMissions from "../pages/frosh/completedMissions"
+import CompletedMissions from "../pages/frosh/completedMissions"
 
 export const pages = {
   "main" : [
@@ -63,7 +63,7 @@ export const pages = {
     {
       "title": "Frosh Missions",
       "link": "/frosh/missions",
-      "component": <completedMissions/>,
+      "component": <CompletedMissions/>,
       "protected": "frosh"
     }
   ]
