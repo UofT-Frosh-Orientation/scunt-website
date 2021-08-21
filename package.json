@@ -1,11 +1,10 @@
 {
-	"name": "frosh-backend-express",
+	"name": "scunt-2021",
 	"version": "1.0.0",
 	"description": "",
 	"main": "server.js",
-	"repository": "froshweek3.0",
+	"repository": "scunt3.0",
 	"scripts": {
-		"test": "jest",
 		"start": "nodemon server.js",
 		"server": "npm run client-build && nodemon server.js",
 		"clean": "rm -rf node_modules",
@@ -18,13 +17,6 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"jest": {
-		"testEnvironment": "node",
-		"testPathIgnorePatterns": [
-			"/node_modules/",
-			"client"
-		]
-	},
 	"dependencies": {
 		"axios": "^0.21.1",
 		"bcryptjs": "^2.4.3",
