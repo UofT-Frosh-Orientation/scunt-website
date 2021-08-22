@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{Component, useState} from 'react'
 import "./containers.css"
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
@@ -8,7 +8,7 @@ import Wave from 'react-wavify'
 import ReactCanvasConfetti from 'react-canvas-confetti';
 import {FroshWeekIcon} from "./socials"
 import { Col, Row } from 'react-bootstrap'
-import { FormCheckbox } from './forms'
+import { FormCheckbox, FormTextBox } from './forms'
 
 export class ContainerNote extends Component {
   render(){
@@ -373,6 +373,80 @@ export function MissionAdminContainer({
       <Col md={2}> { totalPoints } </Col>
       <Col md={1}> { isViewable ? '👀' : '🚫'} </Col>
     </Row>
+  </div>
+}
+
+export function MissionJudgeContainer({
+  number, 
+  teamNumber, 
+  totalPoints, 
+  submissionLink,
+  status, 
+  submitter,
+  category,
+  name,
+  timeCreated,
+  handleJudging,
+  handleUpdate,
+}) {
+  const [viewMore, setViewMore] = useState(false);
+  const statusColors = {submitted: "orange", 
+                        judging: "red",
+                        judged: "green"
+                      }
+
+  return <div className="mission-row">
+    <Row>
+      <Col md={2}>
+        <h4>#{number}</h4>
+      </Col>
+      <Col md={4}>
+        <h5>{teamNumber}</h5>
+      </Col>
+      <Col md={2}>
+        <h4>{totalPoints} Points</h4>
+      </Col>
+      <Col md={2}>
+      <h4><a target='_blank' href={submissionLink}> Link </a></h4>
+      </Col>
+      <Col md={2}>
+        <h6 style={{backgroundColor:statusColors[status], borderRadius:"10%"}}>{status}</h6>
+      </Col>
+      </Row>
+      <h4 style={{textAlign:"right", textDecoration:"underline", cursor:"pointer"}} 
+          onClick={() => {if (viewMore) {setViewMore(false)} else {setViewMore(true)}}}>
+          View more &amp; judge
+      </h4>
+      {viewMore && 
+        <div className="judging-row">
+          <Row>
+            <Col md={6}>
+              <h4>Mission Name: {name}</h4>
+            </Col>
+            <Col md={6}>
+              <h4>Category: {category}</h4>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={6}>
+              <p>Submitter: {submitter}</p>
+              <p>Time: {timeCreated}</p>
+            </Col>
+            <Col md={4}>
+              <FormTextBox 
+                  clearButton 
+                  type="text"
+                  label="New Points"
+                  description={`Max point: ${totalPoints}`}
+                />
+            </Col>
+            <Col md={2} style={{paddingTop:"2rem"}}>
+              <Button label="Update" />
+            </Col>
+          </Row>
+        </div>
+      }
   </div>
 }
 
