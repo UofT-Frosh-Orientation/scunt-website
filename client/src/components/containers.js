@@ -377,7 +377,7 @@ export function MissionAdminContainer({
 }
 
 export function MissionJudgeContainer({
-  requestId,
+  ticketId,
   number, 
   teamNumber, 
   totalPoints, 
@@ -422,7 +422,7 @@ export function MissionJudgeContainer({
             if (viewMore) {
               handleCancel();
             } else {
-              handleJudging(requestId);
+              handleJudging(ticketId);
             }}}>
           {viewMore? "Close" : status==="judging"? "View Anyways" : "View more & judge"}
       </h4>

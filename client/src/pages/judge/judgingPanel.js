@@ -72,9 +72,9 @@ export default function JudgingPanel() {
         setCurrentViewMore('')
         console.log("set status back to submitted")
     }
-    const handleJudging = (requestId) => {
+    const handleJudging = (ticketId) => {
         console.log("set old one back to submitted: ", currentViewMore)
-        setCurrentViewMore(requestId)
+        setCurrentViewMore(ticketId)
         console.log("set status to judging")
     }
     const handleUpdate = (confirm) => {
@@ -104,7 +104,7 @@ export default function JudgingPanel() {
               submittedmissions.filter(m => m.status === statusView || m.status === "judging")
               .map(m => 
                 <MissionJudgeContainer
-                    requestId={m._id}
+                    ticketId={m._id}
                     number={m.number} 
                     teamNumber={m.teamNumber}
                     totalPoints={m.totalPoints}

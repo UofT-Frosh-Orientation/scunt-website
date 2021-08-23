@@ -14,22 +14,18 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 server.listen(process.env.PORT || 6969);
 
-io.on('connection', socket =>{
-	console.log('user connected');
-})
-
-const questionNsp = io.of('/question');
-questionNsp.on(`connection`, socket =>{
-	console.log('a user has joined questionSocket')
-	socket.on('addNewVote', (data)=>{
-		socket.broadcast.emit('addNewVote', data);
+// Judge panel socket.io setup: 
+// io.on('connection', socket =>{
+// 	console.log('user connected');
+// })
+const submissionTicketSocket = io.of('/judge-tickets');
+submissionTicketSocket.on('connection', socket =>{
+	console.log('a user has joined submissionTicketSocket')
+	socket.on('getNewTickets', (data)=>{
+		socket.broadcast.emit('getNewTickets', data);
 	});
-	socket.on('changeVote', (data)=>{
-		socket.broadcast.emit('changeVote', data);
-	});
-	socket.on('deleteVote', (data)=>{
-		console.log('recieved delete vote');
-		socket.broadcast.emit('deleteVote', data);
+	socket.on('updateStatus', (data)=>{
+		socket.broadcast.emit('updateStatus', data);
 	});
 })
 
