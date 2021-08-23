@@ -377,19 +377,23 @@ export function MissionAdminContainer({
 }
 
 export function MissionJudgeContainer({
+  requestId,
   number, 
   teamNumber, 
   totalPoints, 
+  currPoints,
   submissionLink,
   status, 
   submitter,
   category,
   name,
   timeCreated,
+  viewMore,
   handleJudging,
+  handleCancel,
   handleUpdate,
 }) {
-  const [viewMore, setViewMore] = useState(false);
+  // const [viewMore, setViewMore] = useState(false);
   const statusColors = {submitted: "orange", 
                         judging: "red",
                         judged: "green"
@@ -414,8 +418,13 @@ export function MissionJudgeContainer({
       </Col>
       </Row>
       <h4 style={{textAlign:"right", textDecoration:"underline", cursor:"pointer"}} 
-          onClick={() => {if (viewMore) {setViewMore(false)} else {setViewMore(true)}}}>
-          View more &amp; judge
+          onClick={() => {
+            if (viewMore) {
+              handleCancel();
+            } else {
+              handleJudging(requestId);
+            }}}>
+          {viewMore? "Close" : status==="judging"? "View Anyways" : "View more & judge"}
       </h4>
       {viewMore && 
         <div className="judging-row">
@@ -438,11 +447,12 @@ export function MissionJudgeContainer({
                   clearButton 
                   type="text"
                   label="New Points"
-                  description={`Max point: ${totalPoints}`}
+                  localStorageKey={`mission${number}_team_${teamNumber}_points`}
+                  description={`Current Points: ${currPoints}/${totalPoints}`}
                 />
             </Col>
             <Col md={2} style={{paddingTop:"2rem"}}>
-              <Button label="Update" />
+              <Button label="Update" onClick={handleUpdate}/>
             </Col>
           </Row>
         </div>
