@@ -7,7 +7,7 @@ import { FormDropdownMenu, FormTextBox } from '../../components/forms'
 import { HeaderPage } from '../../components/texts'
 var io = require("socket.io-client");
 
-// statuses: submitted, judging, completed
+// statuses: submitted, judging, complete
 export default function JudgingPanel() {
     const [submittedmissions, setSubmittedmissions] = useState([])
     const [statusView, setStatusView] = useState('submitted')
@@ -20,17 +20,17 @@ export default function JudgingPanel() {
 
 
     const getSubmittedMissions = async () => {
-          const account = await axios.get('/user/current')
-          setAccountInfo(account.data)
+        const account = await axios.get('/user/current')
+        setAccountInfo(account.data)
 
-          const { data } = await axios.get('/get/submittedmissions')
-          if(data.status === 200) {
+        const { data } = await axios.get('/get/submittedmissions')
+        if(data.status === 200) {
             setSubmittedmissions(() => data.submittedmissions)
-          }else {
-              alert(data.errorMsg);
-          }
-          setLoading(false)
+        }else {
+            alert(data.errorMsg);
         }
+        setLoading(false)
+    }
 
     useEffect(() => {
         setLoading(true)
@@ -42,7 +42,17 @@ export default function JudgingPanel() {
             console.log("client is connected!")
         });
         ticketSocket.on('submissionsChanged', (data)=> {
-            console.log(data);
+            setSubmittedmissions((oldSubmittedmissions) => {
+                const oldMissionIdx = oldSubmittedmissions.findIndex(m => m._id === data._id)
+                if (oldMissionIdx === -1) {
+                    // Add to collection
+                    return [data,...oldSubmittedmissions];
+                }else {
+                    // Update old list
+                    oldSubmittedmissions[oldMissionIdx] = data;
+                    return [...oldSubmittedmissions];
+                }
+            });
         });
         return () => ticketSocket.disconnect();
     }, [])
@@ -97,6 +107,7 @@ export default function JudgingPanel() {
             })
             if (data.status === 200) {
                 setCurrentViewMore('')
+                alert('success!')
             } else {
                 alert(data.errorMsg)
             }
@@ -110,7 +121,7 @@ export default function JudgingPanel() {
             <br/>
             <div style={{marginLeft:"5rem"}}>
                 <Button primary={statusView === "submitted"} label="Unresolved" onClick={() => setStatusView("submitted")}/>
-                <Button primary={statusView === "completed"} label="Completed" onClick={() => setStatusView("completed")}/>
+                <Button primary={statusView === "complete"} label="Completed" onClick={() => setStatusView("complete")}/>
             </div>
             { loading ?? <p>Loading ...</p> }
             <Container>
