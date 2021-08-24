@@ -105,8 +105,9 @@ export class ContainerPopupModalConfirm extends Component {
   }
   render(){
     return(
-      <ContainerPopupModal exitBackground={false} exitButton={false} header={this.props.header} ref={(popup)=> this.popupRef = popup}>
+      <ContainerPopupModal exitBackground={false} exitButton={true} header={this.props.header} ref={(popup)=> this.popupRef = popup}>
         <p>{this.props.message}</p>
+        {this.props.children}
         <div style={{float:"right"}}>
           <Button label={this.props.labelYes!==undefined?this.props.labelYes:"Yes"} onClick={()=>{this.setModalState(false); this.props.buttonCallback(true);}}/>
           <Button label={this.props.labelNo!==undefined?this.props.labelNo:"No"} primary={false} onClick={()=>{this.setModalState(false); this.props.buttonCallback(false);}}/>
