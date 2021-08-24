@@ -18,11 +18,10 @@ mongoose
 	.connect(mongoURI, { useNewUrlParser: true })
 	.then(() => {
 		console.log('MongoDB Connected');
-		const changeStream = SubmittedMission.watch();
+		const changeStream = SubmittedMission.watch([],{fullDocument : "updateLookup" });
 		changeStream.on('change',(change)=>{
             console.log('some submissions have changed')
-			console.log(change);
-			submissionTicketSocket.emit('submissionsChanged', change);
+			submissionTicketSocket.emit('submissionsChanged', change.fullDocument);
 		});
 	})
 	.catch((err) => console.log(err));

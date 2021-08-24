@@ -420,7 +420,7 @@ export function MissionJudgeContainer({
       <h4 style={{textAlign:"right", textDecoration:"underline", cursor:"pointer"}} 
           onClick={() => {
             if (viewMore) {
-              handleCancel();
+              handleCancel(ticketId);
             } else {
               handleJudging(ticketId);
             }}}>

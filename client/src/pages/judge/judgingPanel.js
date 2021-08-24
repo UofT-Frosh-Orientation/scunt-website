@@ -20,49 +20,15 @@ export default function JudgingPanel() {
 
 
     const getSubmittedMissions = async () => {
-        //   const account = await axios.get('/user/current')
-        //   setAccountInfo(account.data)
+          const account = await axios.get('/user/current')
+          setAccountInfo(account.data)
 
-        //   const { data } = await axios.get('/get/submittedmissions')
-        //   if(data.status === 200) {
-        //     setSubmittedmissions(() => data.missions)
-        //   }
-          // test
-          setSubmittedmissions(() => [
-              {_id: "612176f4df57ff16f4274299",
-                category:"The Classics",
-                submitter:"YuYing-Liang",
-                totalPoints: 0,
-                name:"5 condoms you got for free",
-                number : 3,
-                status:"submitted",
-                submissionLink:"https://google.ca",
-                teamNumber:1,
-                timeCreated: "2021-08-21T21:58:12.822+00:00",
-                },
-                {_id: "612176f4df57ff16f4274298",
-                category:"The Classics",
-                submitter:"YuYing-Liang",
-                totalPoints: 0,
-                name:"5 condoms you got for free",
-                number : 4,
-                status:"judging",
-                submissionLink:"https://google.ca",
-                teamNumber:1,
-                timeCreated: "2021-08-21T21:58:12.822+00:00",
-                },
-                {_id: "612176f4df57ff16f4274296",
-                category:"The Classics",
-                submitter:"YuYing-Liang",
-                totalPoints: 0,
-                name:"5 condoms you got for free",
-                number : 3,
-                status:"completed",
-                submissionLink:"https://google.ca",
-                teamNumber:2,
-                timeCreated: "2021-08-21T21:58:12.822+00:00",
-                },
-          ])
+          const { data } = await axios.get('/get/submittedmissions')
+          if(data.status === 200) {
+            setSubmittedmissions(() => data.submittedmissions)
+          }else {
+              alert(data.errorMsg);
+          }
           setLoading(false)
         }
 
@@ -76,31 +42,67 @@ export default function JudgingPanel() {
             console.log("client is connected!")
         });
         ticketSocket.on('submissionsChanged', (data)=> {
-            console.log(data)
+            console.log(data);
         });
+        return () => ticketSocket.disconnect();
     }, [])
 
-    const handleCancel = () => {
-        setCurrentViewMore('')
-        console.log("set status back to submitted")
+    const handleCancel = async (ticketId) => {
+        // Update database submission status
+        const { data } = await axios.post('/judge/update', {
+            ticketId: ticketId,
+            action: "cancel",
+            newPoints: -1
+        })
+        if (data.status === 200) {
+            setCurrentViewMore('')
+        } else {
+            alert(data.errorMsg)
+        }
     }
-    const handleJudging = (ticketId) => {
-        console.log("set old one back to submitted: ", currentViewMore)
-        setCurrentViewMore(ticketId)
-        console.log("set status to judging")
+    const handleJudging = async (ticketId) => {
+        // Set old one back to submitted:
+        if (currentViewMore){
+            const { data } = await axios.post('/judge/update', {
+                ticketId: currentViewMore,
+                action: "cancel",
+                newPoints: -1
+            })
+            if (data.status !== 200) {
+                alert(data.errorMsg)
+                return
+            } 
+        }
+        // Update new one to judging
+        const { data } = await axios.post('/judge/update', {
+            ticketId: ticketId,
+            action: "judging",
+            newPoints: -1
+        })
+        if (data.status === 200) {
+            setCurrentViewMore(ticketId)
+        } else {
+            alert(data.errorMsg)
+        }
     }
-    const handleUpdate = (confirm) => {
+    
+    const handleUpdate = async (confirm) => {
         // Popup modal accepts a boolean
         if (confirm){
-            console.log("route to update score")
-            const err = undefined
-
-            if (!err){
+            // Update database submission status
+            const { data } = await axios.post('/judge/update', {
+                ticketId: currentViewMore,
+                action: "update",
+                newPoints: popUpConfirmPoints
+            })
+            if (data.status === 200) {
                 setCurrentViewMore('')
-                console.log("set status to completed")
+            } else {
+                alert(data.errorMsg)
             }
         }
     }
+
     return (
         <div>
             <br/>
@@ -112,7 +114,7 @@ export default function JudgingPanel() {
             </div>
             { loading ?? <p>Loading ...</p> }
             <Container>
-            {
+            { submittedmissions &&
               submittedmissions.filter(m => m.status === statusView || m.status === "judging")
               .map(m => 
                 <MissionJudgeContainer
@@ -120,7 +122,7 @@ export default function JudgingPanel() {
                     number={m.number} 
                     teamNumber={m.teamNumber}
                     totalPoints={m.totalPoints}
-                    currPoints={m.currentPoints}
+                    currPoints={m.achievedPoints}
                     submissionLink={m.submissionLink}
                     status={m.status}
                     submitter={m.submitter}

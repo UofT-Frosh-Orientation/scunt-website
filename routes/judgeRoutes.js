@@ -3,8 +3,10 @@ const Judge = require('../models/Judge');
 module.exports = (app) => {
     const bcrypt = require('bcryptjs');
     const EmailValidator = require('email-validator');
-    const ScuntAdmin = require('../models/ScuntAdmin')
-    const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR } = require('./errorMessages');
+    const ScuntAdmin = require('../models/ScuntAdmin');
+    const SubmittedMission = require('../models/SubmittedMission');
+
+    const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, INTERNAL_ERROR_MSG, SUBMITTED, JUDGING, COMPLETE } = require('./errorMessages');
 
     app.post('/create/judge/', async (req, res) => {
         const judgeData = req.body
@@ -45,6 +47,82 @@ module.exports = (app) => {
                 })
             })
         }
-    })
+    });
+
+    // TODO: set protection rules for these endpoints
+    app.get('/get/submittedmissions', async (req, res) => {
+        try {
+            const submittedmissions = await SubmittedMission.find();
+            res.send({
+                status: OK,
+                submittedmissions,
+            })
+        } catch (err) {
+            console.log('submittedmissions - ' + err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: "Something went wrong while retrieving all the submissions, please try refreshing the page"
+            })
+        }
+    });
+
+    // Actions: judging, cancel, update
+    app.post('/judge/update', async (req, res) => {
+        try {
+            const { 
+                ticketId, 
+                action,
+                newPoints
+            } = req.body;
+
+            const submittedmission = await SubmittedMission.findById(ticketId);
+            if(submittedmission) {
+                if (action === "judging") {
+                    submittedmission.status = JUDGING;
+                    submittedmission.save();
+                    res.send({status: OK});
+                    return;
+                } else if (action === "cancel") {
+                    submittedmission.status = SUBMITTED;
+                    submittedmission.save();
+                    res.send({status: OK});
+                    return;
+                } else if (action === "update") {
+                    // check new points is 
+                    if (newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints) {
+                        res.send({
+                            status: NOT_ACCEPTED,
+                            errorMsg: "New score should be higher than current score and lower than total score"
+                        })
+                        return;
+                    }
+                    submittedmission.achievedPoints = newPoints;
+                    submittedmission.status = COMPLETE;
+                    submittedmission.save();
+                    res.send({status: OK});
+                    return;
+                } else {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "Don't try to hack the website, thanks"
+                    })
+                    return;
+                }
+            } else {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Cannot find the submission, please refresh the page and try again"
+                })
+                return;
+            }
+        } catch (err) {
+            console.log('judge update - ' + err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: INTERNAL_ERROR_MSG
+            });
+            return;
+        }
+    });
 
 }
