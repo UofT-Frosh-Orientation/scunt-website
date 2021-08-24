@@ -5,6 +5,7 @@ import { MissionJudgeContainer, ContainerPopupModalConfirm } from '../../compone
 import { Button } from '../../components/buttons'
 import { FormDropdownMenu, FormTextBox } from '../../components/forms'
 import { HeaderPage } from '../../components/texts'
+var io = require("socket.io-client");
 
 // statuses: submitted, judging, completed
 export default function JudgingPanel() {
@@ -17,8 +18,8 @@ export default function JudgingPanel() {
     const [popUpConfirmPoints, setPopUpConfirmPoints] = useState(0)
     const updateScoreConfirm = useRef()
 
-    useEffect(() => {
-        const getSubmittedMissions = async () => {
+
+    const getSubmittedMissions = async () => {
         //   const account = await axios.get('/user/current')
         //   setAccountInfo(account.data)
 
@@ -64,8 +65,19 @@ export default function JudgingPanel() {
           ])
           setLoading(false)
         }
+
+    useEffect(() => {
         setLoading(true)
         getSubmittedMissions()
+
+        // socket.io client side setup
+        const ticketSocket = io.connect(`http://localhost:6969/judge-tickets`)
+        ticketSocket.on('connect', ()=> {
+            console.log("client is connected!")
+        });
+        ticketSocket.on('submissionsChanged', (data)=> {
+            console.log(data)
+        });
     }, [])
 
     const handleCancel = () => {
