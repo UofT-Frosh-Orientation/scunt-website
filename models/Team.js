@@ -10,17 +10,17 @@ const TeamSchema = new mongoose.Schema({
         required: true
     },
     participants: {
-        type: String,
-        required: true
+        type: [String],
+        required: false
     },
     score: {
         type: Number,
         required: true,
         default: 0
     }, 
-    missionsCompleted: {
-        type: [Object], // should be SubmittedMission type
-        required: true
+    leedurInformation:{
+        type: [Object],
+        required: false
     }
 })
 

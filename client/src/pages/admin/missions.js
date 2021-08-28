@@ -69,8 +69,14 @@ export default function MissionsAdminView () {
 
         if (data.status === 200) {
             setMissions(() => data.missions)
-            console.log(currCategory)
-            setMissionsInView(() => data.missions.filter(m => m.category === currCategory))
+            setMissionsInView(() => 
+                currCategory === "All" ? data.missions : 
+                    currCategory === "Viewable Missions" ?
+                        data.missions.filter(m => m.isViewable) :
+                    currCategory === "Hidden Missions" ?
+                        data.missions.filter(m => !m.isViewable) :
+                data.missions.filter(m => m.category === currCategory)
+            )
             setViewableErr(`Complete! 🎈 ${missionsChecked.length} missions are now ${state}`)
         } else {
             setViewableErr(data.errorMsg)
@@ -114,7 +120,12 @@ export default function MissionsAdminView () {
     }
     const selectCategory = (category) => 
         setMissionsInView(() => 
-            category === "All" ? missions : missions.filter(m => m.category === category)
+            category === "All" ? missions : 
+                category === "Viewable Missions" ?
+                    missions.filter(m => m.isViewable) :
+                category === "Hidden Missions" ?
+                    missions.filter(m => !m.isViewable) :
+            missions.filter(m => m.category === category)
         )
 
     return (
@@ -141,7 +152,7 @@ export default function MissionsAdminView () {
                     }
                     <br/>
                     { 
-                        missionsInView.length > 0 &&
+                        categories.length > 0 &&
                         <FormDropdownMenu 
                             label="Filter by category"
                             items={categories}

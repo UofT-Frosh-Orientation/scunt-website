@@ -2,12 +2,12 @@ import React,{Component} from 'react'
 import "./containers.css"
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
-import {TextAccent} from "./texts"
-import {Button} from "./buttons"
+import {TextAccent, TextTooltip} from "./texts"
+import {Button, ButtonBubble} from "./buttons"
 import Wave from 'react-wavify'
 import ReactCanvasConfetti from 'react-canvas-confetti';
 import {FroshWeekIcon} from "./socials"
-import { Col, Row } from 'react-bootstrap'
+import { Col, Container, Row } from 'react-bootstrap'
 import { FormCheckbox } from './forms'
 
 export class ContainerNote extends Component {
@@ -396,6 +396,29 @@ export function MissionGeneralContainer ({
   </div>
 }
 
+export function MissionIncompleteContainer ({
+  name,
+  number,
+  category,
+  totalPoints
+}) {
+  return <div className="mission-row">
+    <Row>
+      <Col md={1}>
+        <h6>{number}</h6>
+      </Col>
+      <Col md={6}>
+        <h6>{name}</h6>
+      </Col>
+      <Col md={2}> {<p>{category}</p>} </Col>
+      <Col md={1}> { totalPoints } </Col>
+      <Col md={2}> 
+        <ButtonBubble link={`/frosh/submit?missionNumber=${number}`} label="submit"/>
+      </Col>
+    </Row>
+  </div>
+}
+
 export function MissionFroshContainer ({
   name,
   number,
@@ -405,24 +428,74 @@ export function MissionFroshContainer ({
   submissionLink,
   achievedPoints,
   totalPoints
-}) {}
+}) {
+  return <div className="mission-row">
+    <Row>
+      <Col md={1}>
+        <h6>{number}</h6>
+      </Col>
+      <Col md={6}>
+        <h6>{name}</h6>
+        <p>{category}</p>
+      </Col>
+      <Col md={1}> 
+        <TextTooltip description={status} position="top">
+          <div style={{
+            width: '20px',
+            height: '20px',
+            borderRadius: '20px',
+            backgroundColor: status === 'submitted' ? 'orange' : status === 'judging' ? 'red' : 'green'
+          }}/>
+        </TextTooltip>
+      </Col>
+      <Col md={3}> 
+        <p>{submitter}</p> 
+        <a style={{fontSize: '14px'}} href={submissionLink}>submission</a> 
+      </Col>
+      <Col md={1}> <p>{achievedPoints !== undefined && achievedPoints !== null ? `${achievedPoints} out of ${totalPoints}` : 'not pointed'}</p> </Col>
+    </Row>
+  </div>
+}
 
 export function TeamInfo ({
   name,
+  number,
   participants,
   score,
-  missionsCompleted
+  leedurInformation,
+  deleteTeam,
+  isLoading
 }) {
-  return <ContainerAccordion
-    header={name}
+  return <><ContainerAccordion
+    header={`${number} - ${name} | ${participants.length} frosh - score: ${score}pts`}
     id={`team-${name}`}
   >
     <div className="team-info">
       <div className="team-subheader">
-        <Button primary={false} label={`Missions Completed 🏅: ${missionsCompleted.length}`} onClick={() => {}}/>
-        <p> Team Score: {score}pts </p>
+        <Button primary={false} label={'Delete Team'} onClick={() => deleteTeam(number)} disabled={isLoading}/>
       </div>
-      { participants.map(p => <span style={{color: p.warned ? 'red' : 'purple'}}>{p.email},</span>) }
+      <Container>
+        {
+          leedurInformation.map(l => 
+            <Row>
+              <Col md={4}>  <h3>{l.name}</h3> </Col>
+              <Col md={2}>  <p>{l.number}</p> </Col>
+              <Col md={4}>  <p>{l.address}</p> </Col>
+              <Col md={2}>  <p>{l.scuntLocation}</p> </Col>
+            </Row>
+          )
+        }
+        <Row>
+          { 
+            participants.map(p => 
+            <Col md={2}>
+              <p style={{fontSize: '10px'}}>{p}</p>
+            </Col>) 
+          }
+        </Row>
+      </Container>
     </div>
   </ContainerAccordion>
+  <br/>
+  </>
 }
