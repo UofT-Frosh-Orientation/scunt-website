@@ -155,7 +155,7 @@ module.exports = (app) => {
                 })
                 return
             }
-            const { missionNumber, teamNumber } = req.body
+            const { missionNumber, teamNumber } = req.query
             const mission = await SubmittedMission.findOne({ 
                 number: missionNumber,
                 teamNumber
