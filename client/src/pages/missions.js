@@ -14,15 +14,18 @@ export default function Missions() {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(false)
   const [currCategory, setCurrCategory] = useState('All')
+  const [hasStarted, setHasStarted] = useState(false)
 
   useEffect(() => {
     const getMissions = async () => {
       const { data } = await axios.get('/get/missions')
+      const event = await axios.get('/get/eventDetails')
       if(data.status === 200) {
         setMissions(() => data.missions)
         setMissionsInView(() => data.missions)
         setCategories(() => data.categories)
       }
+      if(event.data.status === 200) setHasStarted(event.data.startEvent)
       setLoading(false)
     }
     setLoading(true)
@@ -44,7 +47,7 @@ export default function Missions() {
       const notEmpty = text.length > 0;
       if(notEmpty) {
           let textFormatted = formatStrings(text)
-          setSearchResults(missionsInView.filter(m => (formatStrings(m.category).includes(textFormatted)||formatStrings(m.name).includes(textFormatted))));
+          setSearchResults(missionsInView.filter(m => formatStrings(m.category).includes(textFormatted) || formatStrings(m.name).includes(textFormatted) || m.number===parseInt(textFormatted)));
       }
       setIsSearching(notEmpty)
   }
@@ -59,42 +62,44 @@ export default function Missions() {
         <br/>
         { loading ? <p>Loading ...</p> : missions.length <= 0 && <h4>There are currently no missions</h4> }
         { 
-          missions.length > 0 && 
-          <>
-            {
-              categories.length > 0 &&
-              <FormDropdownMenu 
-                  label="Filter by category"
-                  items={categories}
-                  onChange={(idx, item) => {
-                    setCurrCategory(item)
-                    selectCategory(item)
-                  }}
-              />
-            }
-            <FormTextBox 
-              style={{width:"50%", margin: '0.75rem auto'}} clearButton 
-              ref={searchRef} 
-              inputId={'missionSearchBar'} 
-              type={"text"} 
-              label={"Search"} 
-              description={"Looking for a Mission?"} 
-              onChange={handleSearch}
-            />
-            {
-              (isSearching ? searchResults : missions)
-              .filter(m => currCategory === "All" ? m : m.category === currCategory)
-              .map(m => 
-                <MissionGeneralContainer 
-                  name={m.name}
-                  number={m.number}
-                  category={m.category}
-                  totalPoints={m.totalPoints}
-                  key={m.number}
+          hasStarted ? 
+            missions.length > 0 && 
+            <>
+              {
+                categories.length > 0 &&
+                <FormDropdownMenu 
+                    label="Filter by category"
+                    items={categories}
+                    onChange={(idx, item) => {
+                      setCurrCategory(item)
+                      selectCategory(item)
+                    }}
                 />
-              )
-            }
-          </>
+              }
+              <FormTextBox 
+                style={{width:"50%", margin: '0.75rem auto'}} 
+                ref={searchRef} 
+                inputId={'missionSearchBar'} 
+                type={"text"} 
+                label={"Search for a Mission Name, Category or Number"} 
+                description={"Looking for a Mission?"} 
+                onChange={handleSearch}
+              />
+              {
+                (isSearching ? searchResults : missions)
+                .filter(m => currCategory === "All" ? m : m.category === currCategory)
+                .map(m => 
+                  <MissionGeneralContainer 
+                    name={m.name}
+                    number={m.number}
+                    category={m.category}
+                    totalPoints={m.totalPoints}
+                    key={m.number}
+                  />
+                )
+              }
+            </> :
+            <h3 className="center-text"> Scunt starts on September 8th at 5:00pm, see you then! </h3>
         }
         { isSearching && searchResults.length <= 0 && missions.length > 0 && <h4>There are no results for your search.</h4>}
       </Container>

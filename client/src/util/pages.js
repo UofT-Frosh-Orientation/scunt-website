@@ -8,6 +8,10 @@ import JudgesAdminView from "../pages/admin/judges"
 import TeamsAdminVeiw from "../pages/admin/teams"
 import SubmitMission from "../pages/frosh/submitMission"
 import CompletedMissions from "../pages/frosh/completedMissions"
+import LeedurSignUpForm from "../pages/leedur/signupForm"
+import LeedursAdminView from "../pages/admin/leedur"
+import TeamInfo from "../pages/frosh/teamInfo"
+import Leaderboard from "../pages/leaderboard"
 
 export const pages = {
   "main" : [
@@ -15,6 +19,11 @@ export const pages = {
       "title": "Missions",
       "link": "/",
       "component" : <Missions/>
+    },
+    {
+      "title": "Leaderboard",
+      "link": "/leaderboard",
+      "component" : <Leaderboard/>
     },
     {
       "title": "Judges",
@@ -50,9 +59,20 @@ export const pages = {
       "protected": "admin"
     },
     {
+      "title": "Scunt Admin Leedurs",
+      "link": "/admin/leedurs",
+      "component": <LeedursAdminView/>,
+      "protected": "admin"
+    },
+    {
       "title": "Judge Sign Up Form",
       "link": "/judge/signup",
       "component": <SignUpForm/>,
+    },
+    {
+      "title": "Leedur Sign Up Form",
+      "link": "/leedur/signup",
+      "component": <LeedurSignUpForm/>,
     },
     {
       "title": "Frosh Submit",
@@ -64,6 +84,12 @@ export const pages = {
       "title": "Frosh Missions",
       "link": "/frosh/missions",
       "component": <CompletedMissions/>,
+      "protected": "frosh"
+    },
+    {
+      "title": "Scunt Team Info",
+      "link": "/frosh/teamInfo",
+      "component": <TeamInfo/>,
       "protected": "frosh"
     }
   ]
