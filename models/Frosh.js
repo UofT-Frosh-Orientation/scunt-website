@@ -253,10 +253,14 @@ const FroshSchema = new mongoose.Schema({
 		required: false,
 		default: ""
 	},
+	discordId: {
+		type: String,
+		required: false,
+		default: ""
+	},
 	scuntTeam: {
 		type: Number, // Numeric index of scunt team -> could also just store these as strings
 		required: false, // Again, not sure if this will break all the models
-		default: 1
 	}
 });
 

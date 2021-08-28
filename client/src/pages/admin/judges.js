@@ -12,10 +12,8 @@ const IN_REVIEW = "in-review", APPROVED = "approved"
 export default function JudgesAdminView () {
     const deleteJudgeConfirm = useRef()
     const [accountInfo, setAccountInfo] = useState({})
-    const [judges, setJudges] = useState({
-        inReview: [],
-        approved: []
-    })
+    const [inReviewJudges, setInReviewJudges] = useState([])
+    const [approvedJudges, setApprovedJudges] = useState([])
     const [view, setView] = useState(IN_REVIEW)
     const [updateJudgeMsg, setUpdateJudgeMsg] = useState('')
     const [delJudgeEmail, setDelJudgeEmail] = useState('')
@@ -26,7 +24,10 @@ export default function JudgesAdminView () {
             const judges = await axios.get('/get/admin/judges')
 
             setAccountInfo(account.data)
-            if(judges.data.status === 200) setJudges(judges.data.judges)
+            if(judges.data.status === 200) {
+                setInReviewJudges(judges.data.judges.inReview)
+                setApprovedJudges(judges.data.judges.approved)
+            }
         }
         getInfo()
     }, [])
@@ -37,42 +38,34 @@ export default function JudgesAdminView () {
             email, status
         })
         if (data.status === 200) {
-            setJudges(data.judges)
+            const judges = await axios.get('/get/admin/judges')
+            if(judges.data.status === 200) {
+                setInReviewJudges(judges.data.judges.inReview)
+                setApprovedJudges(judges.data.judges.approved)
+            }
             setUpdateJudgeMsg(`Judge with email ${email} has been ${status ? 'approved' : 'revoked'} access`)
         } else {
             setUpdateJudgeMsg(data.errorMsg)
         }
     }
+
     const deleteJudgeAcct = async (confirm) => {
         deleteJudgeConfirm?.current.setModalState(false)
         if (confirm) {
             setUpdateJudgeMsg('Deleting ...')
             const { data } = await axios.delete(`/delete/admin/judge?email=${delJudgeEmail}`)
             if (data.status === 200) {
-                setJudges(data.judges)
+                const judges = await axios.get('/get/admin/judges')
+                if(judges.data.status === 200) {
+                    setInReviewJudges(judges.data.judges.inReview)
+                    setApprovedJudges(judges.data.judges.approved)
+                }
                 setUpdateJudgeMsg(`Judge with email ${delJudgeEmail} has been removed.`)
             } else {
                 setUpdateJudgeMsg(data.errorMsg)
             }
         }
     }
-
-    const judgeHTML = (j, state) => (
-        <div className="judge-info">
-            <h3>{j.name}</h3>
-            <p>{j.email}</p>
-            { 
-                state === IN_REVIEW && <Button primary label='Approve ✅' onClick={() => updateJudgeStatus(j.email, true)}/> 
-            }
-            { 
-                state === APPROVED && <Button primary label='Revoke ❌' onClick={() => updateJudgeStatus(j.email, false)}/> 
-            }
-            <Button primary={false} label='Delete 💀' onClick={() => {
-                setDelJudgeEmail(j.email)
-                deleteJudgeConfirm?.current.setModalState(true)
-            }}/> 
-        </div>
-    )
 
     return (
         <div>
@@ -89,10 +82,31 @@ export default function JudgesAdminView () {
                     </div>
                     <p>{updateJudgeMsg}</p>
                     {
-                        view === IN_REVIEW && (judges.inReview.length > 0 ? judges.inReview.map(j => judgeHTML(j, IN_REVIEW)) : <h3>There are no judges that are in review</h3>)
+                        view === IN_REVIEW && (inReviewJudges.length > 0 ? inReviewJudges.map(j => 
+                            <div className="judge-info">
+                                <h3>{j.name}</h3>
+                                <p>{j.email}</p>
+                                <Button primary label='Approve ✅' onClick={() => updateJudgeStatus(j.email, true)}/>
+                                <Button primary={false} label='Delete 💀' onClick={() => {
+                                    setDelJudgeEmail(j.email)
+                                    deleteJudgeConfirm?.current.setModalState(true)
+                                }}/> 
+                            </div>
+                            
+                        ) : <h3>There are no judges that are in review</h3>)
                     }
                     {
-                        view === APPROVED && (judges.approved.length > 0 ? judges.approved.map(j => judgeHTML(j, APPROVED)) : <h3>There are no judges that are approved</h3>)
+                        view === APPROVED && (approvedJudges.length > 0 ? approvedJudges.map(j => 
+                            <div className="judge-info">
+                                <h3>{j.name}</h3>
+                                <p>{j.email}</p>
+                                <Button primary label='Revoke ❌' onClick={() => updateJudgeStatus(j.email, false)}/> 
+                                <Button primary={false} label='Delete 💀' onClick={() => {
+                                    setDelJudgeEmail(j.email)
+                                    deleteJudgeConfirm?.current.setModalState(true)
+                                }}/> 
+                            </div>
+                        ) : <h3>There are no judges that are approved</h3>)
                     }
                     <ContainerPopupModalConfirm 
                         ref={deleteJudgeConfirm} 

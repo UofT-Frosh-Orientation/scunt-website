@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 // Load User model
 const Frosh = require('../models/Frosh');
+const Leedur = require('../models/Leedur');
 const ScuntAdmin = require('../models/ScuntAdmin');
 const Judge = require('../models/Judge');
 
@@ -17,6 +18,29 @@ module.exports = function(passport) {
 			// Match user
 			console.log("frosh passport strategy");
 			Frosh.findOne({
+				email: new RegExp(`^${email}$`, 'i')
+			}).then((user) => {
+				if (!user) {
+					return done(null, false, { message: 'That email is not registered' });
+				}
+				// Match password
+				bcrypt.compare(password, user.password, (err, isMatch) => {
+					if (err) throw err;
+					if (isMatch) {
+						return done(null, user);
+					} else {
+						return done(null, false, { message: 'Password incorrect' });
+					}
+				});
+			});
+		})
+	);
+
+	passport.use(
+		'leedur', new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+			// Match user
+			console.log("leedur passport strategy");
+			Leedur.findOne({
 				email: new RegExp(`^${email}$`, 'i')
 			}).then((user) => {
 				if (!user) {
@@ -100,7 +124,11 @@ module.exports = function(passport) {
 			ScuntAdmin.findById(sessionInstance.id, function(err, user) {
 				done(err, user);
 			});
-		} else{
+		} else if (sessionInstance.userType==="leedur"){
+			Leedur.findById(sessionInstance.id, function(err, user) {
+				done(err, user);
+			});
+		}else{
 			Frosh.findById(sessionInstance.id, function(err, user) {
 				done(err, user);
 			});

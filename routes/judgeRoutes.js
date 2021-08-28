@@ -1,19 +1,26 @@
-const Judge = require('../models/Judge');
-
 module.exports = (app) => {
     const bcrypt = require('bcryptjs');
     const EmailValidator = require('email-validator');
     const ScuntAdmin = require('../models/ScuntAdmin');
+    const Judge = require('../models/Judge');
     const SubmittedMission = require('../models/SubmittedMission');
 
     const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, INTERNAL_ERROR_MSG, SUBMITTED, JUDGING, COMPLETE } = require('./errorMessages');
 
     app.post('/create/judge/', async (req, res) => {
         const judgeData = req.body
+        const { name, email, password } = judgeData
         const response = {
 			status: OK,
 			errorMsg: ""
 		}
+
+        if(!name || !email || !password) {
+            response.status = NOT_ACCEPTED
+            response.errorMsg = "Please fill in all fields"
+            res.send(response)
+            return
+        }
 
         if (!EmailValidator.validate(judgeData.email)) {
             response.status = NOT_ACCEPTED

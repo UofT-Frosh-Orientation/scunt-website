@@ -1,7 +1,10 @@
+const Team = require('../models/Team');
+
 module.exports = (app) => {
 
 	const passport = require('passport');
     const Judge = require("../models/Judge");
+    const Leedur = require("../models/Leedur");
     const ScuntAdmin = require("../models/ScuntAdmin");
 	const Frosh = require('../models/Frosh')
 
@@ -18,29 +21,35 @@ module.exports = (app) => {
 		}
 
 		const frosh = await Frosh.findOne({ email })
+		const leedur = await Leedur.findOne({ email })
         const judge = await Judge.findOne({ email })
         const admin = await ScuntAdmin.findOne({ email })
 
 		if(frosh) {
 			if (frosh.isDeleted) {
 				errors.push('Your account has been deleted due to outstanding fees. Unfortunately if you want to participate in frosh again, you must re-register.')
-			} else if (!frosh.isScunt || !frosh.scuntTeam) {
+			} else if (!frosh.scuntTeam) {
 				errors.push('You have not registered for scunt yet. To do so please login to your account on orientation.skule.ca and edit your account information to join Scunt.')
+			// } else {
 			} else {
 				loginType = 'frosh'
 			}
+		} else if (leedur) {
+			if (!leedur.isActivated) {
+				errors.push('Your leedur account has not been activated.')
+			} else {
+				loginType = 'leedur'
+			}
+		} else if (judge) {
+			if (!judge.isActivated) {
+				errors.push('Your judge account has not been activated.')
+			} else {
+				loginType = 'judge'
+			}
+		} else if (admin) {
+			loginType = 'admin'
 		} else {
-            if (judge) {
-				if (!judge.isActivated) {
-					errors.push('Your judge account has not been activated.')
-				} else {
-                	loginType = 'judge'
-				}
-            } else if (admin) {
-                loginType = 'admin'
-            } else {
-			    errors.push('You have not registered for a scunt account yet.')
-            }
+			errors.push('You have not registered for a scunt account yet.')
 		}
 
 		if (errors.length > 0) {
@@ -68,7 +77,7 @@ module.exports = (app) => {
     app.get('/user/signedIn', (req, res) => {
 		if (req.isAuthenticated()) {
 			const {accountType} = req.user
-			res.send(accountType || (req.user.isScunt !== undefined ? 'frosh' : ''));
+			res.send(accountType === "leedur" ? 'frosh' : (accountType || (req.user.isScunt !== undefined ? 'frosh' : '')));
 		} else {
 			res.send(null);
 		}
@@ -82,7 +91,7 @@ module.exports = (app) => {
 			user['_id'] = undefined
 			user.resetPasswordToken = undefined
 			user.resetPasswordExpires = undefined
-			console.log(user)
+			// console.log(user)
 			res.send(user)
 		} else {
 			res.send({})

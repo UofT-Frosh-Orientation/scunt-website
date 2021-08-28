@@ -38,6 +38,7 @@ export class LoginButton extends Component {
               <ButtonBubble label="Manage Missions" link="/admin/missions" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Manage Judges" link="/admin/judges" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Manage Teams" link="/admin/teams" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Manage Leedurs" link="/admin/leedurs" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Logout" accent link="/" onClick={()=>{this.infoPopup.setModalState(false); this.setLoginStatus(false,"", "", "")}}/>
             </>
           }
@@ -49,9 +50,10 @@ export class LoginButton extends Component {
             </>
           }
           { 
-            this.state.accountType === "frosh" && <>
+            (this.state.accountType === "frosh" || this.state.accountType === "leedur") && <>
               <ButtonBubble label="Submit" link="/frosh/submit" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Submitted & Completed Missions" link="/frosh/missions" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Team Info" link="/frosh/teamInfo" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Logout" accent link="/" onClick={()=>{this.infoPopup.setModalState(false); this.setLoginStatus(false,"", "", "")}}/>
             </>
           }
