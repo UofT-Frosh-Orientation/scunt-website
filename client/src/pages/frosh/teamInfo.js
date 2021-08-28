@@ -22,6 +22,7 @@ export default function TeamInfo() {
         getMissions()
     }, [])
 
+    console.log(teamInfo)
     return(
         <div>
             <br/>
@@ -33,12 +34,16 @@ export default function TeamInfo() {
                     !loading &&
                     <>
                         <Row>
-                            <Col md={9}> {teamInfo.number} - {teamInfo.name} </Col>
-                            <Col md={3}> {teamInfo.score}pts </Col>
+                            <Col md={3}> <h3> Team Number </h3> </Col>
+                            <Col md={8}> <p> {teamInfo.number} </p> </Col>
+                            <Col md={3}> <h3> Team Name </h3> </Col>
+                            <Col md={8}> <p> {teamInfo.name} </p> </Col>
                         </Row>
+                        <br/>
                         <Row>
+                            <h2>Head Leedurs on your team</h2>
                             {
-                                teamInfo.leedurInformation.map(l =>
+                                teamInfo.leedurInformation && teamInfo.leedurInformation.map(l =>
                                     <Col md={6}>
                                         <h3>{l.name}</h3>
                                         <p>{l.number}</p>

@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { LoadingAnimation, MissionFroshContainer, MissionGeneralContainer, MissionIncompleteContainer } from '../../components/containers'
-import { FormDropdownMenu } from '../../components/forms'
+import { FormDropdownMenu, FormTextBox } from '../../components/forms'
 import { HeaderPage } from '../../components/texts'
 
 export default function CompletedMissions() {
@@ -10,6 +10,9 @@ export default function CompletedMissions() {
     const [accountInfo, setAccountInfo] = useState({})
     const [loading, setLoading] = useState(false)
     const [filter, setFilter] = useState('')
+    const [searchResults, setSearchResults] = useState([])
+    const [isSearching, setIsSearching] = useState(false)
+    const [allMissions, setAllMissions] = useState({})
 
     useEffect(() => {
         const getMissions = async () => {
@@ -18,11 +21,17 @@ export default function CompletedMissions() {
 
             setAccountInfo(account.data)
             if (data.status === 200) {
+                setAllMissions({
+                    "Missions in Judging": data.inProgressMissions,
+                    "Completed Missions": data.completedMissions,
+                    "Incomplete Missions": data.incompleteMissions,
+                    "Missions Submitted by me": data.submittedByUser
+                })
                 setMissions({
                     "Missions in Judging": data.inProgressMissions.map(m => <MissionFroshContainer {...m}/>),
                     "Completed Missions": data.completedMissions.map(m => <MissionFroshContainer {...m}/>),
                     "Incomplete Missions": data.incompleteMissions.map(m => <MissionIncompleteContainer {...m}/>),
-                    "Submitted by me": data.submittedByUser.map(m => <MissionFroshContainer {...m}/>)
+                    "Missions Submitted by me": data.submittedByUser.map(m => <MissionFroshContainer {...m}/>)
                 })
                 setFilter("Incomplete Missions")
             }
@@ -32,6 +41,25 @@ export default function CompletedMissions() {
         getMissions()
     }, [])
 
+    function formatStrings(string){
+        return string.replace(" ","").replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+    }
+  
+    const handleSearch = (text) => {
+        const notEmpty = text.length > 0;
+        if(notEmpty) {
+            let textFormatted = formatStrings(text)
+            setSearchResults(allMissions[filter]
+                .filter(m => 
+                    formatStrings(m.name).includes(textFormatted) ||
+                    formatStrings(m.number.toString()).includes(textFormatted) ||
+                    formatStrings(m.category).includes(textFormatted)
+                )
+            )
+        }
+        setIsSearching(notEmpty)
+    }
+
     return(
         <div>
             <br/>
@@ -40,14 +68,33 @@ export default function CompletedMissions() {
             <Container>
                 { 
                     missions["Incomplete Missions"] && missions["Missions in Judging"] && missions["Completed Missions"]
-                    && <FormDropdownMenu
-                        label="Filter by mission status"
-                        items={["Incomplete Missions", "Missions in Judging", "Completed Missions", "Submitted by me"]}
-                        onChange={(idx, item) => setFilter(item)}
-                    />
+                    && <>
+                        <FormDropdownMenu
+                            label={isSearching ? "Stop searching to filter by mission status" : "Filter by mission status"}
+                            items={["Incomplete Missions", "Missions in Judging", "Completed Missions", "Missions Submitted by me"]}
+                            onChange={(idx, item) => {
+                                setIsSearching(false)
+                                setFilter(item)
+                            }}
+                            disabled={isSearching}
+                        />
+                        <FormTextBox 
+                            style={{width:"100%", margin: '0.75rem auto'}} clearButton 
+                            inputId={'missionSearchBar'} 
+                            type={"text"} 
+                            label={"Search All Missions"} 
+                            onChange={handleSearch}
+                        />
+                        {isSearching && <p>Searching {filter} </p> }
+                    </>
                 }
                 { loading && <div className="center"><LoadingAnimation/></div> }
-                { !loading && missions[filter] }
+                { 
+                    !loading && 
+                    isSearching ? searchResults.map(m =>
+                        filter === "Incomplete Missions" ? <MissionIncompleteContainer {...m}/> : <MissionFroshContainer {...m}/>
+                    ) : missions[filter] 
+                }
             </Container>
         </div>
     )

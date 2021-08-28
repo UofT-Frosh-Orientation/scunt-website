@@ -13,7 +13,7 @@ export default function Leaderboard () {
         const getScores = async () => {
             const { data } = await axios.get('/get/leaderboard/scores?discord=false')
             const event = await axios.get('/get/eventDetails')
-            if(event.data.status === 200) setHasStarted(event.data.startEvent)
+            setHasStarted(event.data.startEvent)
             if(event.data.startEvent) {
                 if (data.status === 200) {
                     setTeams(data.teams)

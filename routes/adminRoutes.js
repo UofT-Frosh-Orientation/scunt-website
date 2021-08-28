@@ -181,18 +181,9 @@ module.exports = (app) => {
                     }
                 }
 
-                const missions = await Mission.find({}, {
-                    name: 1,
-                    number: 1,
-                    category: 1,
-                    totalPoints: 1,
-                    isViewable: 1
-                }).sort({number: 1})
-
                 res.send({
                     status: OK,
                     errorMsg: "",
-                    missions
                 })
             } catch (err) {
                 console.log(err)

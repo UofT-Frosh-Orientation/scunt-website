@@ -1,14 +1,14 @@
-const EventSettings = require('../models/EventSettings');
-
 module.exports = (app) => {
     const EmailValidator = require('email-validator');
     const bcrypt = require('bcryptjs');
+    const EventSettings = require('../models/EventSettings');
     const SubmittedMission = require('../models/SubmittedMission');
     const ScuntAdmin = require('../models/ScuntAdmin')
     const Leedur = require('../models/Leedur');
     const Judge = require('../models/Judge');
     const Team = require('../models/Team');
     const Mission = require('../models/Mission');
+    const Frosh = require('../models/Frosh');
     const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, SUBMITTED, JUDGING, COMPLETE } = require('./errorMessages');
 
     app.get('/get/missions', async (req, res) => {
@@ -34,7 +34,8 @@ module.exports = (app) => {
         try {
             const { 
                 email, 
-                discordUsername, 
+                discordUsername,
+                discordId, 
                 missionNumber,
                 teamNumber,
                 submissionLink
@@ -54,6 +55,29 @@ module.exports = (app) => {
                 res.send({
                     status: NOT_ACCEPTED,
                     errorMsg: 'Please fill in required fields'
+                })
+                return
+            }
+
+            let frosh
+            if (email) {
+                frosh = await Frosh.findOne({ email })
+            } else if (discordUsername) {
+                frosh = await Frosh.findOne({ discordId })
+            }
+
+            if (frosh) {
+                if (frosh.scuntTeam !== parseInt(teamNumber)) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: 'You cannot submit to a scunt team outside your own.'
+                    })
+                    return
+                }
+            } else {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: 'You have not registered for scunt or you have not logged into the scunt discord.'
                 })
                 return
             }
@@ -155,18 +179,42 @@ module.exports = (app) => {
                 })
                 return
             }
-            const { missionNumber, teamNumber } = req.query
+            const { missionNumber, teamNumber, discordId } = req.query
+            const frosh = await Frosh.findOne({ discordId })
+            if (frosh) {
+                if(frosh.scuntTeam !== parseInt(teamNumber)) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: 'You cannot get the status of a mission outside your team!'
+                    })
+                    return
+                }
+            } else {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: 'You have not logged into discord!'
+                })
+                return
+            }
             const mission = await SubmittedMission.findOne({ 
                 number: missionNumber,
                 teamNumber
             })
-            res.send({
-                status: OK,
-                missionStatus: mission.status,
-                points: mission.achievedPoints,
-                name: `${mission.number} - ${mission.name}`,
-                category: mission.category
-            })
+            if (mission) {
+                res.send({
+                    status: OK,
+                    missionStatus: mission.status,
+                    points: mission.achievedPoints,
+                    name: `${mission.number} - ${mission.name}`,
+                    category: mission.category
+                })
+            } else {
+                res.send({
+                    status: USER_ERROR,
+                    errorMsg: 'Your team has not submitted this mission yet.'
+                })
+                return
+            }
         } catch (err) {
             console.log('getting status - ' + err)
             res.send({
@@ -186,7 +234,8 @@ module.exports = (app) => {
                 const inProgressMissions = submittedMissions.filter(m => m.status === SUBMITTED || m.status === JUDGING)
                 const completedMissions = submittedMissions.filter(m => m.status === COMPLETE)
                 const incompleteMissions = await Mission.find({
-                    number: { $nin: missionNumbers }
+                    number: { $nin: missionNumbers },
+                    isViewable: true
                 }).sort({number: 1})
                 const submittedByUser = await SubmittedMission.find({ teamNumber, submitter: { $in: [req.user.email, req.user.discordUsername]}})
 
@@ -294,7 +343,7 @@ module.exports = (app) => {
         try {
             const teamNumber = parseInt(req.query.teamNumber)
             if (req.isAuthenticated() && req.user.scuntTeam === teamNumber) {
-                const teamInfo = await Team.find({
+                const teamInfo = await Team.findOne({
                     number: teamNumber
                 })
 
@@ -334,13 +383,14 @@ module.exports = (app) => {
     app.post('/login/discord', async (req, res) => {
         try {
             const { email, code, discordUsername, id } = req.body
-            const frosh = await Frosh({ email })
+            const frosh = await Frosh.findOne({ email })
             if (frosh) {
                 if(frosh.scuntTeam) {
-                    if(frosh.code === code) {
+                    if(frosh.discordToken === code) {
                         frosh.discordUsername = discordUsername
                         frosh.discordId = id
                         frosh.discordSignedIn = true
+                        frosh.save()
                         res.send({
                             status: OK
                         })
@@ -363,6 +413,7 @@ module.exports = (app) => {
                 })
             }
         } catch (err) {
+            console.log(err)
             res.send({
                 status: INTERNAL_ERROR,
                 errorMsg: 'There was a problem with logging you in.'

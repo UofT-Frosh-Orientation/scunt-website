@@ -20,12 +20,14 @@ export default function Missions() {
     const getMissions = async () => {
       const { data } = await axios.get('/get/missions')
       const event = await axios.get('/get/eventDetails')
-      if(data.status === 200) {
-        setMissions(() => data.missions)
-        setMissionsInView(() => data.missions)
-        setCategories(() => data.categories)
+      setHasStarted(event.data.startEvent)
+      if (event.data.startEvent) {
+        if(data.status === 200) {
+          setMissions(() => data.missions)
+          setMissionsInView(() => data.missions)
+          setCategories(() => data.categories)
+        }
       }
-      if(event.data.status === 200) setHasStarted(event.data.startEvent)
       setLoading(false)
     }
     setLoading(true)

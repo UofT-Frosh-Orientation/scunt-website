@@ -12,6 +12,7 @@ export default function SubmitMission() {
     const [loading, setLoading] = useState(false)
     const [searchResults, setSearchResults] = useState([])
     const [accountInfo, setAccountInfo] = useState({})
+    const [isSearching, setIsSearching] = useState(false)
 
     useEffect(() => {
         const getMissions = async () => {
@@ -42,6 +43,7 @@ export default function SubmitMission() {
             let textFormatted = formatStrings(text)
             setSearchResults(missions.filter(m => formatStrings(m.text).includes(textFormatted)))
         }
+        setIsSearching(notEmpty)
     }
 
     const submit = async () => {
@@ -80,11 +82,11 @@ export default function SubmitMission() {
                                         onChange={handleSearch}
                                     />
                                     {
-                                        searchResults.length > 0 ? searchResults.map((m) => 
-                                            <Button primary={false} label={m.text} onClick={() => setMissionNumber(m.number)}/>
-                                        ) : missionNumber ?
-                                            <p>Choose another mission</p> :
-                                            <p>There are no results for this search.</p>
+                                        isSearching ? 
+                                            searchResults.map((m) => 
+                                                <Button primary={false} label={m.text} onClick={() => setMissionNumber(m.number)}/>
+                                            ) : missionNumber ? <p>Choose another mission</p> :
+                                        <p>There are no results for this search.</p>
                                     }
                                 </>
                             : <p> There are no missions you can submit to at the moment</p>

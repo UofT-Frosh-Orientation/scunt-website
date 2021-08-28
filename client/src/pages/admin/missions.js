@@ -24,6 +24,8 @@ export default function MissionsAdminView () {
     const [viewableErr, setViewableErr] = useState('')
     const [deleteErr, setDeleteErr] = useState('')
     const [currCategory, setCurrCategory] = useState('')
+    const [searchResults, setSearchResults] = useState([])
+    const [isSearching, setIsSearching] = useState(false)
 
     useEffect(() => {
         const getInfo = async () => {
@@ -68,15 +70,17 @@ export default function MissionsAdminView () {
         })
 
         if (data.status === 200) {
-            setMissions(() => data.missions)
+            const missions = await axios.get('/get/admin/missions')
+            setMissions(() => missions.data.missions)
             setMissionsInView(() => 
-                currCategory === "All" ? data.missions : 
+                currCategory === "All" ? missions.data.missions : 
                     currCategory === "Viewable Missions" ?
-                        data.missions.filter(m => m.isViewable) :
+                        missions.data.missions.filter(m => m.isViewable) :
                     currCategory === "Hidden Missions" ?
-                        data.missions.filter(m => !m.isViewable) :
-                data.missions.filter(m => m.category === currCategory)
+                        missions.data.missions.filter(m => !m.isViewable) :
+                missions.data.missions.filter(m => m.category === currCategory)
             )
+            setIsSearching(false)
             setViewableErr(`Complete! 🎈 ${missionsChecked.length} missions are now ${state}`)
         } else {
             setViewableErr(data.errorMsg)
@@ -118,7 +122,10 @@ export default function MissionsAdminView () {
         } 
         deleteConfirmModal?.current.setModalState(false)
     }
-    const selectCategory = (category) => 
+    const selectCategory = (category) => {
+        if(isSearching) {
+            isSearching(false)
+        }
         setMissionsInView(() => 
             category === "All" ? missions : 
                 category === "Viewable Missions" ?
@@ -127,6 +134,20 @@ export default function MissionsAdminView () {
                     missions.filter(m => !m.isViewable) :
             missions.filter(m => m.category === category)
         )
+    }
+    
+    function formatStrings(string){
+        return string.replace(" ","").replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    }
+
+    const handleSearch = (text) => {
+        const notEmpty = text.length > 0;
+        if(notEmpty) {
+            let textFormatted = formatStrings(text)
+            setSearchResults(missionsInView.filter(m => formatStrings(m.category).includes(textFormatted) || formatStrings(m.name).includes(textFormatted) || m.number===parseInt(textFormatted)));
+        }
+        setIsSearching(notEmpty)
+    }
 
     return (
         <div>
@@ -162,6 +183,14 @@ export default function MissionsAdminView () {
                             }}
                         />
                     }
+                    <FormTextBox 
+                        style={{width:"50%", margin: '0.75rem auto'}} 
+                        inputId={'missionSearchBar'} 
+                        type={"text"} 
+                        label={"Search for a Mission Name, Category or Number"} 
+                        description={"Looking for a Mission?"} 
+                        onChange={handleSearch}
+                    />
                     {   
                         missionsChecked.length > 0 && categories.length > 0 && <>
                             <h4>Make selected ... </h4>
@@ -173,7 +202,7 @@ export default function MissionsAdminView () {
                         </>
                     }
                     {
-                        missionsInView.length > 0 ? missionsInView.map(m => (
+                        missionsInView.length > 0 ? (isSearching ? searchResults : missionsInView).map(m => (
                             <MissionAdminContainer 
                                 number={m.number} 
                                 name={m.name} 
