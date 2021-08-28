@@ -81,13 +81,13 @@ module.exports = (app) => {
                 console.log(missions[0])
                 if(
                     missions[0][0].trim() !== "#" ||
-                    !missions[0][1].trim().includes("Mission") ||
+                    !(missions[0][1].trim().includes("Mission") || missions[0][1].trim().includes("Item")) ||
                     missions[0][2].trim() !== "Category" ||
                     missions[0][3].trim() !== "Points"
                 ) {
                     res.send({
                         status: USER_ERROR,
-                        errorMsg: "Please put your spreadsheet in the correct format (columns with titles: #|Mission|Category|Points)"
+                        errorMsg: "Please put your spreadsheet in the correct format (columns with titles: #|Mission or Item|Category|Points)"
                     })
                     return
                 }
