@@ -149,7 +149,7 @@ export default function JudgingPanel() {
             <HeaderPage img={require("../../assets/banners/about_us.svg").default}> Judging Panel </HeaderPage>
             <br/>
             <div style={{marginLeft:"5rem"}}>
-                <Button primary={tabView === "livestream"} label="Livestream" onClick={() => setTabView("submitted")}/>
+                <Button primary={tabView === "livestream"} label="Livestream" onClick={() => setTabView("livestream")}/>
                 <Button primary={tabView === "unresolved"} label="Unresolved" onClick={() => setTabView("unresolved")}/>
                 <Button primary={tabView === "in-person"} label="In-person judging" onClick={() => setTabView("in-person")}/>
                 <Button primary={tabView === "bribes-and-deductions"} label="Bribes &amp; Deductions" onClick={() => setTabView("bribes-and-deductions")}/>

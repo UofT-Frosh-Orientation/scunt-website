@@ -397,10 +397,13 @@ export function MissionJudgeContainer({
   handleScreen
 }) {
   const [errMsg, setErrMsg] = useState('')
-  const statusColors = {submitted: "orange", 
-                        judging: "red",
-                        judged: "green"
-                      }
+  const statusColors = {
+    "submitted": "orange", 
+    "submitted(live)": "orange",
+    "judging": "#FF8080",
+    "judging(live)": "#FF8080",
+    "complete": "#E6FFE6"
+  }
   const getPointsErrMsg = (value) =>{
     if (value > totalPoints * 1.5 || value < achievedPoints) {
       setErrMsg('value out of range')
@@ -421,7 +424,10 @@ export function MissionJudgeContainer({
         <h4>team {teamNumber}</h4>
       </Col>
       <Col md={2}>
-        <h4>{totalPoints} Points</h4>
+        {status !== "complete"? 
+          <h4>{totalPoints} Points</h4> :
+          <h4>{achievedPoints}/{totalPoints} Points</h4>
+        }
       </Col>
       <Col md={1}>
       <h4><a target='_blank' href={submissionLink}> Link </a></h4>
@@ -434,6 +440,7 @@ export function MissionJudgeContainer({
         {handleScreen !== undefined &&  
         <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer", marginRight: "1rem"}}
           onClick={handleScreen}> Screen </h4>}
+        {status !== "complete" &&  
         <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer"}} 
             onClick={() => {
               if (viewMore) {
@@ -443,6 +450,7 @@ export function MissionJudgeContainer({
               }}}>
             {viewMore? "Close" : status==="judging" || status==="judging(live)"? "View Anyways" : "View more & judge"}
         </h4>
+        }
       </div>
       {viewMore && 
         <div className="judging-row">

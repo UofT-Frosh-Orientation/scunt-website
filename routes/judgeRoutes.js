@@ -5,7 +5,7 @@ module.exports = (app) => {
     const Judge = require('../models/Judge');
     const SubmittedMission = require('../models/SubmittedMission');
 
-    const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, INTERNAL_ERROR_MSG, SUBMITTED, JUDGING, COMPLETE } = require('./errorMessages');
+    const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, INTERNAL_ERROR_MSG, SUBMITTED, SUBMITTED_LIVE, JUDGING, JUDGING_LIVE, COMPLETE, FLAGGED } = require('./errorMessages');
 
     app.post('/create/judge/', async (req, res) => {
         const judgeData = req.body
@@ -73,7 +73,7 @@ module.exports = (app) => {
         }
     });
 
-    // Actions: judging, cancel, update
+    // Actions: judging, cancel, update, screen, flag
     app.post('/judge/update', async (req, res) => {
         try {
             const { 
@@ -85,18 +85,26 @@ module.exports = (app) => {
             const submittedmission = await SubmittedMission.findById(ticketId);
             if(submittedmission) {
                 if (action === "judging") {
-                    submittedmission.status = JUDGING;
+                    if (submittedmission.status === SUBMITTED_LIVE) {
+                        submittedmission.status = JUDGING_LIVE;
+                    }else {
+                        submittedmission.status = JUDGING;
+                    }
                     submittedmission.save();
                     res.send({status: OK});
                     return;
                 } else if (action === "cancel") {
-                    submittedmission.status = SUBMITTED;
+                    if (submittedmission.status === JUDGING_LIVE) {
+                        submittedmission.status = SUBMITTED_LIVE;
+                    }else {
+                        submittedmission.status = SUBMITTED;
+                    }
                     submittedmission.save();
                     res.send({status: OK});
                     return;
                 } else if (action === "update") {
-                    // check new points is 
-                    if (newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints) {
+                    // check new points range
+                    if (isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints) {
                         res.send({
                             status: NOT_ACCEPTED,
                             errorMsg: "New score should be higher than current score and lower than total score"
@@ -108,7 +116,17 @@ module.exports = (app) => {
                     submittedmission.save();
                     res.send({status: OK});
                     return;
-                } else {
+                } else if (action === "screen") {
+                    submittedmission.status = SUBMITTED_LIVE;
+                    submittedmission.save();
+                    res.send({status: OK});
+                    return;
+                } else if (action === "flag") {
+                    submittedmission.status = FLAGGED;
+                    submittedmission.save();
+                    res.send({status: OK});
+                    return;
+                }else {
                     res.send({
                         status: NOT_ACCEPTED,
                         errorMsg: "Don't try to hack the website, thanks"
