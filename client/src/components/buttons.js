@@ -49,6 +49,12 @@ export class Button extends Component {
           {this.props.label}
         </div>
       )
+    }else if(this.props.flagged){
+      return(
+        <div onClick={this.props.onClick} className={"buttonFlagged" + (this.props.large?" buttonLarge":"")}>
+          {this.props.label}
+        </div>
+      )
     } else {
       return(
         <div onClick={this.props.onClick} className={"buttonSecondary" + (this.props.large?" buttonLarge":"")}>

@@ -382,7 +382,7 @@ export function MissionJudgeContainer({
   number, 
   teamNumber, 
   totalPoints, 
-  currPoints,
+  achievedPoints,
   submissionLink,
   status, 
   submitter,
@@ -393,48 +393,65 @@ export function MissionJudgeContainer({
   handleJudging,
   handleCancel,
   handleUpdate,
+  handleFlag, 
+  handleScreen
 }) {
-  // const [viewMore, setViewMore] = useState(false);
+  const [errMsg, setErrMsg] = useState('')
   const statusColors = {submitted: "orange", 
                         judging: "red",
                         judged: "green"
                       }
+  const getPointsErrMsg = (value) =>{
+    if (value > totalPoints * 1.5 || value < achievedPoints) {
+      setErrMsg('value out of range')
+    } else {
+      setErrMsg('')
+    }
+  }
 
   return <div className="mission-row">
     <Row>
-      <Col md={2}>
+      <Col md={1}>
         <h4>#{number}</h4>
       </Col>
       <Col md={4}>
-        <h5>{teamNumber}</h5>
+        <h5>{name}</h5>
+      </Col>
+      <Col md={2}>
+        <h4>team {teamNumber}</h4>
       </Col>
       <Col md={2}>
         <h4>{totalPoints} Points</h4>
       </Col>
-      <Col md={2}>
+      <Col md={1}>
       <h4><a target='_blank' href={submissionLink}> Link </a></h4>
       </Col>
       <Col md={2}>
         <h6 style={{backgroundColor:statusColors[status], borderRadius:"10%"}}>{status}</h6>
       </Col>
       </Row>
-      <h4 style={{textAlign:"right", textDecoration:"underline", cursor:"pointer"}} 
-          onClick={() => {
-            if (viewMore) {
-              handleCancel(ticketId);
-            } else {
-              handleJudging(ticketId);
-            }}}>
-          {viewMore? "Close" : status==="judging"? "View Anyways" : "View more & judge"}
-      </h4>
+      <div style={{textAlign:"right"}}>
+        {handleScreen !== undefined &&  
+        <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer", marginRight: "1rem"}}
+          onClick={handleScreen}> Screen </h4>}
+        <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer"}} 
+            onClick={() => {
+              if (viewMore) {
+                handleCancel(ticketId);
+              } else {
+                handleJudging(ticketId);
+              }}}>
+            {viewMore? "Close" : status==="judging" || status==="judging(live)"? "View Anyways" : "View more & judge"}
+        </h4>
+      </div>
       {viewMore && 
         <div className="judging-row">
           <Row>
             <Col md={6}>
-              <h4>Mission Name: {name}</h4>
+              <h4>Category: {category}</h4>
             </Col>
             <Col md={6}>
-              <h4>Category: {category}</h4>
+              <h4>Achieved Points: {achievedPoints}</h4>
             </Col>
           </Row>
 
@@ -443,17 +460,20 @@ export function MissionJudgeContainer({
               <p>Submitter: {submitter}</p>
               <p>Time: {timeCreated}</p>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <FormTextBox 
                   clearButton 
-                  type="text"
+                  type="number"
                   label="New Points"
                   localStorageKey={`mission${number}_team_${teamNumber}_points`}
-                  description={`Current Points: ${currPoints}/${totalPoints}`}
+                  onChange={getPointsErrMsg}
+                  error={errMsg}
+                  description={`Achieved Points: ${achievedPoints}/${totalPoints}`}
                 />
             </Col>
-            <Col md={2} style={{paddingTop:"2rem"}}>
+            <Col md={3} style={{paddingTop:"2rem"}}>
               <Button label="Update" onClick={handleUpdate}/>
+              <Button className={"buttonFlag"} flagged={true} primary={false} label="Flag" onClick={handleFlag}/>
             </Col>
           </Row>
         </div>
