@@ -85,7 +85,7 @@ export const pages = {
       "title": "Frosh Submit",
       "link": "/frosh/submit",
       "component": <SubmitMission/>,
-      "protected": "frosh"
+      // "protected": "frosh"
     },
     {
       "title": "Frosh Missions",

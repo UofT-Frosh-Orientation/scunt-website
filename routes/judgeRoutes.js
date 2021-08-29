@@ -3,6 +3,7 @@ module.exports = (app) => {
     const EmailValidator = require('email-validator');
     const ScuntAdmin = require('../models/ScuntAdmin');
     const Judge = require('../models/Judge');
+    const Team = require('../models/Team');
     const SubmittedMission = require('../models/SubmittedMission');
 
     const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, INTERNAL_ERROR_MSG, SUBMITTED, SUBMITTED_LIVE, JUDGING, JUDGING_LIVE, COMPLETE, FLAGGED } = require('./errorMessages');
@@ -111,9 +112,21 @@ module.exports = (app) => {
                         })
                         return;
                     }
+                    // check team
+                    const team = await Team.findOne({number: submittedmission.teamNumber});
+                    if (!team) {
+                        res.send({
+                            status: NOT_ACCEPTED,
+                            errorMsg: "Something is wrong with this submission ticket: this scunt team doesn't exist. Please ignore this item"
+                        })
+                        return;
+                    }
+                    team.score = team.score - submittedmission.achievedPoints + team.score;
                     submittedmission.achievedPoints = newPoints;
                     submittedmission.status = COMPLETE;
                     submittedmission.save();
+                    team.save();
+
                     res.send({status: OK});
                     return;
                 } else if (action === "screen") {
