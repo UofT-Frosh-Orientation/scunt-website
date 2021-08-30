@@ -58,6 +58,7 @@ module.exports = (app) => {
     });
 
     // TODO: set protection rules for these endpoints
+    // TODO: maybe create submissions schema for deductions?
     app.get('/get/submittedmissions', async (req, res) => {
         try {
             const submittedmissions = await SubmittedMission.find();
@@ -274,6 +275,81 @@ module.exports = (app) => {
             }
         } catch (err) {
             console.log('judge get team points - ' + err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: INTERNAL_ERROR_MSG
+            });
+            return;
+        }
+    });
+
+    // actions: bribes, deductions
+    app.post('/judge/special-update', async (req, res) => {
+        try {
+            const { 
+                action, 
+                teamNumber,
+                pointsChanged
+            } = req.body;
+
+            if (action === 'bribes'){
+                // check bribes range
+                if (isNaN(pointsChanged) || pointsChanged < 0 || pointsChanged > req.user.bribePointsLeft) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "bribes points out of range"
+                    })
+                    return;
+                }
+                // check team
+                const team = await Team.findOne({number: teamNumber});
+                if (!team) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "invalid team number, please try again"
+                    })
+                    return;
+                }
+                team.score = team.score + pointsChanged;
+                team.save();
+                const judge = await Judge.findById(req.user._id);
+                judge.bribePointsLeft -= pointsChanged;
+                judge.save();
+                res.send({status: OK});
+                return;
+
+            } else if (action === 'deductions') {
+                // check deductions range
+                if (isNaN(pointsChanged) || pointsChanged < 0) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "Make sure you input a positive number"
+                    })
+                    return;
+                }
+                // check team
+                const team = await Team.findOne({number: teamNumber});
+                if (!team) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "invalid team number, please try again"
+                    })
+                    return;
+                }
+                team.score = team.score - pointsChanged;
+                team.save();
+                res.send({status: OK});
+                return;
+
+            } else {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Don't try to hack the website, thanks"
+                })
+                return;
+            }
+        } catch (err) {
+            console.log('judge manual update - ' + err)
             res.send({
                 status: INTERNAL_ERROR,
                 errorMsg: INTERNAL_ERROR_MSG

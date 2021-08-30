@@ -379,7 +379,7 @@ function InPersonJudgingPanel() {
         })
         if (data.status === 200) {
             alert('success!')
-            handleClear()
+            await handleClear()
         } else {
             alert(data.errorMsg)
         }
@@ -470,7 +470,6 @@ function InPersonJudgingPanel() {
     )
 }
 
-// TODO
 function BribesAndDeductions() {
     const [teams, setTeams] = useState([])
     const [accountInfo, setAccountInfo] = useState({})
