@@ -45,6 +45,10 @@ const SubmittedMissionSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
+	isMediaConsent: {
+		type: Boolean,
+		required: true
+	},
 	timeCreated:{
 		type: Date,
 		required: true

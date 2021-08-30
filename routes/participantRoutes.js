@@ -38,7 +38,8 @@ module.exports = (app) => {
                 discordId, 
                 missionNumber,
                 teamNumber,
-                submissionLink
+                submissionLink,
+                isMediaConsent
             } = req.body
 
             const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
@@ -105,6 +106,7 @@ module.exports = (app) => {
                     alreadySubmitted.teamNumber = teamNumber
                     alreadySubmitted.submitterDiscordId = discordId
                     alreadySubmitted.timeCreated = new Date()
+                    alreadySubmitted.isMediaConsent = isMediaConsent
                     alreadySubmitted.save()
                 } else {
                     const submission = new SubmittedMission({
@@ -116,6 +118,7 @@ module.exports = (app) => {
                         submitterDiscordId: discordId,
                         submissionLink,
                         teamNumber,
+                        isMediaConsent,
                         totalPoints: mission.totalPoints,
                         timeCreated: new Date()
                     })
@@ -139,43 +142,43 @@ module.exports = (app) => {
         }
     })
 
-    app.post('/testing/post/submitMany', async (req, res) => {
-        try {
-            const { numberOfMissions } = req.body
-            const missions = await Mission.find()
-            // mix up missions
-            for(let i=0; i < 10000; i++) {
-                const randNum1 = Math.floor(Math.random()*missions.length)
-                const randNum2 = Math.floor(Math.random()*missions.length)
-                const temp = missions[randNum1]
-                missions[randNum1] = missions[randNum2]
-                missions[randNum2] = temp
-            }
-            for(let i=0; i < numberOfMissions; i++) {
-                const submission = new SubmittedMission({
-                    name: missions[i].name,
-                    number: missions[i].number,
-                    category: missions[i].category,
-                    status: SUBMITTED,
-                    submitter: "aldjflsdk",
-                    submissionLink: "https://google.ca",
-                    teamNumber: Math.floor(Math.random()*3),
-                    totalPoints: mission.totalPoints,
-                    timeCreated: new Date()
-                })
-                submission.save()
-            }
-            res.send({
-                status: OK,
-            })
-        } catch (err) {
-            console.log('submit - ' + err)
-            res.send({
-                status: INTERNAL_ERROR,
-                errorMsg: INTERNAL_ERROR_MSG
-            })
-        }
-    })
+    // app.post('/testing/post/submitMany', async (req, res) => {
+    //     try {
+    //         const { numberOfMissions } = req.body
+    //         const missions = await Mission.find()
+    //         // mix up missions
+    //         for(let i=0; i < 10000; i++) {
+    //             const randNum1 = Math.floor(Math.random()*missions.length)
+    //             const randNum2 = Math.floor(Math.random()*missions.length)
+    //             const temp = missions[randNum1]
+    //             missions[randNum1] = missions[randNum2]
+    //             missions[randNum2] = temp
+    //         }
+    //         for(let i=0; i < numberOfMissions; i++) {
+    //             const submission = new SubmittedMission({
+    //                 name: missions[i].name,
+    //                 number: missions[i].number,
+    //                 category: missions[i].category,
+    //                 status: SUBMITTED,
+    //                 submitter: "aldjflsdk",
+    //                 submissionLink: "https://google.ca",
+    //                 teamNumber: Math.floor(Math.random()*3),
+    //                 totalPoints: mission.totalPoints,
+    //                 timeCreated: new Date()
+    //             })
+    //             submission.save()
+    //         }
+    //         res.send({
+    //             status: OK,
+    //         })
+    //     } catch (err) {
+    //         console.log('submit - ' + err)
+    //         res.send({
+    //             status: INTERNAL_ERROR,
+    //             errorMsg: INTERNAL_ERROR_MSG
+    //         })
+    //     }
+    // })
 
     // discord bot
     app.get('/get/mission/status', async (req, res) => {
