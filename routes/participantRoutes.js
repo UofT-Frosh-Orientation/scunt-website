@@ -283,7 +283,7 @@ module.exports = (app) => {
             const teams = await Team.find({}, {
                 number: 1,
                 name: 1
-            }).sort({ number: 1 })
+            }).sort({number: 1})
             const sanitizedTeams = teams.map(t => `${t.number} - ${t.name}`)
 
             res.send({

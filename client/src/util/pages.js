@@ -3,9 +3,10 @@ import Judges from "../pages/judgesInfo"
 import Rules from "../pages/rules"
 // import ScuntAdminDasboard from "../admin/dashboard"
 import SignUpForm from "../pages/judge/signupForm"
+import JudgingPanel from "../pages/judge/judgingPanel"
 import MissionsAdminView from "../pages/admin/missions"
 import JudgesAdminView from "../pages/admin/judges"
-import TeamsAdminVeiw from "../pages/admin/teams"
+import TeamsAdminView from "../pages/admin/teams"
 import SubmitMission from "../pages/frosh/submitMission"
 import CompletedMissions from "../pages/frosh/completedMissions"
 import LeedurSignUpForm from "../pages/leedur/signupForm"
@@ -55,7 +56,7 @@ export const pages = {
     {
       "title": "Scunt Admin Teams",
       "link": "/admin/teams",
-      "component": <TeamsAdminVeiw/>,
+      "component": <TeamsAdminView/>,
       "protected": "admin"
     },
     {
@@ -70,6 +71,12 @@ export const pages = {
       "component": <SignUpForm/>,
     },
     {
+      "title": "Judging Panel",
+      "link": "/judge/panel",
+      "component": <JudgingPanel/>,
+      // "protected": "judge",
+    },
+    {
       "title": "Leedur Sign Up Form",
       "link": "/leedur/signup",
       "component": <LeedurSignUpForm/>,
@@ -78,7 +85,7 @@ export const pages = {
       "title": "Frosh Submit",
       "link": "/frosh/submit",
       "component": <SubmitMission/>,
-      "protected": "frosh"
+      // "protected": "frosh"
     },
     {
       "title": "Frosh Missions",

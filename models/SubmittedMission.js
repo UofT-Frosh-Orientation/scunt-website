@@ -34,6 +34,7 @@ const SubmittedMissionSchema = new mongoose.Schema({
     achievedPoints: {
 		type: Number,
 		required: false,
+		default: 0
 	},
     totalPoints: {
 		type: Number,

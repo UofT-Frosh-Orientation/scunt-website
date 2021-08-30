@@ -44,7 +44,7 @@ export class LoginButton extends Component {
           }
           { 
             this.state.accountType === "judge" && <>
-              <ButtonBubble label="Judge Submissions" link="/judge/submissions" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Judging Panel" link="/judge/panel" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               {/* <ButtonBubble label="Your Info" link="/judge/account" onClick={()=>{this.infoPopup.setModalState(false)}}/> */}
               <ButtonBubble label="Logout" accent link="/" onClick={()=>{this.infoPopup.setModalState(false); this.setLoginStatus(false,"", "", "")}}/>
             </>
