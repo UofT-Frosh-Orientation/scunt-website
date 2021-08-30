@@ -2,53 +2,15 @@
     --button-size: 75px;
 }
 
-.floating-button {
-    width: var(--button-size);
-    height: var(--button-size);
-    background-color: #6F1E88;
-    text-align: center;
-    color: #ffcf4b;
-    border-radius: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 5px 10px 0 #0000002d;
+.search-results{
+    background: #6f1e8815;
+    border-radius: 5px;
+    padding: 0.75rem 1.25rem;
+    margin: 0.25rem 0;      
     cursor: pointer;
-    user-select: none;
-    border: 1px solid #ffcf4b#6F1E88;
-    position: absolute;
-    right: 30px;
-    bottom: 50px;
-    transition: transform 0.5s, box-shadow 0.1s;
 }
 
-.floating-button:hover{
-    transform: scale(0.9);
-    box-shadow: 0 5px 10px 0 #00000017;
-    transition: transform 0.2s, box-shadow 0.1s;
-}
-  
-.floating-button span {
-    font-size: 30px;
-}
-  
-.floating-message {
-    position: absolute;
-    padding:15px;
-    right: 50px;
-    bottom: 125px;
-    background-color: #b59fc4;
-    border-radius: 15px;
-    width: 330px;
-}
-
-@media only screen and (max-width: 767px) {
-    .floating-button {
-        --button-size: 60px;
-    }
-    .floating-message {
-        padding:10px;
-        right: 20px;
-        bottom: 100px;
-    }
+.search-results:hover{   
+    transition: background-color 0.5s;
+    background-color: #6f1e884f !important;
 }

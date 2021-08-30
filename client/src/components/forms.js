@@ -137,6 +137,10 @@ export class FormTextBox extends Component {
     return(this.state.value);
   }
 
+  setValue = (newValue) => {
+    this.state.value = newValue;
+  }
+
   onKeyPress = (target) => {
     if(target.charCode===13){
       if(this.props.onEnterKey) this.props.onEnterKey();

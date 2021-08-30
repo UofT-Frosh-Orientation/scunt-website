@@ -276,35 +276,103 @@ export default function JudgingPanel() {
 }
 
 function InPersonJudgingPanel() {
+    const [teams, setTeams] = useState([])
+    const [missions, setMissions] = useState([])
+    const [searchResults, setSearchResults] = useState([])
+    const [searchErr, setSearchErr] = useState('')
+
     const [missionToUpdate, setMissionToUpdate] = useState({})
     const [teamNumber, setTeamNumber] = useState(undefined)
     const [achievedPoints, setAchievedPoints] = useState(undefined)
     const [newPoints, setNewPoints] = useState(undefined)
+    const [newPointsErrMsg, setNewPointsErrMsg] = useState('')
+    const searchBarRef = useRef()
+    const newPointsRef = useRef()
 
     useEffect(()=> {
+        const getTeamsAndMissions = async () => {
+            const missionRes = await axios.get('/get/missions')  
+            if(missionRes.data.status === 200) {
+              setMissions(() => missionRes.data.missions.map(m => ({
+                  text: `${m.number} - ${m.name}`,
+                  number: m.number
+              })))
+            }
+
+            const teamRes = await axios.get('/get/leedur/teams')
+            if (teamRes.data.status === 200) setTeams(teamRes.data.teams)
+          }
+          getTeamsAndMissions()
     }, [])
 
-    const handlePopulate = async(missionNumber) => {
-        // validate, 
-        // get mission info
-        setMissionToUpdate({
-            number: 1,
-            name: "test test test",
-            category: "classics",
-            totalPoints: 500
-        })
+    const getPointsErrMsg = (value) =>{
+        if (value > missionToUpdate.totalPoints * 1.5 || value < achievedPoints) {
+            setNewPointsErrMsg('value out of range')
+        } else {
+            setNewPoints(value)
+            setNewPointsErrMsg('')
+        }
+    }
+
+    function formatStrings(string){
+        return string.replace(" ","").replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+    }
+  
+    const handleSearch = (text) => {
+        if( text.length > 0) {
+            let textFormatted = formatStrings(text)
+            const searchItems = missions.filter(m => formatStrings(m.text).includes(textFormatted))
+            if (searchItems.length === 0) {
+                setSearchErr("no search result")
+            } else {
+                setSearchErr('')
+            }
+            setSearchResults(searchItems)
+        } else {
+            setSearchResults([])
+        }
+    }
+
+    const handlePopulate = async(mission) => {
+        setMissionToUpdate(mission)
+        searchBarRef?.current.setValue(mission.text)
+        setSearchResults([])
     }
     const handlePopulateTeamInfo = async(teamNumber) => {
-        // validate, 
-        // get team info
-        setTeamNumber(teamNumber)
-        setAchievedPoints(100)
+        if (teamNumber > 0 && teamNumber <= teams.length) {
+            setTeamNumber(teamNumber)
+            // get achieved points
+            const { data } = await axios.post('/judge/get-team-mission-points', {
+                teamNumber: teamNumber,
+            })
+            if (data.status !== 200) {
+                alert(data.errorMsg)
+            }
+            setAchievedPoints(data.achievedPoints)
+        }
     }
-    const handleManualUpdate = async(confirm) => {
-        if (confirm){
-            // update
-        }else {
-            // clear state
+
+    const handleClear = async() => {
+        searchBarRef?.current.inputChange("")
+        newPointsRef?.current.inputChange("")
+        setMissionToUpdate({})
+        setTeamNumber(undefined)
+        setAchievedPoints(undefined)
+    }
+    const handleManualUpdate = async() => {
+        if (!missionToUpdate.number || !teamNumber || !newPoints ) {
+            alert('Please fill out all the input fields')
+            return
+        }
+        const { data } = await axios.post('/judge/manual-update', {
+            number: missionToUpdate.number,
+            teamNumber: teamNumber,
+            newPoints: newPoints
+        })
+        if (data.status === 200) {
+            alert('success!')
+        } else {
+            alert(data.errorMsg)
         }
     }
 
@@ -313,36 +381,40 @@ function InPersonJudgingPanel() {
             <Row>
                 <Col md={5}>
                     <h3>Enter mission number &amp; team number below</h3>
-                    <FormTextBox 
-                        style={{width:"100%", margin: '0.75rem auto'}} clearButton 
-                        inputId={'missionSearchBar'} 
-                        type={"text"} 
-                        label={"Search Mission"} 
-                        onChange={handlePopulate}
-                    />
-                    <FormTextBox 
-                        style={{width:"100%", margin: '0.75rem auto'}} clearButton 
-                        inputId={'missionNumber'} 
-                        type={"number"} 
-                        label={"mission #"} 
-                        description={"please type in the mission number"} 
-                        onChange={handlePopulate}
+                    {missions.length > 0 ?
+                        <>
+                            <FormTextBox 
+                                style={{width:"100%", margin: '0.75rem auto'}} clearButton 
+                                type={"text"} 
+                                label={"Search Mission by number or name"} 
+                                onChange={handleSearch}
+                                ref={searchBarRef}
+                                error={searchErr}
+                            />
+                            {searchResults.map((m) => 
+                                <h4 className="search-results" onClick={() => handlePopulate(m)}> {m.text} </h4>
+                                )
+                            }
+                        </>
+                        : <p> There are no missions to judge at the momment</p>
+                    }
+                    {teams.length > 0 &&
+                        <FormDropdownMenu
+                            label="Team Number"
+                            items={teams}
+                            onChange={(idx, item) => {
+                                handlePopulateTeamInfo(idx+1)
+                            }}
                         />
+                    }
                     <FormTextBox 
                         style={{width:"100%", margin: '0.75rem auto'}} clearButton 
-                        inputId={'teamNumber'} 
-                        type={"number"} 
-                        label={"team #"} 
-                        description={"team number (not team name!)"}
-                        onChange = {handlePopulateTeamInfo} 
-                        />
-                    <FormTextBox 
-                        style={{width:"100%", margin: '0.75rem auto'}} clearButton 
-                        inputId={'newPointsManualUpdate'} 
                         type={"number"} 
                         label={"New Points"} 
-                        description={`Current Points: ${0}/${0}`}
-                        onChange = {setNewPoints}
+                        description={`Achieved Points: ${0}/${0}`}
+                        ref={newPointsRef}
+                        onChange = {getPointsErrMsg}
+                        error = {newPointsErrMsg}
                         />
                 </Col>
                 <Col md={2}></Col>
@@ -370,7 +442,7 @@ function InPersonJudgingPanel() {
                             <td> <p>{teamNumber}</p> </td>
                         </tr>
                         <tr>
-                            <td> <h4>Current Points:</h4> </td>
+                            <td> <h4>Achieved Points:</h4> </td>
                             <td> <p>{achievedPoints}</p> </td>
                         </tr>
                         <tr>
@@ -383,7 +455,7 @@ function InPersonJudgingPanel() {
             </Row>
             <div style={{float:"right"}}>
             <Button label={"Update"} onClick={handleManualUpdate}/>
-            <Button label={"Clear"} primary={false} onClick={handleManualUpdate}/>
+            <Button label={"Clear"} primary={false} onClick={handleClear}/>
             </div>
         </div>
     )
