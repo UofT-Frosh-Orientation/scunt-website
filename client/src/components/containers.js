@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{Component, useState} from 'react'
 import "./containers.css"
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
@@ -8,7 +8,7 @@ import Wave from 'react-wavify'
 import ReactCanvasConfetti from 'react-canvas-confetti';
 import {FroshWeekIcon} from "./socials"
 import { Col, Container, Row } from 'react-bootstrap'
-import { FormCheckbox } from './forms'
+import { FormCheckbox, FormTextBox } from './forms'
 
 export class ContainerNote extends Component {
   render(){
@@ -105,8 +105,9 @@ export class ContainerPopupModalConfirm extends Component {
   }
   render(){
     return(
-      <ContainerPopupModal exitBackground={false} exitButton={false} header={this.props.header} ref={(popup)=> this.popupRef = popup}>
+      <ContainerPopupModal exitBackground={false} exitButton={true} header={this.props.header} ref={(popup)=> this.popupRef = popup}>
         <p>{this.props.message}</p>
+        {this.props.children}
         <div style={{float:"right"}}>
           <Button label={this.props.labelYes!==undefined?this.props.labelYes:"Yes"} onClick={()=>{this.setModalState(false); this.props.buttonCallback(true);}}/>
           <Button label={this.props.labelNo!==undefined?this.props.labelNo:"No"} primary={false} onClick={()=>{this.setModalState(false); this.props.buttonCallback(false);}}/>
@@ -373,6 +374,118 @@ export function MissionAdminContainer({
       <Col md={2}> { totalPoints } </Col>
       <Col md={1}> { isViewable ? '👀' : '🚫'} </Col>
     </Row>
+  </div>
+}
+
+export function MissionJudgeContainer({
+  ticketId,
+  number, 
+  teamNumber, 
+  totalPoints, 
+  achievedPoints,
+  submissionLink,
+  status, 
+  submitter,
+  category,
+  name,
+  timeCreated,
+  viewMore,
+  handleJudging,
+  handleCancel,
+  handleUpdate,
+  handleFlag, 
+  handleScreen
+}) {
+  const [errMsg, setErrMsg] = useState('')
+  const statusColors = {
+    "submitted": "orange", 
+    "submitted(live)": "orange",
+    "judging": "#FF8080",
+    "judging(live)": "#FF8080",
+    "complete": "#E6FFE6"
+  }
+  const getPointsErrMsg = (value) =>{
+    if (value > totalPoints * 1.5 || value < achievedPoints) {
+      setErrMsg('value out of range')
+    } else {
+      setErrMsg('')
+    }
+  }
+
+  return <div className="mission-row">
+    <Row>
+      <Col md={1}>
+        <h4>#{number}</h4>
+      </Col>
+      <Col md={4}>
+        <h5>{name}</h5>
+      </Col>
+      <Col md={2}>
+        <h4>team {teamNumber}</h4>
+      </Col>
+      <Col md={2}>
+        {status !== "complete"? 
+          <h4>{totalPoints} Points</h4> :
+          <h4>{achievedPoints}/{totalPoints} Points</h4>
+        }
+      </Col>
+      <Col md={1}>
+      <h4><a target='_blank' href={submissionLink}> Link </a></h4>
+      </Col>
+      <Col md={2}>
+        <h6 style={{backgroundColor:statusColors[status], borderRadius:"10%"}}>{status}</h6>
+      </Col>
+      </Row>
+      <div style={{textAlign:"right"}}>
+        {handleScreen !== undefined &&  
+        <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer", marginRight: "1rem"}}
+          onClick={handleScreen}> Screen </h4>}
+        {status !== "complete" &&  
+        <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer"}} 
+            onClick={() => {
+              if (viewMore) {
+                handleCancel(ticketId);
+              } else {
+                handleJudging(ticketId);
+              }}}>
+            {viewMore? "Close" : status==="judging" || status==="judging(live)"? "View Anyways" : "View more & judge"}
+        </h4>
+        }
+      </div>
+      {viewMore && 
+        <div className="judging-row">
+          <Row>
+            <Col md={6}>
+              <h4>Category: {category}</h4>
+            </Col>
+            <Col md={6}>
+              <h4>Achieved Points: {achievedPoints}</h4>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={6}>
+              <p>Submitter: {submitter}</p>
+              <p>Time: {timeCreated}</p>
+            </Col>
+            <Col md={3}>
+              <FormTextBox 
+                  clearButton 
+                  type="number"
+                  label="New Points"
+                  localStorageKey={`mission${number}_team_${teamNumber}_points`}
+                  onChange={getPointsErrMsg}
+                  error={errMsg}
+                  description={`Achieved Points: ${achievedPoints}/${totalPoints}`}
+                />
+            </Col>
+            <Col md={3} style={{paddingTop:"2rem"}}>
+              <Button label="Update" onClick={handleUpdate}/>
+              <Button className={"buttonFlag"} flagged={true} primary={false} label="Flag" onClick={handleFlag}/>
+            </Col>
+          </Row>
+        </div>
+      }
   </div>
 }
 

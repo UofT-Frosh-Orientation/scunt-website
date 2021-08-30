@@ -6,7 +6,7 @@ import { ContainerPopupModalConfirm, TeamInfo } from '../../components/container
 import { HeaderPage } from "../../components/texts"
 import './dashboard.css'
 
-export default function TeamsAdminVeiw() {
+export default function TeamsAdminView() {
     const confirmRevealTeams = useRef(), confirmStartEvent = useRef(), deleteAllConfirm = useRef()
     const [accountInfo, setAccountInfo] = useState({})
     const [teams, setTeams] = useState([])

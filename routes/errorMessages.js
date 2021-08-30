@@ -11,6 +11,9 @@ module.exports = {
     INTERNAL_ERROR: 500,
     // mission statuses
     SUBMITTED: "submitted",
+    SUBMITTED_LIVE: "submitted(live)",
     JUDGING: "judging",
-    COMPLETE: "complete"
+    JUDGING_LIVE: "judging(live)",
+    COMPLETE: "complete",
+    FLAGGED: "flagged"
 }

@@ -440,6 +440,13 @@
   margin: 0;
 }
 
+.judging-row {
+  background: white;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  margin: 0.5rem 0;
+}
+
 /* .mission-row .col-md-1,
 .mission-row .col-md-2,
 .mission-row .col-md-3,
