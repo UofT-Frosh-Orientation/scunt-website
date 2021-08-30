@@ -29,6 +29,7 @@ export default function SubmitMission() {
             })))
           }
           if(window.location.search.includes('missionNumber')) setMissionNumber(parseInt(window.location.search.split('=')[1]))
+          setIsMediaConsent(localStorage['mission-media-consent'])
           setLoading(false)
         }
         setLoading(true)

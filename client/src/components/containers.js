@@ -377,6 +377,14 @@ export function MissionAdminContainer({
   </div>
 }
 
+const statusColors = {
+  "submitted": "orange", 
+  "submitted(live)": "orange",
+  "judging": "#FF8080",
+  "judging(live)": "#FF8080",
+  "complete": "#E6FFE6"
+}
+
 export function MissionJudgeContainer({
   ticketId,
   number, 
@@ -397,13 +405,6 @@ export function MissionJudgeContainer({
   handleScreen
 }) {
   const [errMsg, setErrMsg] = useState('')
-  const statusColors = {
-    "submitted": "orange", 
-    "submitted(live)": "orange",
-    "judging": "#FF8080",
-    "judging(live)": "#FF8080",
-    "complete": "#E6FFE6"
-  }
   const getPointsErrMsg = (value) =>{
     if (value > totalPoints * 1.5 || value < achievedPoints) {
       setErrMsg('value out of range')
@@ -557,7 +558,7 @@ export function MissionFroshContainer ({
             width: '20px',
             height: '20px',
             borderRadius: '20px',
-            backgroundColor: status === 'submitted' ? 'orange' : status === 'judging' ? 'red' : 'green'
+            backgroundColor: statusColors[status]
           }}/>
         </TextTooltip>
       </Col>

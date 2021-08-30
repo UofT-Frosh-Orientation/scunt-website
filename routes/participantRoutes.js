@@ -9,7 +9,7 @@ module.exports = (app) => {
     const Team = require('../models/Team');
     const Mission = require('../models/Mission');
     const Frosh = require('../models/Frosh');
-    const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, SUBMITTED, JUDGING, COMPLETE } = require('./errorMessages');
+    const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, SUBMITTED, JUDGING, COMPLETE, SUBMITTED_LIVE, JUDGING_LIVE } = require('./errorMessages');
 
     app.get('/get/missions', async (req, res) => {
         try {
@@ -100,7 +100,7 @@ module.exports = (app) => {
             })
             if(mission) {
                 if (alreadySubmitted) {
-                    alreadySubmitted.status = SUBMITTED
+                    alreadySubmitted.status = isMediaConsent ? SUBMITTED_LIVE : SUBMITTED
                     alreadySubmitted.submitter = discordUsername || email
                     alreadySubmitted.submissionLink = submissionLink
                     alreadySubmitted.teamNumber = teamNumber
@@ -113,7 +113,7 @@ module.exports = (app) => {
                         name: mission.name,
                         number: missionNumber,
                         category: mission.category,
-                        status: SUBMITTED,
+                        status: isMediaConsent ? SUBMITTED_LIVE : SUBMITTED,
                         submitter: discordUsername || email,
                         submitterDiscordId: discordId,
                         submissionLink,
@@ -245,7 +245,10 @@ module.exports = (app) => {
                 const submittedMissions = await SubmittedMission.find({ teamNumber })
                 const missionNumbers = submittedMissions.flatMap(m => m.number)
 
-                const inProgressMissions = submittedMissions.filter(m => m.status === SUBMITTED || m.status === JUDGING)
+                const inProgressMissions = submittedMissions.filter(m => 
+                    (m.status === SUBMITTED || m.status === JUDGING) ||
+                    (m.status === SUBMITTED_LIVE || m.status === JUDGING_LIVE)
+                )
                 const completedMissions = submittedMissions.filter(m => m.status === COMPLETE)
                 const incompleteMissions = await Mission.find({
                     number: { $nin: missionNumbers },
