@@ -10,7 +10,8 @@ export default function LeedurSignUpForm() {
         name: '',
         email: '',
         password: '',
-        scuntTeam: 1
+        scuntTeam: 1,
+        pronouns: ''
     })
     const [teams, setTeams] = useState([])
     const [message, setMessage] = useState('')
@@ -64,6 +65,7 @@ export default function LeedurSignUpForm() {
                             handleChange("scuntTeam", idx+1)
                             }}
                         />
+                        <FormTextBox label="Pronouns" required clearButton onChange={(value)=>{handleChange("pronouns",value)}}/>
                         <Button primary label="Sign Up" onClick={signup} disabled={loading}/>
                         <h4 style={{color: loading ? 'purple' : 'orange'}}>{message}</h4>
                     </> :

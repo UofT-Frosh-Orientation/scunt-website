@@ -23,6 +23,10 @@ const LeedurSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    pronouns: {
+        type: String,
+        required: true
+    },
     discordSignedIn: {
 		type: Boolean,
 		required: false,

@@ -307,13 +307,13 @@ module.exports = (app) => {
 
     app.post('/create/leedur/', async (req, res) => {
         const leedurData = req.body
-        const { name, email, password, scuntTeam } = leedurData
+        const { name, email, password, scuntTeam, pronouns } = leedurData
         const response = {
 			status: OK,
 			errorMsg: ""
 		}
 
-        if(!name || !email || !password || !scuntTeam) {
+        if(!name || !email || !password || !scuntTeam || !pronouns) {
             response.status = NOT_ACCEPTED
             response.errorMsg = "Please fill in all fields"
             res.send(response)
@@ -409,7 +409,7 @@ module.exports = (app) => {
             const frosh = await Frosh.findOne({ email })
             const leedur = await Leedur.findOne({ email })
             const user = frosh || leedur
-            const type = frosh ? 'frosh' : leedur ? 'leedur' : 'none'
+            const type = frosh ? 'frosh' : leedur ? 'Leedurs' : 'none'
             if (user) {
                 if(user.scuntTeam) {
                     if(user.discordToken === code) {
@@ -419,7 +419,11 @@ module.exports = (app) => {
                         user.save()
                         res.send({
                             status: OK,
-                            type
+                            type,
+                            name: (user.preferredName || user.fullName) || user.name, 
+                            teamNumber: user.scuntTeam, 
+                            discordSignedIn: user.discordSignedIn, 
+                            pronouns: user.pronouns,
                         })
                     } else {
                         res.send({
@@ -457,11 +461,9 @@ module.exports = (app) => {
             const teamNames = teams.flatMap(t => t.name)
 
             if (calledFromDiscord) {
-                console.log("here")
                 res.send({
                     status: OK,
-                    teamScores,
-                    teamNames
+                    teamScores
                 })
             } else {
                 // score algo
@@ -501,6 +503,35 @@ module.exports = (app) => {
             res.send({
                 status: INTERNAL_ERROR,
                 errorMsg: 'There was a problem retrieving team scores'
+            })
+        }
+    })
+
+    //discord bot
+    app.get('/get/discordUser/team', async (req, res) => {
+        try {
+            const {discordId} = req.query
+
+            const frosh = await Frosh.findOne({ discordId })
+            const leedur = await Leedur.findOne({ discordId })
+            const user = frosh || leedur
+
+            if (user) {
+                res.send({
+                    status: OK,
+                    teamNumber: user.scuntTeam
+                })
+            } else {
+                res.send({
+                    status: USER_ERROR,
+                    errorMsg: 'You have not logged into the server yet.'
+                })
+            }
+        } catch (err) {
+            console.log(err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: 'There was a problem retrieving the team of this discord id'
             })
         }
     })

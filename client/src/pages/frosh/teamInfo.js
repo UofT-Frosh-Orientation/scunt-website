@@ -52,7 +52,10 @@ export default function TeamInfo() {
                                     <p>{account.discordUsername}</p>
                                 </Col> : 
                                 <Col md={4}>
-                                    <p>It seems like you haven't signed into discord yet.</p>
+                                    <p>
+                                        It seems like you haven't signed into discord yet.
+                                        Please join <a href="https://discord.gg/6TqvC683P7">the havenger scunt server</a>!
+                                    </p>
                                 </Col>
                             }
                         </Row>
