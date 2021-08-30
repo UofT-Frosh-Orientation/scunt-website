@@ -410,9 +410,9 @@ function InPersonJudgingPanel() {
                     {teams.length > 0 &&
                         <FormDropdownMenu
                             label="Team Number"
-                            items={teams}
+                            items={["Select Team"].concat(teams)}
                             onChange={(idx, item) => {
-                                handlePopulateTeamInfo(idx+1)
+                                handlePopulateTeamInfo(idx)
                             }}
                         />
                     }
@@ -470,36 +470,63 @@ function InPersonJudgingPanel() {
     )
 }
 
+// TODO
 function BribesAndDeductions() {
-    const [missionToUpdate, setMissionToUpdate] = useState({})
-    const [teamNumber, setTeamNumber] = useState(undefined)
-    const [achievedPoints, setAchievedPoints] = useState(undefined)
-    const [newPoints, setNewPoints] = useState(undefined)
+    const [teams, setTeams] = useState([])
+    const [accountInfo, setAccountInfo] = useState({})
+    const [bribesTeamNumber, setBribesTeamNumber] = useState(undefined)
+    const [bribesPoints, setBribesPoints] = useState(undefined)
+    const [deductionsTeamNumber, setDeductionsTeamNumber] = useState(undefined)
+    const [deductionPoints, setDeductionPoints] = useState(undefined)
 
     useEffect(()=> {
+        const getTeamsAndAccountInfo = async () => {
+            // const teamRes = await axios.get('/get/leedur/teams')
+            // if (teamRes.data.status === 200) setTeams(teamRes.data.teams)
+            // const account = await axios.get('/user/current')
+            // setAccountInfo(account.data)
+            const teamRes = {"status":200,"teams":["1 - Saving Ryan's Pirates","2 - Super Soakers Squad","3 - Scuntaholics Anonymous","4 - Under the Semen","5 - Masterbaiters","6 - Tough Swimmers to Swallow","7 - The Magic Conch Club","8 - No Team Name","9 - Blah","10 - bleh"]}
+            setTeams(teamRes.teams)
+            setAccountInfo({"isActivated":true,"bribePointsLeft":1500,"accountType":"judge","_id":"612c34d9c726848c7cb1ea12","name":"alice","email":"alicezhou0805@gmail.com"})
+          }
+          getTeamsAndAccountInfo()
     }, [])
 
-    const handlePopulate = async(missionNumber) => {
-        // validate, 
-        // get mission info
-        setMissionToUpdate({
-            number: 1,
-            name: "test test test",
-            category: "classics",
-            totalPoints: 500
+    const handleBribesUpdate = async() => {
+        if (!bribesTeamNumber || !bribesPoints ) {
+            alert('Please fill out all the input fields')
+            return
+        }
+        if (bribesPoints > accountInfo.bribePointsLeft ) {
+            alert('No bribes points left :(')
+            return
+        }
+        const { data } = await axios.post('/judge/special-update', {
+            action: 'bribes',
+            teamNumber: bribesTeamNumber,
+            pointsChanged: bribesPoints
         })
+        if (data.status === 200) {
+            alert('success!')
+        } else {
+            alert(data.errorMsg)
+        }
     }
-    const handlePopulateTeamInfo = async(teamNumber) => {
-        // validate, 
-        // get team info
-        setTeamNumber(teamNumber)
-        setAchievedPoints(100)
-    }
-    const handleManualUpdate = async(confirm) => {
-        if (confirm){
-            // update
-        }else {
-            // clear state
+
+    const handleDeductionsUpdate = async() => {
+        if (!deductionsTeamNumber || !deductionPoints  || deductionPoints < 0) {
+            alert('Please fill out all the input fields and make sure deduction points are positive')
+            return
+        }
+        const { data } = await axios.post('/judge/special-update', {
+            action: 'deductions',
+            teamNumber: deductionsTeamNumber,
+            pointsChanged: deductionPoints
+        })
+        if (data.status === 200) {
+            alert('success!')
+        } else {
+            alert(data.errorMsg)
         }
     }
 
@@ -508,47 +535,48 @@ function BribesAndDeductions() {
             <Row>
                 <Col md={5}>
                     <h3>Bribes</h3>
-                    <FormDropdownMenu 
-                        label="Team Number"
-                        items={["yes", "no"]}
-                        onChange={(idx, item) => {
-                        
-                        }}
-                    />
+                    {teams.length > 0 &&
+                        <FormDropdownMenu
+                            label="Team Number"
+                            items={["Select Team"].concat(teams)}
+                            onChange={(idx, item) => {
+                                setBribesTeamNumber(idx)
+                            }}
+                        />
+                    }
                     <FormTextBox 
                         style={{width:"100%", margin: '0.75rem auto'}} clearButton 
-                        inputId={'BribesPoints'} 
                         type={"number"} 
                         label={"Bribes Points"} 
-                        description={`Current Points: ${0}/${0}`}
-                        onChange = {setNewPoints}
+                        description={`Bribes Points remaining: ${0}`}
+                        onChange = {setBribesPoints}
                         />
                     <div style={{float:"right"}}>
-                        <Button label={"Update"} onClick={handleManualUpdate}/>
-                        <Button label={"Clear"} primary={false} onClick={handleManualUpdate}/>
+                        <Button label={"Update"} onClick={handleBribesUpdate}/>
                     </div>
                 </Col>
                 <Col md={2}></Col>
                 <Col md={5}>
                     <h3>Deductions</h3>
-                    <FormDropdownMenu 
-                        label="Team Number"
-                        items={["yes", "no"]}
-                        onChange={(idx, item) => {
-                        
-                        }}
-                    />
+                    {teams.length > 0 &&
+                        <FormDropdownMenu
+                            label="Team Number"
+                            items={["Select Team"].concat(teams)}
+                            onChange={(idx, item) => {
+                                setDeductionsTeamNumber(idx)
+                            }}
+                        />
+                    }
                     <FormTextBox 
                         style={{width:"100%", margin: '0.75rem auto'}} clearButton 
                         inputId={'Deduction Points'} 
                         type={"number"} 
-                        label={"Bribes Points"} 
-                        description={`Current Points: ${0}/${0}`}
-                        onChange = {setNewPoints}
+                        label={"Deduction Points"} 
+                        description={`Enter the positive number of points you want to deduct`}
+                        onChange = {setDeductionPoints}
                         />
                     <div style={{float:"right"}}>
-                        <Button label={"Update"} onClick={handleManualUpdate}/>
-                        <Button label={"Clear"} primary={false} onClick={handleManualUpdate}/>
+                        <Button label={"Update"} onClick={handleDeductionsUpdate}/>
                     </div>
                     <br/> 
                 </Col>

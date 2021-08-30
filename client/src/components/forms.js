@@ -138,7 +138,7 @@ export class FormTextBox extends Component {
   }
 
   setValue = (newValue) => {
-    this.state.value = newValue;
+    this.setState({value: newValue});
   }
 
   onKeyPress = (target) => {
