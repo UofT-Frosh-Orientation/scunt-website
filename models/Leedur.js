@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const randToken = require('rand-token');
 
 const LeedurSchema = new mongoose.Schema({
     email: {
@@ -22,6 +23,28 @@ const LeedurSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    discordSignedIn: {
+		type: Boolean,
+		required: false,
+		default: false
+	},
+	discordToken: {
+		type: String,
+		required: false,
+		default: function () {
+			return randToken.generate(12);
+		}
+	},
+	discordUsername: {
+		type: String,
+		required: false,
+		default: ""
+	},
+	discordId: {
+		type: String,
+		required: false,
+		default: ""
+	},
     accountType: {
         type: String,
         required: true,

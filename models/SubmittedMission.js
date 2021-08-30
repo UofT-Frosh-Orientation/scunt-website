@@ -23,6 +23,10 @@ const SubmittedMissionSchema = new mongoose.Schema({
 		required: false,
 		default: ''
 	},
+	submitterDiscordId: {
+		type: String,
+		required: false
+	},
     submissionLink: {
 		type: String,
 		required: false,

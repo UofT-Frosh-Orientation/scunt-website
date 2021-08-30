@@ -32,7 +32,7 @@ export default function PrivateRoute({ path, homeRoute, render, routeType }) {
                     (
                         authType === routeType ? 
                             ( 
-                                !hasStarted && routeType === 'frosh' ? 
+                                !hasStarted && routeType === 'frosh' && window.location.pathname !== "/frosh/teamInfo" ? 
                                 <EventNotStarted/> : 
                                 <Route path={path} exact render={render}/>
                             ) : 

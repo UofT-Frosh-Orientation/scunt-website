@@ -6,6 +6,7 @@ import { HeaderPage } from '../../components/texts'
 
 export default function TeamInfo() {
     const [teamInfo, setTeamInfo] = useState({})
+    const [account, setAccount] = useState({})
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -13,6 +14,7 @@ export default function TeamInfo() {
             const account = await axios.get('/user/current')
             const { data } = await axios.get(`/get/frosh/teamInfo?teamNumber=${account.data.scuntTeam}`)
 
+            setAccount(account.data)
             if (data.status === 200) {
                 setTeamInfo(data.teamInfo)
             }
@@ -34,6 +36,28 @@ export default function TeamInfo() {
                     !loading &&
                     <>
                         <Row>
+                            <h2>Your Information</h2>
+                            <Col md={4}>
+                                <h3>Email</h3>
+                                <p>{account.email}</p>
+                            </Col>
+                            <Col md={4}>
+                                <h3>Discord Code</h3>
+                                <p>{account.discordToken}</p>
+                            </Col>
+                            {
+                                account.discordSignedIn ?   
+                                <Col md={4}>
+                                    <h3>Discord Username</h3>
+                                    <p>{account.discordUsername}</p>
+                                </Col> : 
+                                <Col md={4}>
+                                    <p>It seems like you haven't signed into discord yet.</p>
+                                </Col>
+                            }
+                        </Row>
+                        <Row>
+                            <h2>Team Information</h2>
                             <Col md={3}> <h3> Team Number </h3> </Col>
                             <Col md={8}> <p> {teamInfo.number} </p> </Col>
                             <Col md={3}> <h3> Team Name </h3> </Col>

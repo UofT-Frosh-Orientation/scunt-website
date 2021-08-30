@@ -62,7 +62,7 @@ export default function Missions() {
       <Container>
         <HeaderSection> Missions </HeaderSection>
         <br/>
-        { loading ? <p>Loading ...</p> : missions.length <= 0 && <h4>There are currently no missions</h4> }
+        { loading ? <p>Loading ...</p> : hasStarted && missions.length <= 0 && <h4>There are currently no missions</h4> }
         { 
           hasStarted ? 
             missions.length > 0 && 
@@ -70,12 +70,13 @@ export default function Missions() {
               {
                 categories.length > 0 &&
                 <FormDropdownMenu 
-                    label="Filter by category"
+                    label={isSearching ? "Stop searching to Filter by category" : "Filter by category"}
                     items={categories}
                     onChange={(idx, item) => {
                       setCurrCategory(item)
                       selectCategory(item)
                     }}
+                    disabled={isSearching}
                 />
               }
               <FormTextBox 
@@ -103,7 +104,7 @@ export default function Missions() {
             </> :
             <h3 className="center-text"> Scunt starts on September 8th at 5:00pm, see you then! </h3>
         }
-        { isSearching && searchResults.length <= 0 && missions.length > 0 && <h4>There are no results for your search.</h4>}
+        { hasStarted && isSearching && searchResults.length <= 0 && missions.length > 0 && <h4>There are no results for your search.</h4>}
       </Container>
     </div>
   );

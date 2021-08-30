@@ -59,15 +59,22 @@ module.exports = (app) => {
                 return
             }
 
-            let frosh
+            let user
             if (email) {
-                frosh = await Frosh.findOne({ email })
-            } else if (discordUsername) {
-                frosh = await Frosh.findOne({ discordId })
+                const frosh = await Frosh.findOne({ email })
+                const leedur = await Leedur.findOne({ email })
+                if (frosh) user = frosh
+                else if (leedur) user = leedur
+            } else if (discordId) {
+                const frosh = await Frosh.findOne({ discordId })
+                const leedur = await Leedur.findOne({ discordId })
+                if (frosh) user = frosh
+                else if (leedur) user = leedur
             }
 
-            if (frosh) {
-                if (frosh.scuntTeam !== parseInt(teamNumber)) {
+            console.log(user)
+            if (user) {
+                if (user.scuntTeam !== parseInt(teamNumber)) {
                     res.send({
                         status: NOT_ACCEPTED,
                         errorMsg: 'You cannot submit to a scunt team outside your own.'
@@ -96,6 +103,7 @@ module.exports = (app) => {
                     alreadySubmitted.submitter = discordUsername || email
                     alreadySubmitted.submissionLink = submissionLink
                     alreadySubmitted.teamNumber = teamNumber
+                    alreadySubmitted.submitterDiscordId = discordId
                     alreadySubmitted.timeCreated = new Date()
                     alreadySubmitted.save()
                 } else {
@@ -105,6 +113,7 @@ module.exports = (app) => {
                         category: mission.category,
                         status: SUBMITTED,
                         submitter: discordUsername || email,
+                        submitterDiscordId: discordId,
                         submissionLink,
                         teamNumber,
                         totalPoints: mission.totalPoints,
@@ -181,8 +190,10 @@ module.exports = (app) => {
             }
             const { missionNumber, teamNumber, discordId } = req.query
             const frosh = await Frosh.findOne({ discordId })
-            if (frosh) {
-                if(frosh.scuntTeam !== parseInt(teamNumber)) {
+            const leedur = await Leedur.findOne({ discordId })
+            const user = frosh || leedur
+            if (user) {
+                if(user.scuntTeam !== parseInt(teamNumber)) {
                     res.send({
                         status: NOT_ACCEPTED,
                         errorMsg: 'You cannot get the status of a mission outside your team!'
@@ -204,7 +215,7 @@ module.exports = (app) => {
                 res.send({
                     status: OK,
                     missionStatus: mission.status,
-                    points: mission.achievedPoints,
+                    points: mission.achievedPoints || 0,
                     name: `${mission.number} - ${mission.name}`,
                     category: mission.category
                 })
@@ -237,7 +248,13 @@ module.exports = (app) => {
                     number: { $nin: missionNumbers },
                     isViewable: true
                 }).sort({number: 1})
-                const submittedByUser = await SubmittedMission.find({ teamNumber, submitter: { $in: [req.user.email, req.user.discordUsername]}})
+                const submittedByUser = await SubmittedMission.find({ 
+                    teamNumber,                     
+                    $or: [
+                        {submitter: { $in: [req.user.email, req.user.discordUsername]}},
+                        {submitterDiscordId: req.user.discordId}
+                    ]
+                })
 
                 res.send({
                     status: OK,
@@ -266,7 +283,7 @@ module.exports = (app) => {
             const teams = await Team.find({}, {
                 number: 1,
                 name: 1
-            })
+            }).sort({ number: 1 })
             const sanitizedTeams = teams.map(t => `${t.number} - ${t.name}`)
 
             res.send({
@@ -384,15 +401,19 @@ module.exports = (app) => {
         try {
             const { email, code, discordUsername, id } = req.body
             const frosh = await Frosh.findOne({ email })
-            if (frosh) {
-                if(frosh.scuntTeam) {
-                    if(frosh.discordToken === code) {
-                        frosh.discordUsername = discordUsername
-                        frosh.discordId = id
-                        frosh.discordSignedIn = true
-                        frosh.save()
+            const leedur = await Leedur.findOne({ email })
+            const user = frosh || leedur
+            const type = frosh ? 'frosh' : leedur ? 'leedur' : 'none'
+            if (user) {
+                if(user.scuntTeam) {
+                    if(user.discordToken === code) {
+                        user.discordUsername = discordUsername
+                        user.discordId = id
+                        user.discordSignedIn = true
+                        user.save()
                         res.send({
-                            status: OK
+                            status: OK,
+                            type
                         })
                     } else {
                         res.send({

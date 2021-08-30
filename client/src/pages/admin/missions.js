@@ -175,12 +175,13 @@ export default function MissionsAdminView () {
                     { 
                         categories.length > 0 &&
                         <FormDropdownMenu 
-                            label="Filter by category"
+                            label={isSearching ? "Stop searching to filter by category" : "Filter by category"}
                             items={categories}
                             onChange={(idx, item) => {
                                 setCurrCategory(item)
                                 selectCategory(item)
                             }}
+                            disabled={isSearching}
                         />
                     }
                     <FormTextBox 
