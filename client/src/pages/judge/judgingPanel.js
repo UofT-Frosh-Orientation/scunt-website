@@ -295,7 +295,10 @@ function InPersonJudgingPanel() {
             if(missionRes.data.status === 200) {
               setMissions(() => missionRes.data.missions.map(m => ({
                   text: `${m.number} - ${m.name}`,
-                  number: m.number
+                  number: m.number,
+                  name: m.name, 
+                  category: m.category, 
+                  totalPoints: m.totalPoints
               })))
             }
 
@@ -341,8 +344,13 @@ function InPersonJudgingPanel() {
     const handlePopulateTeamInfo = async(teamNumber) => {
         if (teamNumber > 0 && teamNumber <= teams.length) {
             setTeamNumber(teamNumber)
+            if (!missionToUpdate.number) {
+                alert("please fill out the mission number first")
+                return
+            }
             // get achieved points
             const { data } = await axios.post('/judge/get-team-mission-points', {
+                number: missionToUpdate.number,
                 teamNumber: teamNumber,
             })
             if (data.status !== 200) {
@@ -371,6 +379,7 @@ function InPersonJudgingPanel() {
         })
         if (data.status === 200) {
             alert('success!')
+            handleClear()
         } else {
             alert(data.errorMsg)
         }

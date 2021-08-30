@@ -5,7 +5,7 @@ module.exports = (app) => {
     const Judge = require('../models/Judge');
     const Team = require('../models/Team');
     const SubmittedMission = require('../models/SubmittedMission');
-
+    const Mission = require('../models/Mission');
     const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR, INTERNAL_ERROR_MSG, SUBMITTED, SUBMITTED_LIVE, JUDGING, JUDGING_LIVE, COMPLETE, FLAGGED } = require('./errorMessages');
 
     app.post('/create/judge/', async (req, res) => {
@@ -105,10 +105,10 @@ module.exports = (app) => {
                     return;
                 } else if (action === "update") {
                     // check new points range
-                    if (isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints) {
+                    if (isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints * 1.5) {
                         res.send({
                             status: NOT_ACCEPTED,
-                            errorMsg: "New score should be higher than current score and lower than total score"
+                            errorMsg: "New score should be higher than current score and lower than total score x 1.5"
                         })
                         return;
                     }
@@ -121,7 +121,7 @@ module.exports = (app) => {
                         })
                         return;
                     }
-                    team.score = team.score - submittedmission.achievedPoints + team.score;
+                    team.score = team.score - submittedmission.achievedPoints + newPoints;
                     submittedmission.achievedPoints = newPoints;
                     submittedmission.status = COMPLETE;
                     submittedmission.save();
@@ -163,4 +163,122 @@ module.exports = (app) => {
         }
     });
 
+    app.post('/judge/manual-update', async (req, res) => {
+        try {
+            const { 
+                number, 
+                teamNumber,
+                newPoints
+            } = req.body;
+
+            const submittedmission = await SubmittedMission.findOne({number: number, teamNumber: teamNumber});
+            if(submittedmission) {
+                // check new points range
+                if (isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints * 1.5) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "New score should be higher than current score and lower than total score x 1.5"
+                    })
+                    return;
+                }
+                // check team
+                const team = await Team.findOne({number: teamNumber});
+                if (!team) {
+                    res.send({
+                        status: INTERNAL_ERROR,
+                        errorMsg: INTERNAL_ERROR_MSG
+                    })
+                    return;
+                }
+                team.score = team.score - submittedmission.achievedPoints + newPoints;
+                submittedmission.achievedPoints = newPoints;
+                submittedmission.status = COMPLETE;
+                submittedmission.save();
+                team.save();
+                res.send({status: OK});
+                return;
+            } else {
+                // check valid mission number
+                const mission = await Mission.findOne({number: number});
+                if (!mission) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "Mission not found, please double check your mission number"
+                    })
+                    return;
+                }
+                // check new points range
+                if (isNaN(newPoints) || newPoints > mission.totalPoints * 1.5) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "New score should be higher than current score and lower than total score x 1.5"
+                    })
+                    return;
+                }
+                // check team
+                const team = await Team.findOne({number: teamNumber});
+                if (!team) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: "Scunt team not found, please double check your team number"
+                    })
+                    return;
+                }
+                const newSubmittedmission = new SubmittedMission({
+                    name: mission.name, 
+                    number: mission.number, 
+                    category: mission.category,
+                    status: COMPLETE,
+                    submitter: "in-person hero",
+                    achievedPoints: newPoints,
+                    totalPoints: mission.totalPoints, 
+                    teamNumber: teamNumber,
+                    timeCreated: new Date()
+                });
+                newSubmittedmission.save();
+                team.score = team.score + newPoints;
+                team.save();
+                res.send({status: OK});
+                return;
+            }
+        } catch (err) {
+            console.log('judge manual update - ' + err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: INTERNAL_ERROR_MSG
+            });
+            return;
+        }
+    });
+
+    app.post('/judge/get-team-mission-points', async (req, res) => {
+        try {
+            const { 
+                number,
+                teamNumber,
+            } = req.body;
+
+            const submittedmission = await SubmittedMission.findOne({number: number, teamNumber: teamNumber});
+            if(submittedmission) {
+                res.send({
+                    status: OK, 
+                    achievedPoints: submittedmission.achievedPoints
+                });
+                return;
+            } else {
+                res.send({
+                    status: OK, 
+                    achievedPoints: 0
+                });
+                return;
+            }
+        } catch (err) {
+            console.log('judge get team points - ' + err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: INTERNAL_ERROR_MSG
+            });
+            return;
+        }
+    });
 }
