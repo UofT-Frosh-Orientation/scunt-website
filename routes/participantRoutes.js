@@ -100,25 +100,25 @@ module.exports = (app) => {
             })
             if(mission) {
                 if (alreadySubmitted) {
-                    alreadySubmitted.status = isMediaConsent ? SUBMITTED_LIVE : SUBMITTED
+                    alreadySubmitted.status = String(isMediaConsent) === 'true' ? SUBMITTED_LIVE : SUBMITTED
                     alreadySubmitted.submitter = discordUsername || email
                     alreadySubmitted.submissionLink = submissionLink
                     alreadySubmitted.teamNumber = teamNumber
                     alreadySubmitted.submitterDiscordId = discordId
                     alreadySubmitted.timeCreated = new Date()
-                    alreadySubmitted.isMediaConsent = isMediaConsent
+                    alreadySubmitted.isMediaConsent = String(isMediaConsent) === 'true'
                     alreadySubmitted.save()
                 } else {
                     const submission = new SubmittedMission({
                         name: mission.name,
                         number: missionNumber,
                         category: mission.category,
-                        status: isMediaConsent ? SUBMITTED_LIVE : SUBMITTED,
+                        status: String(isMediaConsent) === 'true' ? SUBMITTED_LIVE : SUBMITTED,
                         submitter: discordUsername || email,
                         submitterDiscordId: discordId,
                         submissionLink,
                         teamNumber,
-                        isMediaConsent,
+                        isMediaConsent: String(isMediaConsent) === 'true',
                         totalPoints: mission.totalPoints,
                         timeCreated: new Date()
                     })

@@ -564,7 +564,7 @@ export function MissionFroshContainer ({
       </Col>
       <Col md={3}> 
         <p>{submitter}</p> 
-        <a style={{fontSize: '14px'}} href={submissionLink}>submission</a> 
+        <a style={{fontSize: '14px'}} href={submissionLink} target="_blank" rel="noreferrer">submission</a> 
       </Col>
       <Col md={1}> <p>{achievedPoints !== undefined && achievedPoints !== null ? `${achievedPoints} out of ${totalPoints}` : 'not pointed'}</p> </Col>
     </Row>
