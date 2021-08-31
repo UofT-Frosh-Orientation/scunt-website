@@ -410,6 +410,7 @@ module.exports = (app) => {
             const leedur = await Leedur.findOne({ email })
             const user = frosh || leedur
             const type = frosh ? 'frosh' : leedur ? 'Leedurs' : 'none'
+            const oldLoggedInStatus = user.discordSignedIn
             if (user) {
                 if(user.scuntTeam) {
                     if(user.discordToken === code) {
@@ -422,7 +423,7 @@ module.exports = (app) => {
                             type,
                             name: (user.preferredName || user.fullName) || user.name, 
                             teamNumber: user.scuntTeam, 
-                            discordSignedIn: user.discordSignedIn, 
+                            discordSignedIn: oldLoggedInStatus, 
                             pronouns: user.pronouns,
                         })
                     } else {
