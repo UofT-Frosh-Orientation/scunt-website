@@ -470,41 +470,41 @@ module.exports = (app) => {
             const teamScores = teams.flatMap(t => t.score)
             const teamNames = teams.flatMap(t => t.name)
 
+            const teamDisplayScores = [];
+            for(let i = 0; i < teamScores.length; i++){
+                let runningSum = 0;
+                for(let j = 0; j < teamScores.length; j++){
+                    if(i !== j){
+                        runningSum += (0.1*teamScores[j]);
+                    }else {
+                        runningSum += teamScores[j]
+                    }
+                }
+                teamDisplayScores.push(Math.floor(runningSum));
+            }
+            
+            const aggregatedTeams = [];
+            let maxScore = -1;
+            for(let k = 0; k < teamScores.length; k++){
+                const team = {
+                    name: teamNames[k],
+                    score: teamDisplayScores[k]
+                };
+                aggregatedTeams.push(team);
+                maxScore = Math.max(maxScore, team.score)
+            }
+
             if (calledFromDiscord) {
                 res.send({
                     status: OK,
-                    teamScores
+                    teamScores: teamDisplayScores
                 })
             } else {
-                // score algo
-                const teamDisplayScores = [];
-                for(let i = 0; i < teamScores.length; i++){
-                    let runningSum = 0;
-                    for(let j = 0; j < teamScores.length; j++){
-                        if(i !== j){
-                            runningSum += (0.1*teamScores[j]);
-                        }else {
-                            runningSum += teamScores[j]
-                        }
-                    }
-                    teamDisplayScores.push(Math.floor(runningSum));
-                }
-                
-                const teams = [];
-                let maxScore = -1;
-                for(let k = 0; k < teamScores.length; k++){
-                    const team = {
-                        name: teamNames[k],
-                        score: teamDisplayScores[k]
-                    };
-                    teams.push(team);
-                    maxScore = Math.max(maxScore, team.score)
-                }
-                teams.sort((a, b) => {return b.score - a.score});
+                aggregatedTeams.sort((a, b) => b.score - a.score);
 
                 res.send({
                     status: OK,
-                    teams: teams,
+                    teams: aggregatedTeams,
                     maxScore: maxScore
                 })
             }
