@@ -469,7 +469,10 @@ module.exports = (app) => {
 
             const teams = await Team.find()
             const teamScores = teams.flatMap(t => t.score)
-            const teamNames = teams.flatMap(t => t.name)
+            const teamNames = teams.flatMap(t => ({
+                name: t.name,
+                num: t.number
+            }))
 
             const teamDisplayScores = [];
             for(let i = 0; i < teamScores.length; i++){
@@ -488,7 +491,7 @@ module.exports = (app) => {
             let maxScore = -1;
             for(let k = 0; k < teamScores.length; k++){
                 const team = {
-                    name: teamNames[k],
+                    name: `${teamNames[k].num} - ${teamNames[k].name}`,
                     score: teamDisplayScores[k]
                 };
                 aggregatedTeams.push(team);
