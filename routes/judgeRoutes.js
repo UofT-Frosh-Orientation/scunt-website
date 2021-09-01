@@ -328,6 +328,7 @@ module.exports = (app) => {
 
                 // add bribe to team score
                 team.score += parseInt(pointsChanged);
+                console.log(team)
                 team.save();
                 judge.bribePointsLeft -= parseInt(pointsChanged);
                 judge.save();   
@@ -366,6 +367,7 @@ module.exports = (app) => {
                 newDeduc.save()
 
                 team.score -= parseInt(pointsChanged);
+                console.log(team)
                 team.save();
                 res.send({status: OK});
                 return;

@@ -49,12 +49,11 @@ export default function Leaderboard () {
             <br/>
             <HeaderPage img={require("../assets/banners/about_us.svg").default}> Scunt 2021 </HeaderPage>
             <br/>
-            <Container>
                 <HeaderSection> Leaderboard </HeaderSection>
                 <br/>
                 {
                     hasStarted ?
-                    <div className="graph" style={{height: window.innerHeight - 25, margin: "2.5% 0 0 1%"}}>
+                    <div className="graph" style={{height: window.innerHeight - 25, margin: "1.5% 0 0 2vw"}}>
                         {
                             teams.length > 0 && teams.map((t, index) => 
                             <ScoreMeter maxScore={maxScore} score={t.score} team={t.name} numTeams={teams.length} index={index} key={"score" + index}/>
@@ -63,7 +62,6 @@ export default function Leaderboard () {
                     </div> :
                     <h3 className="center-text"> Scunt starts on September 8th at 5:00pm, see you then! </h3>
                 }
-            </Container>
         </div>
     )
 }

@@ -590,7 +590,7 @@ export function BribeDeductionContainer ({
   return <div className="mission-row" style={{backgroundColor: statusColors[name]}}>
     <Row>
       <Col md={3}>
-        <h6>{teamNumber}</h6>
+        <h6>Team {teamNumber}</h6>
       </Col>
       <Col md={3}>
         <h6>{name}</h6>
