@@ -17,7 +17,7 @@
                                },
                                "password": {
                                    "type": "string",
-                                   "example": "G*nxhlPcWE#xpZlYZMcO"
+                                   "example": "password"
                                },
                                "name": {
                                    "type": "string",
