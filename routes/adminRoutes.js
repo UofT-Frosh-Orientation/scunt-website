@@ -119,7 +119,7 @@ module.exports = (app) => {
                     status: OK,
                     errorMsg: "",
                     missions: sanitizedData,
-                    categories: ["All"].concat(categories)
+                    categories: ["All", "Viewable Missions", "Hidden Missions"].concat(categories)
                 })
             } catch (err) {
                 res.send({
