@@ -13,6 +13,7 @@ import LeedurSignUpForm from "../pages/leedur/signupForm"
 import LeedursAdminView from "../pages/admin/leedur"
 import TeamInfo from "../pages/frosh/teamInfo"
 import Leaderboard from "../pages/leaderboard"
+import FlaggedAdminView from "../pages/admin/flagged"
 
 export const pages = {
   "main" : [
@@ -66,6 +67,12 @@ export const pages = {
       "protected": "admin"
     },
     {
+      "title": "Scunt Admin Flagged Missions",
+      "link": "/admin/flagged",
+      "component": <FlaggedAdminView/>,
+      "protected": "admin"
+    },
+    {
       "title": "Judge Sign Up Form",
       "link": "/judge/signup",
       "component": <SignUpForm/>,
@@ -74,7 +81,7 @@ export const pages = {
       "title": "Judging Panel",
       "link": "/judge/panel",
       "component": <JudgingPanel/>,
-      // "protected": "judge",
+      "protected": "judge",
     },
     {
       "title": "Leedur Sign Up Form",

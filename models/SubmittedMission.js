@@ -47,12 +47,13 @@ const SubmittedMissionSchema = new mongoose.Schema({
 	},
 	isMediaConsent: {
 		type: Boolean,
-		required: true
+		required: false
 	},
 	timeCreated:{
 		type: Date,
-		required: true
-	}
+		required: true,
+		default: new Date()
+	},
 })
 
 const SubmittedMission = mongoose.model('SubmittedMission', SubmittedMissionSchema);

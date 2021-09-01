@@ -61,7 +61,9 @@ module.exports = (app) => {
     // TODO: maybe create submissions schema for deductions?
     app.get('/get/submittedmissions', async (req, res) => {
         try {
-            const submittedmissions = await SubmittedMission.find();
+            const submittedmissions = await SubmittedMission.find({
+                number: { $ne: -1 }
+            });
             res.send({
                 status: OK,
                 submittedmissions,
@@ -292,6 +294,7 @@ module.exports = (app) => {
                 pointsChanged
             } = req.body;
 
+            console.log(pointsChanged)
             if (action === 'bribes'){
                 // check bribes range
                 if (isNaN(pointsChanged) || pointsChanged < 0 || pointsChanged > req.user.bribePointsLeft) {
@@ -310,14 +313,27 @@ module.exports = (app) => {
                     })
                     return;
                 }
-                team.score = team.score + pointsChanged;
-                team.save();
+
                 const judge = await Judge.findById(req.user._id);
-                judge.bribePointsLeft -= pointsChanged;
-                judge.save();
+
+                // submit bribe as mission
+                const newBribe = new SubmittedMission({
+                    name: "Bribe",
+                    number: -1,
+                    totalPoints: pointsChanged,
+                    teamNumber: team.number,
+                    category: judge.name
+                })
+                newBribe.save()
+
+                // add bribe to team score
+                team.score += parseInt(pointsChanged);
+                team.save();
+                judge.bribePointsLeft -= parseInt(pointsChanged);
+                judge.save();   
+                             
                 res.send({status: OK});
                 return;
-
             } else if (action === 'deductions') {
                 // check deductions range
                 if (isNaN(pointsChanged) || pointsChanged < 0) {
@@ -336,7 +352,20 @@ module.exports = (app) => {
                     })
                     return;
                 }
-                team.score = team.score - pointsChanged;
+
+                const judge = await Judge.findById(req.user._id);
+
+                // submit deduction as mission
+                const newDeduc = new SubmittedMission({
+                    name: "Deduction",
+                    number: -1,
+                    totalPoints: pointsChanged,
+                    teamNumber: team.number,
+                    category: judge.name
+                })
+                newDeduc.save()
+
+                team.score -= parseInt(pointsChanged);
                 team.save();
                 res.send({status: OK});
                 return;
@@ -357,4 +386,31 @@ module.exports = (app) => {
             return;
         }
     });
+
+    app.get('/get/judge/bribe-deduction-history', async (req, res) => {
+        try{
+            if (req.isAuthenticated() && req.user.accountType === 'judge') {
+                const bribesAndDeductions = await SubmittedMission.find({
+                    number: -1,
+                    name: { $in: ['Bribe', 'Deduction'] },
+                })
+                res.send({
+                    status: OK,
+                    bribesAndDeductions
+                })
+            } else {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Please login to the correct account to get this information."
+                })
+            }
+        } catch (err) {
+            console.log('judge bribe deduction history - ' + err)
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: INTERNAL_ERROR_MSG
+            });
+            return
+        }
+    })
 }

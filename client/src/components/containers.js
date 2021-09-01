@@ -378,11 +378,14 @@ export function MissionAdminContainer({
 }
 
 const statusColors = {
-  "submitted": "orange", 
-  "submitted(live)": "orange",
+  "submitted": "#FAD7A0", 
+  "submitted(live)": "#EDBB99",
   "judging": "#FF8080",
   "judging(live)": "#FF8080",
-  "complete": "#E6FFE6"
+  "complete": "#ABEBC6",
+  "flagged": "#E74C3C",
+  "Bribe": "#AED6F1",
+  "Deduction": "#E6B0AA"
 }
 
 export function MissionJudgeContainer({
@@ -431,10 +434,10 @@ export function MissionJudgeContainer({
         }
       </Col>
       <Col md={1}>
-      <h4><a target='_blank' href={submissionLink}> Link </a></h4>
+      <h4><a target='_blank' href={submissionLink} rel="noreferrer"> Link </a></h4>
       </Col>
       <Col md={2}>
-        <h6 style={{backgroundColor:statusColors[status], borderRadius:"10%"}}>{status}</h6>
+        <h6 style={{backgroundColor:statusColors[status], borderRadius:"10px", textAlign: 'center'}}>{status}</h6>
       </Col>
       </Row>
       <div style={{textAlign:"right"}}>
@@ -524,7 +527,7 @@ export function MissionIncompleteContainer ({
       <Col md={6}>
         <h6>{name}</h6>
       </Col>
-      <Col md={2}> {<p>{category}</p>} </Col>
+      <Col md={2}> <p>{category}</p> </Col>
       <Col md={1}> { totalPoints } </Col>
       <Col md={2}> 
         <ButtonBubble link={`/frosh/submit?missionNumber=${number}`} label="submit"/>
@@ -541,14 +544,21 @@ export function MissionFroshContainer ({
   submitter,
   submissionLink,
   achievedPoints,
-  totalPoints
+  totalPoints,
+  teamNumber
 }) {
   return <div className="mission-row">
     <Row>
+      {
+        teamNumber &&
+        <Col md={1}>
+          <h6>Team {teamNumber}</h6>
+        </Col>
+      }
       <Col md={1}>
-        <h6>{number}</h6>
+        <h6>#{number}</h6>
       </Col>
-      <Col md={6}>
+      <Col md={teamNumber ? 5 : 6}>
         <h6>{name}</h6>
         <p>{category}</p>
       </Col>
@@ -567,6 +577,26 @@ export function MissionFroshContainer ({
         <a style={{fontSize: '14px'}} href={submissionLink} target="_blank" rel="noreferrer">submission</a> 
       </Col>
       <Col md={1}> <p>{achievedPoints !== undefined && achievedPoints !== null ? `${achievedPoints} out of ${totalPoints}` : 'not pointed'}</p> </Col>
+    </Row>
+  </div>
+}
+
+export function BribeDeductionContainer ({
+  name,
+  teamNumber,
+  totalPoints,
+  category
+}) {
+  return <div className="mission-row" style={{backgroundColor: statusColors[name]}}>
+    <Row>
+      <Col md={3}>
+        <h6>{teamNumber}</h6>
+      </Col>
+      <Col md={3}>
+        <h6>{name}</h6>
+      </Col>
+      <Col md={3}> <p>Given by: {category}</p> </Col>
+      <Col md={3}> <p>{name === 'Bribe' ? '+' : '-'} { totalPoints }pts</p> </Col>
     </Row>
   </div>
 }

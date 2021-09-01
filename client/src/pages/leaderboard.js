@@ -3,27 +3,45 @@ import React, { useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { HeaderPage, HeaderSection } from '../components/texts'
 import './leaderboard.css'
+var io = require("socket.io-client");
 
 export default function Leaderboard () {
     const [teams, setTeams] = useState([])
     const [maxScore, setMaxScore] = useState([])
     const [hasStarted, setHasStarted] = useState(false)
 
+    const getScores = async () => {
+        const { data } = await axios.get('/get/leaderboard/scores?discord=false')
+        if (data.status === 200) {
+            setTeams(data.teams)
+            setMaxScore(data.maxScore)
+            setHasStarted(true)
+        } else if (data.status === 69) {
+            setHasStarted(false)
+        }else {
+            alert(data.errorMsg)
+        }             
+    }
+
     useEffect(() => {
-        const getScores = async () => {
-            const { data } = await axios.get('/get/leaderboard/scores?discord=false')
-            const event = await axios.get('/get/eventDetails')
-            setHasStarted(event.data.startEvent)
-            if(event.data.startEvent) {
+        getScores()
+
+        // socket.io client side setup
+        console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
+        const leaderboardSocket = io.connect(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
+        leaderboardSocket.on('connect', ()=> {
+            console.log("client is connected!")
+        });
+        leaderboardSocket.on('scoresChanged', () => {
+            setTeams(async () => {
+                const { data } = await axios.get('/get/leaderboard/scores?discord=false')
                 if (data.status === 200) {
                     setTeams(data.teams)
                     setMaxScore(data.maxScore)
-                } else {
-                    alert(data.errorMsg)
                 }
-            }                
-        }
-        getScores()
+            });
+        });
+        return () => leaderboardSocket.disconnect();
     }, [])
 
     return (

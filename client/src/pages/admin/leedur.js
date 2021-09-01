@@ -5,6 +5,7 @@ import { ContainerPopupModalConfirm } from '../../components/containers'
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import './dashboard.css'
+import { Link } from 'react-router-dom'
 
 const IN_REVIEW = "in-review", APPROVED = "approved"
 
@@ -74,6 +75,7 @@ export default function LeedursAdminView () {
             <Container>
                 <h3>{accountInfo.name}</h3>
                 <p>{accountInfo.email}</p>
+                <p>Leedurs can sign up <Link to="/leedur/signup">here</Link></p>
                 <div>
                     <div className="tabs">
                         <Button primary={view === IN_REVIEW} label="In Review" onClick={() => setView(IN_REVIEW)}/>

@@ -261,13 +261,19 @@ module.exports = (app) => {
                         {submitterDiscordId: req.user.discordId}
                     ]
                 })
+                const bribesAndDeductions = await SubmittedMission.find({
+                    number: -1,
+                    name: { $in: ['Bribe', 'Deduction'] },
+                    teamNumber
+                })
 
                 res.send({
                     status: OK,
                     inProgressMissions,
                     completedMissions,
                     incompleteMissions,
-                    submittedByUser
+                    submittedByUser,
+                    bribesAndDeductions
                 })
             } else {
                 res.send({
@@ -386,7 +392,6 @@ module.exports = (app) => {
 
     app.get('/get/eventDetails', async (req, res) => {
         const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
-        console.log(event)
         if (event) {
             res.send({
                 revealTeams: event.revealTeams,
@@ -459,7 +464,7 @@ module.exports = (app) => {
             const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
             if(!event.startEvent) {
                 res.send({
-                    status: NOT_ACCEPTED,
+                    status: 69,
                     errorMsg: 'The event has not started yet!'
                 })
                 return

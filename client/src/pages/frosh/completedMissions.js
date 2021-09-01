@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Container, Row } from 'react-bootstrap'
-import { LoadingAnimation, MissionFroshContainer, MissionGeneralContainer, MissionIncompleteContainer } from '../../components/containers'
+import { BribeDeductionContainer, LoadingAnimation, MissionFroshContainer, MissionGeneralContainer, MissionIncompleteContainer } from '../../components/containers'
 import { FormDropdownMenu, FormTextBox } from '../../components/forms'
 import { HeaderPage } from '../../components/texts'
 
@@ -25,13 +25,15 @@ export default function CompletedMissions() {
                     "Missions in Judging": data.inProgressMissions,
                     "Completed Missions": data.completedMissions,
                     "Incomplete Missions": data.incompleteMissions,
-                    "Missions Submitted by me": data.submittedByUser
+                    "Missions Submitted by me": data.submittedByUser,
+                    "Bribes & Deductions": data.bribesAndDeductions,
                 })
                 setMissions({
                     "Missions in Judging": data.inProgressMissions.map(m => <MissionFroshContainer {...m}/>),
                     "Completed Missions": data.completedMissions.map(m => <MissionFroshContainer {...m}/>),
                     "Incomplete Missions": data.incompleteMissions.map(m => <MissionIncompleteContainer {...m}/>),
-                    "Missions Submitted by me": data.submittedByUser.map(m => <MissionFroshContainer {...m}/>)
+                    "Missions Submitted by me": data.submittedByUser.map(m => <MissionFroshContainer {...m}/>),
+                    "Bribes & Deductions": data.bribesAndDeductions.map(m => <BribeDeductionContainer {...m}/>),
                 })
                 setFilter("Incomplete Missions")
             }
@@ -71,20 +73,23 @@ export default function CompletedMissions() {
                     && <>
                         <FormDropdownMenu
                             label={isSearching ? "Stop searching to filter by mission status" : "Filter by mission status"}
-                            items={["Incomplete Missions", "Missions in Judging", "Completed Missions", "Missions Submitted by me"]}
+                            items={["Incomplete Missions", "Missions in Judging", "Completed Missions", "Missions Submitted by me", "Bribes & Deductions"]}
                             onChange={(idx, item) => {
                                 setIsSearching(false)
                                 setFilter(item)
                             }}
                             disabled={isSearching}
                         />
-                        <FormTextBox 
-                            style={{width:"100%", margin: '0.75rem auto'}} clearButton 
-                            inputId={'missionSearchBar'} 
-                            type={"text"} 
-                            label={"Search All Missions"} 
-                            onChange={handleSearch}
-                        />
+                        {    
+                            filter !== "Bribes & Deductions" && 
+                            <FormTextBox 
+                                style={{width:"100%", margin: '0.75rem auto'}} clearButton 
+                                inputId={'missionSearchBar'} 
+                                type={"text"} 
+                                label={"Search All Missions"} 
+                                onChange={handleSearch}
+                            />
+                        }
                         {isSearching && <p>Searching {filter} </p> }
                     </>
                 }

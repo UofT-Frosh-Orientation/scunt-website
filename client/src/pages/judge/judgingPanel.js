@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState, useRef } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
-import { MissionJudgeContainer, ContainerPopupModalConfirm } from '../../components/containers';
+import { MissionJudgeContainer, ContainerPopupModalConfirm, LoadingAnimation, BribeDeductionContainer } from '../../components/containers';
 import { Button } from '../../components/buttons'
 import { FormDropdownMenu, FormTextBox } from '../../components/forms'
 import { HeaderPage } from '../../components/texts'
@@ -36,7 +36,8 @@ export default function JudgingPanel() {
         getSubmittedMissions()
 
         // socket.io client side setup
-        const ticketSocket = io.connect(`http://localhost:6969/judge-tickets`)
+        console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/judge-tickets`)
+        const ticketSocket = io.connect(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/judge-tickets`)
         ticketSocket.on('connect', ()=> {
             console.log("client is connected!")
         });
@@ -154,6 +155,7 @@ export default function JudgingPanel() {
                 <Button primary={tabView === "in-person"} label="In-person judging" onClick={() => setTabView("in-person")}/>
                 <Button primary={tabView === "bribes-and-deductions"} label="Bribes &amp; Deductions" onClick={() => setTabView("bribes-and-deductions")}/>
                 <Button primary={tabView === "completed"} label="Completed" onClick={() => setTabView("completed")}/>
+                <Button primary={tabView === "bribe-and-deduction-history"} label="Bribe & Deduction History" onClick={() => setTabView('bribe-and-deduction-history')}/>
             </div>
             <br/>
             { loading ?? <p>Loading ...</p> }
@@ -219,6 +221,11 @@ export default function JudgingPanel() {
                 {tabView === "bribes-and-deductions" 
                     &&  <BribesAndDeductions />}
 
+                {/* bribes and deduction history */}
+                {
+                    tabView === 'bribe-and-deduction-history' &&
+                    <BribeDeductionHistory/>
+                }
                 {/* completed tab */}
                 {tabView === "completed" 
                     && submittedmissions &&
@@ -470,6 +477,27 @@ function InPersonJudgingPanel() {
     )
 }
 
+function BribeDeductionHistory() {
+    const [bribesAndDeductions, setBribesAndDeductions] = useState([])
+
+    useEffect(() => {
+        const getBribesAndDeduc = async () => {
+            const { data } = await axios.get('/get/judge/bribe-deduction-history')
+            if (data.status === 200) setBribesAndDeductions(data.bribesAndDeductions)
+        }
+        getBribesAndDeduc()
+    })
+
+    return(
+        <div>
+            { bribesAndDeductions.length <= 0 && <LoadingAnimation/> }
+            {
+                bribesAndDeductions.length > 0 && bribesAndDeductions.map(m => <BribeDeductionContainer {...m}/>)
+            }
+        </div>
+    )
+}
+
 function BribesAndDeductions() {
     const [teams, setTeams] = useState([])
     const [accountInfo, setAccountInfo] = useState({})
@@ -480,14 +508,11 @@ function BribesAndDeductions() {
 
     useEffect(()=> {
         const getTeamsAndAccountInfo = async () => {
-            // const teamRes = await axios.get('/get/leedur/teams')
-            // if (teamRes.data.status === 200) setTeams(teamRes.data.teams)
-            // const account = await axios.get('/user/current')
-            // setAccountInfo(account.data)
-            const teamRes = {"status":200,"teams":["1 - Saving Ryan's Pirates","2 - Super Soakers Squad","3 - Scuntaholics Anonymous","4 - Under the Semen","5 - Masterbaiters","6 - Tough Swimmers to Swallow","7 - The Magic Conch Club","8 - No Team Name","9 - Blah","10 - bleh"]}
-            setTeams(teamRes.teams)
-            setAccountInfo({"isActivated":true,"bribePointsLeft":1500,"accountType":"judge","_id":"612c34d9c726848c7cb1ea12","name":"alice","email":"alicezhou0805@gmail.com"})
-          }
+            const teamRes = await axios.get('/get/leedur/teams')
+            if (teamRes.data.status === 200) setTeams(teamRes.data.teams)
+            const account = await axios.get('/user/current')
+            setAccountInfo(account.data)
+        }
           getTeamsAndAccountInfo()
     }, [])
 
@@ -534,6 +559,7 @@ function BribesAndDeductions() {
             <Row>
                 <Col md={5}>
                     <h3>Bribes</h3>
+                    <p>You have {accountInfo.bribePointsLeft} bribe points left</p>
                     {teams.length > 0 &&
                         <FormDropdownMenu
                             label="Team Number"

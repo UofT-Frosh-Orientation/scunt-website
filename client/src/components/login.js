@@ -39,6 +39,7 @@ export class LoginButton extends Component {
               <ButtonBubble label="Manage Judges" link="/admin/judges" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Manage Teams" link="/admin/teams" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Manage Leedurs" link="/admin/leedurs" onClick={()=>{this.infoPopup.setModalState(false)}}/>
+              <ButtonBubble label="Flagged Missions" link="/admin/flagged" onClick={()=>{this.infoPopup.setModalState(false)}}/>
               <ButtonBubble label="Logout" accent link="/" onClick={()=>{this.infoPopup.setModalState(false); this.setLoginStatus(false,"", "", "")}}/>
             </>
           }

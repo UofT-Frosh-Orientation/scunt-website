@@ -6,6 +6,7 @@ import { ContainerPopupModal, ContainerPopupModalConfirm, MissionAdminContainer,
 import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import './dashboard.css'
+import { Link } from 'react-router-dom'
 
 const IN_REVIEW = "in-review", APPROVED = "approved"
 
@@ -75,6 +76,7 @@ export default function JudgesAdminView () {
             <Container>
                 <h3>{accountInfo.name}</h3>
                 <p>{accountInfo.email}</p>
+                <p>Judges can sign up <Link to="/judge/signup">here</Link></p>
                 <div>
                     <div className="tabs">
                         <Button primary={view === IN_REVIEW} label="In Review" onClick={() => setView(IN_REVIEW)}/>

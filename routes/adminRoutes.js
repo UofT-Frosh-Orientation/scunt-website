@@ -11,6 +11,7 @@ module.exports = (app) => {
     const Mission = require('../models/Mission');
     const Team = require('../models/Team');
     const Frosh = require('../models/Frosh');
+    const SubmittedMission = require('../models/SubmittedMission');
 
     const { OK, NOT_ACCEPTED, DUPLICATE_EMAIL, INVALID_EMAIL, USER_ERROR, INTERNAL_ERROR } = require('./errorMessages');
     const client_email = process.env.SERVICE_ACCOUNT_CLIENT_EMAIL || require('../config/serviceAccount.json').client_email
@@ -616,7 +617,6 @@ module.exports = (app) => {
                 const { startEvent, revealTeams } = req.body
                 const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
                 
-                console.log(event, startEvent, revealTeams)
                 if (event) {
                     if(startEvent !== undefined && startEvent !== null) event.startEvent = startEvent
                     if(revealTeams !== undefined && revealTeams !== null) {
@@ -644,6 +644,33 @@ module.exports = (app) => {
                 res.send({
                     status: INTERNAL_ERROR,
                     errorMsg: "Something went wrong while updating event settings, please let tech team know."
+                })
+            }
+        } else {
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: "Please login"
+            })
+        }
+    })
+
+    app.get('/get/admin/flagged-missions', async (req, res) => {
+        if(req.isAuthenticated() && req.user.accountType === "admin") {
+            try {
+                const missions = await SubmittedMission.find({
+                    status: 'flagged'
+                })
+
+                console.log(missions)
+                res.send({
+                    status: OK,
+                    missions
+                })
+            } catch (err) {
+                console.log(err)
+                res.send({
+                    status: INTERNAL_ERROR,
+                    errorMsg: "Something went wrong while retrieving all the flagged missions, please let tech team know."
                 })
             }
         } else {
