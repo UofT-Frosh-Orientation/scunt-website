@@ -58,9 +58,15 @@ module.exports = (app) => {
     });
 
     // TODO: set protection rules for these endpoints
-    // TODO: maybe create submissions schema for deductions?
     app.get('/get/submittedmissions', async (req, res) => {
         try {
+            if (!req.isAuthenticated() || req.user.accountType !== 'judge') {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Please login to the correct account to get this information."
+                });
+                return;
+            }
             const submittedmissions = await SubmittedMission.find({
                 number: { $ne: -1 }
             });
@@ -80,6 +86,14 @@ module.exports = (app) => {
     // Actions: judging, cancel, update, screen, flag
     app.post('/judge/update', async (req, res) => {
         try {
+            if (!req.isAuthenticated() || req.user.accountType !== 'judge') {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Please login to the correct account to get this information."
+                });
+                return;
+            }
+
             const { 
                 ticketId, 
                 action,
@@ -168,6 +182,13 @@ module.exports = (app) => {
 
     app.post('/judge/manual-update', async (req, res) => {
         try {
+            if (!req.isAuthenticated() || req.user.accountType !== 'judge') {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Please login to the correct account to get this information."
+                });
+                return;
+            }
             const { 
                 number, 
                 teamNumber,
@@ -256,6 +277,13 @@ module.exports = (app) => {
 
     app.post('/judge/get-team-mission-points', async (req, res) => {
         try {
+            if (!req.isAuthenticated() || req.user.accountType !== 'judge') {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Please login to the correct account to get this information."
+                });
+                return;
+            }
             const { 
                 number,
                 teamNumber,
@@ -288,6 +316,13 @@ module.exports = (app) => {
     // actions: bribes, deductions
     app.post('/judge/special-update', async (req, res) => {
         try {
+            if (!req.isAuthenticated() || req.user.accountType !== 'judge') {
+                res.send({
+                    status: NOT_ACCEPTED,
+                    errorMsg: "Please login to the correct account to get this information."
+                });
+                return;
+            }
             const { 
                 action, 
                 teamNumber,
