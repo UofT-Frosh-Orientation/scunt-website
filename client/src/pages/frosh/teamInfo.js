@@ -54,7 +54,7 @@ export default function TeamInfo() {
                                 <Col md={4}>
                                     <p>
                                         It seems like you haven't signed into discord yet.
-                                        Please join <a href="https://discord.gg/6TqvC683P7">the havenger scunt server</a>!
+                                        Please join <a href="https://discord.gg/ApuNhwxyjK">the havenger scunt server</a>!
                                     </p>
                                 </Col>
                             }
