@@ -100,7 +100,7 @@ module.exports = (app) => {
             })
             if(mission) {
                 if (alreadySubmitted) {
-                    alreadySubmitted.status = String(isMediaConsent) === 'true' ? SUBMITTED_LIVE : SUBMITTED
+                    alreadySubmitted.status = SUBMITTED
                     alreadySubmitted.submitter = discordUsername || email
                     alreadySubmitted.submissionLink = submissionLink
                     alreadySubmitted.teamNumber = teamNumber
@@ -113,7 +113,7 @@ module.exports = (app) => {
                         name: mission.name,
                         number: missionNumber,
                         category: mission.category,
-                        status: String(isMediaConsent) === 'true' ? SUBMITTED_LIVE : SUBMITTED,
+                        status: SUBMITTED,
                         submitter: discordUsername || email,
                         submitterDiscordId: discordId,
                         submissionLink,

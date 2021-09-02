@@ -177,6 +177,7 @@ export default function JudgingPanel() {
                           category={m.category}
                           name={m.name}
                           timeCreated={m.timeCreated}
+                          isMediaConsent={m.isMediaConsent}
                           viewMore={currentViewMore === m._id}
                           handleCancel={handleCancel}
                           handleJudging={handleJudging}
@@ -203,6 +204,7 @@ export default function JudgingPanel() {
                           category={m.category}
                           name={m.name}
                           timeCreated={m.timeCreated}
+                          isMediaConsent={m.isMediaConsent}
                           viewMore={currentViewMore === m._id}
                           handleCancel={handleCancel}
                           handleJudging={handleJudging}
@@ -243,6 +245,7 @@ export default function JudgingPanel() {
                           category={m.category}
                           name={m.name}
                           timeCreated={m.timeCreated}
+                          isMediaConsent={m.isMediaConsent}
                           viewMore={currentViewMore === m._id}
                           handleCancel={handleCancel}
                           handleJudging={handleJudging}

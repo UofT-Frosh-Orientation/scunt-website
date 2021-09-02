@@ -400,6 +400,7 @@ export function MissionJudgeContainer({
   category,
   name,
   timeCreated,
+  isMediaConsent,
   viewMore,
   handleJudging,
   handleCancel,
@@ -441,7 +442,7 @@ export function MissionJudgeContainer({
       </Col>
       </Row>
       <div style={{textAlign:"right"}}>
-        {handleScreen !== undefined &&  
+        {handleScreen !== undefined &&  isMediaConsent &&
         <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer", marginRight: "1rem"}}
           onClick={handleScreen}> Screen </h4>}
         {status !== "complete" &&  
