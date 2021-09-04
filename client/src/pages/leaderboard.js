@@ -60,7 +60,7 @@ export default function Leaderboard () {
                             )
                         }
                     </div> :
-                    <h3 className="center-text"> Scunt starts on September 8th at 5:00pm, see you then! </h3>
+                    <h3 className="center-text"> Scunt starts on September 8th at 5:30pm, see you then! </h3>
                 }
         </div>
     )
