@@ -1,0 +1,24 @@
+.verify-submission {
+    list-style-type: none;
+}
+
+.verify-submission li,
+.verify-submission {
+    padding: 0;
+    margin: 0;
+}
+
+.verify-submission h4 {
+    width: 40%;
+}
+
+.verify-submission p {
+    width: 60%;
+    overflow-x: auto;
+    vertical-align: middle;
+}
+
+.verify-submission h4,
+.verify-submission p {
+    display:inline-block;
+}

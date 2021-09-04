@@ -29,6 +29,7 @@ module.exports = {
 		paths: {
 			// admin routes
 			"/post/admin/create": adminDocs.createAdminAccount,
+			"/upload/admin/teams": adminDocs.uploadTeams,
 			// auth routes
 			// judge routes
 			// participant routes

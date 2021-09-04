@@ -17,7 +17,7 @@
                                },
                                "password": {
                                    "type": "string",
-                                   "example": "G*nxhlPcWE#xpZlYZMcO"
+                                   "example": "password"
                                },
                                "name": {
                                    "type": "string",
@@ -28,6 +28,33 @@
                     }
                 }
             },
+            "responses": {
+                "200": {
+                    "description": "Sucess/Failure",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status":{
+                                        "type": "number"
+                                    },
+                                    "errorMsg":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "uploadTeams": {
+        "post": {
+            "summary": "upload teams",
+            "description": "upload scunt teams data from spreadsheet",
+            "tags": ["admin"],
             "responses": {
                 "200": {
                     "description": "Sucess/Failure",

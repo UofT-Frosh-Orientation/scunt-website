@@ -1,0 +1,16 @@
+:root {
+    --button-size: 75px;
+}
+
+.search-results{
+    background: #6f1e8815;
+    border-radius: 5px;
+    padding: 0.75rem 1.25rem;
+    margin: 0.25rem 0;      
+    cursor: pointer;
+}
+
+.search-results:hover{   
+    transition: background-color 0.5s;
+    background-color: #6f1e884f !important;
+}
