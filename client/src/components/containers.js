@@ -435,7 +435,10 @@ export function MissionJudgeContainer({
         }
       </Col>
       <Col md={1}>
-      <h4><a target='_blank' href={submissionLink} rel="noreferrer"> Link </a></h4>
+        {submissionLink ? 
+         <h4><a target='_blank' href={submissionLink} rel="noreferrer"> Link </a></h4> : 
+         <h5> In person</h5>
+        }
       </Col>
       <Col md={2}>
         <h6 style={{backgroundColor:statusColors[status], borderRadius:"10px", textAlign: 'center'}}>{status}</h6>
@@ -485,7 +488,7 @@ export function MissionJudgeContainer({
                 />
             </Col>
             <Col md={3} style={{paddingTop:"2rem"}}>
-              <Button label="Update" onClick={handleUpdate}/>
+              <Button label="Submit" onClick={handleUpdate}/>
               <Button className={"buttonFlag"} flagged={true} primary={false} label="Flag" onClick={handleFlag}/>
             </Col>
           </Row>
