@@ -31,7 +31,7 @@ const JudgeSchema = new mongoose.Schema({
     },
     bribePointsLeft: {
         type: Number,
-        default: 1500,
+        default: 2500,
         required: false
     },
     accountType: {
