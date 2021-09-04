@@ -193,7 +193,6 @@ export const JUDGES_DATA = [
        "13 INDIVIDUALLY packed Timbits (Bonus points for different flavours)",  
        "A selfie with the Skateboarding spiderman", 
        "A drink with the word “cock” in its name", 
-       "Get me into the secret room in Myhal (Hint: It’s above one of the exits)", 
        "Pics of you in-front of low-key Toronto music halls, the more the merrier"],
 
        img : require("../assets/judges/Luca_1000.png").default
@@ -210,10 +209,22 @@ export const JUDGES_DATA = [
        "toronto's sick! let's have somethin to remind me of this city!", "cute stickers/stationary always welcome :3♡" ],
        
        img : require("../assets/judges/Julia_1000.png").default
-       }
-       
-       
-       
-  
-  
+       },
+
+       {
+        name : "Sunny Park",
+
+        content : 
+        [ "a friend :’)", 
+        "a perfectly ripe peach (the fruit)", 
+        "the best bubble tea in toronto",
+        "serenade me", 
+        "i hoard patches for fun", 
+        "hit me with your spiciest pick up line", 
+        "give me your best boozy brunch recommendations", 
+        "lip sync for your life to a song from any of the mamma mia or high school musical movies (bonus points for glitter & dramatic reveals)"
+        ],
+
+        img : require("../assets/judges/sunny_1000.png").default
+        }
 ]

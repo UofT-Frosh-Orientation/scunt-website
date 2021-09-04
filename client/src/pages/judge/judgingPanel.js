@@ -259,7 +259,7 @@ export default function JudgingPanel() {
             {/* pop up modals */}
             <ContainerPopupModalConfirm 
                 ref={updateScoreConfirm} 
-                labelYes="Update" 
+                labelYes="Submit" 
                 labelNo="Cancel" 
                 buttonCallback={handleUpdate}
                 header={`Are you sure?`} 
@@ -473,7 +473,7 @@ function InPersonJudgingPanel() {
                 </Col>
             </Row>
             <div style={{float:"right"}}>
-            <Button label={"Update"} onClick={handleManualUpdate}/>
+            <Button label={"Submit"} onClick={handleManualUpdate}/>
             <Button label={"Clear"} primary={false} onClick={handleClear}/>
             </div>
         </div>
@@ -580,7 +580,7 @@ function BribesAndDeductions() {
                         onChange = {setBribesPoints}
                         />
                     <div style={{float:"right"}}>
-                        <Button label={"Update"} onClick={handleBribesUpdate}/>
+                        <Button label={"Submit"} onClick={handleBribesUpdate}/>
                     </div>
                 </Col>
                 <Col md={2}></Col>
@@ -604,7 +604,7 @@ function BribesAndDeductions() {
                         onChange = {setDeductionPoints}
                         />
                     <div style={{float:"right"}}>
-                        <Button label={"Update"} onClick={handleDeductionsUpdate}/>
+                        <Button label={"Submit"} onClick={handleDeductionsUpdate}/>
                     </div>
                     <br/> 
                 </Col>
