@@ -11,7 +11,7 @@ export default function Leaderboard () {
     const [hasStarted, setHasStarted] = useState(false)
 
     const getScores = async () => {
-        const { data } = await axios.get('/get/leaderboard/scores?discord=false')
+        const { data } = await axios.get('http://localhost:6969/get/leaderboard/scores?discord=false')
         if (data.status === 200) {
             setTeams(data.teams)
             setMaxScore(data.maxScore)
@@ -27,21 +27,21 @@ export default function Leaderboard () {
         getScores()
 
         // socket.io client side setup
-        console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
-        const leaderboardSocket = io.connect(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
-        leaderboardSocket.on('connect', ()=> {
-            console.log("client is connected!")
-        });
-        leaderboardSocket.on('scoresChanged', () => {
-            setTeams(async () => {
-                const { data } = await axios.get('/get/leaderboard/scores?discord=false')
-                if (data.status === 200) {
-                    setTeams(data.teams)
-                    setMaxScore(data.maxScore)
-                }
-            });
-        });
-        return () => leaderboardSocket.disconnect();
+        // console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
+        // const leaderboardSocket = io.connect(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
+        // leaderboardSocket.on('connect', ()=> {
+        //     console.log("client is connected!")
+        // });
+        // leaderboardSocket.on('scoresChanged', () => {
+        //     setTeams(async () => {
+        //         const { data } = await axios.get('/get/leaderboard/scores?discord=false')
+        //         if (data.status === 200) {
+        //             setTeams(data.teams)
+        //             setMaxScore(data.maxScore)
+        //         }
+        //     });
+        // });
+        // return () => leaderboardSocket.disconnect();
     }, [])
 
     return (
@@ -53,7 +53,7 @@ export default function Leaderboard () {
                 <br/>
                 {
                     hasStarted ?
-                    <div className="graph" style={{height: window.innerHeight - 25, margin: "1.5% 0 0 2vw"}}>
+                    <div className="graph" style={{height: 80*teams.length, margin: "1.5% 0 0 5vw"}}>
                         {
                             teams.length > 0 && teams.map((t, index) => 
                             <ScoreMeter maxScore={maxScore} score={t.score} team={t.name} numTeams={teams.length} index={index} key={"score" + index}/>
@@ -70,12 +70,12 @@ function ScoreMeter({
     numTeams, index, score, maxScore, team
 }) {
 
-    const height = (100/numTeams - 5)*1.5;
-    const top = (height+2)*index
+    // const height = window.innerHeight/numTeams - 25;
+    const top = (80)*index
     const barWidth = (0.2*window.innerWidth)+ ((0.7 * window.innerWidth) - 50) * (score/maxScore)
 
     return(
-        <div className="score-meter" style={{height: height.toString() + "%", top: top.toString() + "%"}}>
+        <div className="score-meter" style={{height: '50px', top}}>
             <h4>{team}</h4>
             <div className="points" style={{width: barWidth}}>{score}</div>
         </div>
