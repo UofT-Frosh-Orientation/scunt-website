@@ -394,7 +394,7 @@ module.exports = (app) => {
                 const newDeduc = new SubmittedMission({
                     name: "Deduction",
                     number: -1,
-                    achievedPoints: pointsChanged,
+                    achievedPoints: -1 * pointsChanged,
                     totalPoints: pointsChanged,
                     teamNumber: team.number,
                     category: judge.name
