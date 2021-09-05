@@ -681,4 +681,42 @@ module.exports = (app) => {
         }
     })
 
+    app.post('/update/admin/scores', async (req, res) => {
+        if(req.isAuthenticated() && req.user.accountType === "admin") {
+            try {
+                const teamScores = {};
+                const submittedmissions = await SubmittedMission.find();
+                
+                for (const submittedmission of submittedmissions) {
+                    if (teamScores[submittedmission["teamNumber"]]) {
+                        teamScores[submittedmission["teamNumber"]] += submittedmission["achievedPoints"];
+                    } else {
+                        teamScores[submittedmission["teamNumber"]] = submittedmission["achievedPoints"];
+                    }
+                }
+
+                console.log(teamScores);
+                const teams = await Team.find();
+                for (const team of teams) {
+                    team.score = teamScores[team.number] ? teamScores[team.number] : 0;
+                    team.save();
+                }
+                res.send({
+                    status: OK,
+                })
+            } catch (err) {
+                console.log(err)
+                res.send({
+                    status: INTERNAL_ERROR,
+                    errorMsg: "Something went wrong while refreshing scores, please let tech team know."
+                })
+            }
+        } else {
+            res.send({
+                status: INTERNAL_ERROR,
+                errorMsg: "Please login"
+            })
+        }
+    })
+
 }

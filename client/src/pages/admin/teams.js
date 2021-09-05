@@ -7,7 +7,7 @@ import { HeaderPage } from "../../components/texts"
 import './dashboard.css'
 
 export default function TeamsAdminView() {
-    const confirmRevealTeams = useRef(), confirmStartEvent = useRef(), deleteAllConfirm = useRef()
+    const confirmRevealTeams = useRef(), confirmStartEvent = useRef(), deleteAllConfirm = useRef(), RecalculateScoresConfirm = useRef()
     const [accountInfo, setAccountInfo] = useState({})
     const [teams, setTeams] = useState([])
     const [eventDetails, setEventDetails] = useState({})
@@ -121,6 +121,21 @@ export default function TeamsAdminView() {
         }
     }
 
+    const recalculateScores = async (confirm) => {
+        if (confirm) {
+            setLoading(true)
+            setActionMsg(`Recalculating scores 🟣🟡🟣🟡 ...`)
+            const { data } = await axios.post('/update/admin/scores')
+
+            if(data.status === 200) {
+                setActionMsg(`Team scores successfully updated🎆`)
+            } else {
+                setActionMsg(`${data.errorMsg} 😓`)
+            }
+            setLoading(false)
+        }
+    }
+
     return(
         <div>
             <br/>
@@ -141,6 +156,10 @@ export default function TeamsAdminView() {
                     <Button primary={false}
                         label="Delete All"
                         onClick={() => deleteAllConfirm.current?.setModalState(true)}
+                        disabled={loading}/>
+                    <Button primary={false}
+                        label="Recalculate scores"
+                        onClick={() => RecalculateScoresConfirm.current?.setModalState(true)}
                         disabled={loading}/>
                 </div>
                 <br/>
@@ -183,6 +202,14 @@ export default function TeamsAdminView() {
                 header="Delete All Teams"
                 message="Are you sure you want to delete all teams?"
                 buttonCallback={deleteAllTeams}
+            />
+            <ContainerPopupModalConfirm
+                ref={RecalculateScoresConfirm}
+                labelYes="Re-calculate scores"
+                labelNo="Cancel"
+                header="Recalculate all team scores"
+                message="Run this if for some reason scoring is messed up for the teams (which hopefully never happens). This function will re-calculate team scores again from all the submitted missions"
+                buttonCallback={recalculateScores}
             />
         </div>
     )

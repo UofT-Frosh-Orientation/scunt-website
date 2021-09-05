@@ -11,7 +11,7 @@ export class LoginButton extends Component {
   constructor(){
     super()
     this.state={
-      status:false, 
+      status: undefined, 
       initials: "",
       accountType: "", 
       name: ""
@@ -21,7 +21,7 @@ export class LoginButton extends Component {
     this.login.openLogin()
   }
   setLoginStatus = async (status, initials, accountType, name) => {
-    if(!status) {
+    if(status === false) {
       await axios.get('/logout')
     }
     this.setState({
@@ -97,7 +97,7 @@ export class Login extends Component {
         const { data } = await axios.get('/user/accountInfo')
         this.props.handleLoginChange(true, data.initials, data.accountType, data.name)
         this.popup.setModalState(false);
-        this.props.infoPopup.setModalState(true)
+        this.props.infoPopup.setModalState(true);
       } catch (err) {
         this.setState({
           loginError: "An error has occured"
