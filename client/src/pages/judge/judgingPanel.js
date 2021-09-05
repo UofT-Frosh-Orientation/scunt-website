@@ -600,7 +600,7 @@ function BribesAndDeductions() {
                         inputId={'Deduction Points'} 
                         type={"number"} 
                         label={"Deduction Points"} 
-                        description={`Enter the positive number of points you want to deduct`}
+                        description={`Enter a positive number between 0-500 to indicate the number of points you want to deduct`}
                         onChange = {setDeductionPoints}
                         />
                     <div style={{float:"right"}}>

@@ -126,7 +126,6 @@ export default function TeamsAdminView() {
             setLoading(true)
             setActionMsg(`Recalculating scores 🟣🟡🟣🟡 ...`)
             const { data } = await axios.post('/update/admin/scores')
-            const { data } = await axios.delete('/deleteAll/admin/teams')
 
             if(data.status === 200) {
                 setActionMsg(`Team scores successfully updated🎆`)

@@ -386,6 +386,12 @@ module.exports = (app) => {
                         errorMsg: "invalid team number, please try again"
                     })
                     return;
+                }else if (team.score < pointsChanged) {
+                    res.send({
+                        status: NOT_ACCEPTED,
+                        errorMsg: `This team only has ${team.score} points left :(`
+                    })
+                    return;
                 }
 
                 const judge = await Judge.findById(req.user._id);
