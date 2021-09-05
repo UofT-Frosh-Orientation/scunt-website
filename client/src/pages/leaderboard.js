@@ -11,7 +11,7 @@ export default function Leaderboard () {
     const [hasStarted, setHasStarted] = useState(false)
 
     const getScores = async () => {
-        const { data } = await axios.get('http://localhost:6969/get/leaderboard/scores?discord=false')
+        const { data } = await axios.get('/get/leaderboard/scores?discord=false')
         if (data.status === 200) {
             setTeams(data.teams)
             setMaxScore(data.maxScore)
@@ -27,21 +27,21 @@ export default function Leaderboard () {
         getScores()
 
         // socket.io client side setup
-        // console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
-        // const leaderboardSocket = io.connect(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
-        // leaderboardSocket.on('connect', ()=> {
-        //     console.log("client is connected!")
-        // });
-        // leaderboardSocket.on('scoresChanged', () => {
-        //     setTeams(async () => {
-        //         const { data } = await axios.get('/get/leaderboard/scores?discord=false')
-        //         if (data.status === 200) {
-        //             setTeams(data.teams)
-        //             setMaxScore(data.maxScore)
-        //         }
-        //     });
-        // });
-        // return () => leaderboardSocket.disconnect();
+        console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
+        const leaderboardSocket = io.connect(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/leaderboard-scores`)
+        leaderboardSocket.on('connect', ()=> {
+            console.log("client is connected!")
+        });
+        leaderboardSocket.on('scoresChanged', () => {
+            setTeams(async () => {
+                const { data } = await axios.get('/get/leaderboard/scores?discord=false')
+                if (data.status === 200) {
+                    setTeams(data.teams)
+                    setMaxScore(data.maxScore)
+                }
+            });
+        });
+        return () => leaderboardSocket.disconnect();
     }, [])
 
     return (
