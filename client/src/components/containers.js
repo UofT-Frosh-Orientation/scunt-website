@@ -1,14 +1,14 @@
-import React,{Component} from 'react'
+import React,{Component, useState} from 'react'
 import "./containers.css"
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
-import {TextAccent} from "./texts"
-import {Button} from "./buttons"
+import {TextAccent, TextTooltip} from "./texts"
+import {Button, ButtonBubble} from "./buttons"
 import Wave from 'react-wavify'
 import ReactCanvasConfetti from 'react-canvas-confetti';
 import {FroshWeekIcon} from "./socials"
-import { Col, Row } from 'react-bootstrap'
-import { FormCheckbox } from './forms'
+import { Col, Container, Row } from 'react-bootstrap'
+import { FormCheckbox, FormTextBox } from './forms'
 
 export class ContainerNote extends Component {
   render(){
@@ -105,8 +105,9 @@ export class ContainerPopupModalConfirm extends Component {
   }
   render(){
     return(
-      <ContainerPopupModal exitBackground={false} exitButton={false} header={this.props.header} ref={(popup)=> this.popupRef = popup}>
+      <ContainerPopupModal exitBackground={false} exitButton={true} header={this.props.header} ref={(popup)=> this.popupRef = popup}>
         <p>{this.props.message}</p>
+        {this.props.children}
         <div style={{float:"right"}}>
           <Button label={this.props.labelYes!==undefined?this.props.labelYes:"Yes"} onClick={()=>{this.setModalState(false); this.props.buttonCallback(true);}}/>
           <Button label={this.props.labelNo!==undefined?this.props.labelNo:"No"} primary={false} onClick={()=>{this.setModalState(false); this.props.buttonCallback(false);}}/>
@@ -376,7 +377,148 @@ export function MissionAdminContainer({
   </div>
 }
 
+const statusColors = {
+  "submitted": "#FAD7A0", 
+  "submitted(live)": "#EDBB99",
+  "judging": "#FF8080",
+  "judging(live)": "#FF8080",
+  "complete": "#ABEBC6",
+  "flagged": "#E74C3C",
+  "Bribe": "#AED6F1",
+  "Deduction": "#E6B0AA"
+}
+
+export function MissionJudgeContainer({
+  ticketId,
+  number, 
+  teamNumber, 
+  totalPoints, 
+  achievedPoints,
+  submissionLink,
+  status, 
+  submitter,
+  category,
+  name,
+  timeCreated,
+  isMediaConsent,
+  viewMore,
+  handleJudging,
+  handleCancel,
+  handleUpdate,
+  handleFlag, 
+  handleScreen
+}) {
+  const [errMsg, setErrMsg] = useState('')
+  const getPointsErrMsg = (value) =>{
+    if (value > totalPoints * 1.5 || value < achievedPoints) {
+      setErrMsg('value out of range')
+    } else {
+      setErrMsg('')
+    }
+  }
+
+  return <div className="mission-row">
+    <Row>
+      <Col md={1}>
+        <h4>#{number}</h4>
+      </Col>
+      <Col md={4}>
+        <h5>{name}</h5>
+      </Col>
+      <Col md={2}>
+        <h4>team {teamNumber}</h4>
+      </Col>
+      <Col md={2}>
+        {status !== "complete"? 
+          <h4>{totalPoints} Points</h4> :
+          <h4>{achievedPoints}/{totalPoints} Points</h4>
+        }
+      </Col>
+      <Col md={1}>
+        {submissionLink ? 
+         <h4><a target='_blank' href={submissionLink} rel="noreferrer"> Link </a></h4> : 
+         <h5> In person</h5>
+        }
+      </Col>
+      <Col md={2}>
+        <h6 style={{backgroundColor:statusColors[status], borderRadius:"10px", textAlign: 'center'}}>{status}</h6>
+      </Col>
+      </Row>
+      <div style={{textAlign:"right"}}>
+        {handleScreen !== undefined &&  isMediaConsent &&
+        <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer", marginRight: "1rem"}}
+          onClick={handleScreen}> Screen </h4>}
+        {status !== "complete" &&  
+        <h4 style={{display:"inline", textDecoration:"underline", cursor:"pointer"}} 
+            onClick={() => {
+              if (viewMore) {
+                handleCancel(ticketId);
+              } else {
+                handleJudging(ticketId);
+              }}}>
+            {viewMore? "Close" : status==="judging" || status==="judging(live)"? "View Anyways" : "View more & judge"}
+        </h4>
+        }
+      </div>
+      {viewMore && 
+        <div className="judging-row">
+          <Row>
+            <Col md={6}>
+              <h4>Category: {category}</h4>
+            </Col>
+            <Col md={6}>
+              <h4>Achieved Points: {achievedPoints}</h4>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={6}>
+              <p>Submitter: {submitter}</p>
+              <p>Time: {timeCreated}</p>
+            </Col>
+            <Col md={3}>
+              <FormTextBox 
+                  clearButton 
+                  type="number"
+                  label="New Points"
+                  localStorageKey={`mission${number}_team_${teamNumber}_points`}
+                  onChange={getPointsErrMsg}
+                  error={errMsg}
+                  description={`Achieved Points: ${achievedPoints}/${totalPoints}`}
+                />
+            </Col>
+            <Col md={3} style={{paddingTop:"2rem"}}>
+              <Button label="Submit" onClick={handleUpdate}/>
+              <Button className={"buttonFlag"} flagged={true} primary={false} label="Flag" onClick={handleFlag}/>
+            </Col>
+          </Row>
+        </div>
+      }
+  </div>
+}
+
 export function MissionGeneralContainer ({
+  name,
+  number,
+  category,
+  totalPoints
+}) {
+  return <div className="mission-row">
+    <Row>
+      <Col md={7}>
+        <h6>{number}. {name}</h6>
+      </Col>
+      <Col md={5}> 
+        <div style={{display: "flex", flexDirection:"row", justifyContent:"space-between"}}>
+          <p>{category}</p>
+          <p style={{textAlign:"right"}}><b>{totalPoints}</b></p>
+        </div>
+      </Col>
+    </Row>
+  </div>
+}
+
+export function MissionIncompleteContainer ({
   name,
   number,
   category,
@@ -387,11 +529,14 @@ export function MissionGeneralContainer ({
       <Col md={1}>
         <h6>{number}</h6>
       </Col>
-      <Col md={7}>
+      <Col md={6}>
         <h6>{name}</h6>
       </Col>
-      <Col md={3}> {<p>{category}</p>} </Col>
+      <Col md={2}> <p>{category}</p> </Col>
       <Col md={1}> { totalPoints } </Col>
+      <Col md={2}> 
+        <ButtonBubble link={`/frosh/submit?missionNumber=${number}`} label="submit"/>
+      </Col>
     </Row>
   </div>
 }
@@ -404,25 +549,102 @@ export function MissionFroshContainer ({
   submitter,
   submissionLink,
   achievedPoints,
-  totalPoints
-}) {}
+  totalPoints,
+  teamNumber
+}) {
+  return <div className="mission-row">
+    <Row>
+      {
+        teamNumber &&
+        <Col md={1}>
+          <h6>Team {teamNumber}</h6>
+        </Col>
+      }
+      <Col md={1}>
+        <h6>#{number}</h6>
+      </Col>
+      <Col md={teamNumber ? 5 : 6}>
+        <h6>{name}</h6>
+        <p>{category}</p>
+      </Col>
+      <Col md={1}> 
+        <TextTooltip description={status} position="top">
+          <div style={{
+            width: '20px',
+            height: '20px',
+            borderRadius: '20px',
+            backgroundColor: statusColors[status]
+          }}/>
+        </TextTooltip>
+      </Col>
+      <Col md={3}> 
+        <p>{submitter}</p> 
+        <a style={{fontSize: '14px'}} href={submissionLink} target="_blank" rel="noreferrer">submission</a> 
+      </Col>
+      <Col md={1}> <p>{achievedPoints !== undefined && achievedPoints !== null ? `${achievedPoints} out of ${totalPoints}` : 'not pointed'}</p> </Col>
+    </Row>
+  </div>
+}
+
+export function BribeDeductionContainer ({
+  name,
+  teamNumber,
+  totalPoints,
+  category
+}) {
+  return <div className="mission-row" style={{backgroundColor: statusColors[name]}}>
+    <Row>
+      <Col md={3}>
+        <h6>Team {teamNumber}</h6>
+      </Col>
+      <Col md={3}>
+        <h6>{name}</h6>
+      </Col>
+      <Col md={3}> <p>Given by: {category}</p> </Col>
+      <Col md={3}> <p>{name === 'Bribe' ? '+' : '-'} { totalPoints }pts</p> </Col>
+    </Row>
+  </div>
+}
 
 export function TeamInfo ({
   name,
+  number,
   participants,
   score,
-  missionsCompleted
+  leedurInformation,
+  deleteTeam,
+  isLoading
 }) {
-  return <ContainerAccordion
-    header={name}
+  return <><ContainerAccordion
+    header={`${number} - ${name} | ${participants.length} frosh - score: ${score}pts`}
     id={`team-${name}`}
   >
     <div className="team-info">
       <div className="team-subheader">
-        <Button primary={false} label={`Missions Completed 🏅: ${missionsCompleted.length}`} onClick={() => {}}/>
-        <p> Team Score: {score}pts </p>
+        <Button primary={false} label={'Delete Team'} onClick={() => deleteTeam(number)} disabled={isLoading}/>
       </div>
-      { participants.map(p => <span style={{color: p.warned ? 'red' : 'purple'}}>{p.email},</span>) }
+      <Container>
+        {
+          leedurInformation.map(l => 
+            <Row>
+              <Col md={4}>  <h3>{l.name}</h3> </Col>
+              <Col md={2}>  <p>{l.number}</p> </Col>
+              <Col md={4}>  <p>{l.address}</p> </Col>
+              <Col md={2}>  <p>{l.scuntLocation}</p> </Col>
+            </Row>
+          )
+        }
+        <Row>
+          { 
+            participants.map(p => 
+            <Col md={2}>
+              <p style={{fontSize: '10px'}}>{p}</p>
+            </Col>) 
+          }
+        </Row>
+      </Container>
     </div>
   </ContainerAccordion>
+  <br/>
+  </>
 }

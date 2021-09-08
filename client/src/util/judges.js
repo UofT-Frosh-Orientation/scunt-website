@@ -1,13 +1,28 @@
 export const JUDGES_DATA = [
     {
+        name: "Tech Team",
+        content: [
+            "Buy (ALL OF) us a lavish dinner (before 8pm please)",
+            "Bubble Tea for James Kokoska (or all of us)",
+            "Buy Tech Team a Nintendo Switch",
+            "Get 69 People to sign up for NewHacks",
+            "Rate the F!rosh App 5 stars on the App Store",
+            "Draw something beautiful for Alice"
+        ],
+        img: require('../assets/judges/techTeam.jpg').default
+    },
+    {
         name : "Dhruv Sharma",
        
         content : 
-       [ "Impress me with any talent that you have in 10s.", 
-       "Make the sickest transitions video you can with your F!rosh kits", 
-       "I like Pizza, and I’m vegetarian, you know where this is going.", 
-       "Rap Any top 100 billboard song or sing/play an anime opening and great things will happen","LITERALLY any dessert.", 
-       "Make a cheer about yours truly and recite it with your group/send a vid!", "Follow insta at @dhruv_sharma___"],
+       [ 
+           "Impress me with any talent that you have in 10s.", 
+            "Make the sickest transitions video you can with your F!rosh kits", 
+            "I like Pizza, and I’m vegetarian, you know where this is going.", 
+            "Rap Any top 100 billboard song or sing/play an anime opening and great things will happen","LITERALLY any dessert.", 
+            "Make a cheer about yours truly and recite it with your group/send a vid!", 
+            "Follow insta at @dhruv_sharma___ and help me get verified"
+        ],
        
        img : require("../assets/judges/Dhruv_1000.png").default
        },
@@ -151,7 +166,7 @@ export const JUDGES_DATA = [
        "I REALLY like shawarma (but NO tomato, extra onion and turnip)", 
        "Find me a calc tutor.", "Make Praxis 3 a robot course again!" ],
        
-       img : require("../assets/judges/Aidan_1000.png").default
+       img : require("../assets/judges/aidan_1000.png").default
        },
        
        {
@@ -193,7 +208,6 @@ export const JUDGES_DATA = [
        "13 INDIVIDUALLY packed Timbits (Bonus points for different flavours)",  
        "A selfie with the Skateboarding spiderman", 
        "A drink with the word “cock” in its name", 
-       "Get me into the secret room in Myhal (Hint: It’s above one of the exits)", 
        "Pics of you in-front of low-key Toronto music halls, the more the merrier"],
 
        img : require("../assets/judges/Luca_1000.png").default
@@ -210,10 +224,22 @@ export const JUDGES_DATA = [
        "toronto's sick! let's have somethin to remind me of this city!", "cute stickers/stationary always welcome :3♡" ],
        
        img : require("../assets/judges/Julia_1000.png").default
-       }
-       
-       
-       
-  
-  
+       },
+
+       {
+        name : "Sunny Park",
+
+        content : 
+        [ "a friend :’)", 
+        "a perfectly ripe peach (the fruit)", 
+        "the best bubble tea in toronto",
+        "serenade me", 
+        "i hoard patches for fun", 
+        "hit me with your spiciest pick up line", 
+        "give me your best boozy brunch recommendations", 
+        "lip sync for your life to a song from any of the mamma mia or high school musical movies (bonus points for glitter & dramatic reveals)"
+        ],
+
+        img : require("../assets/judges/sunny_1000.png").default
+        }
 ]

@@ -27,6 +27,7 @@
     "react-transition-group": "^4.4.2",
     "react-water-wave": "^1.0.5",
     "react-wavify": "^1.5.2",
+    "socket.io-client": "2.3.0",
     "tsparticles": "^1.33.3",
     "web-vitals": "^1.1.2"
   },

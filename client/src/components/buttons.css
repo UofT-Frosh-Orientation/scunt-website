@@ -83,6 +83,31 @@ label:focus,
   transition: box-shadow 0.1s;
 }
 
+.buttonFlagged{
+  background-image: linear-gradient(to right, #ec4a3e85,#ec4a3e9d, #ec4a3ebd, #ec4a3ec5, #ec4a3ee5, #ec4a3e);
+  background-size:400%;
+  text-align: center;
+  color: #6F1E88;
+  font-size: 20px;
+  border-radius: 10px;
+  padding-top: 8px;
+  padding-bottom: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: inline-block;
+  transition: background-position 0.8s, box-shadow 0.1s;
+  box-shadow: 0 0.2vw 0.5vw 0 #0000001e;
+  cursor: pointer;
+  user-select: none;
+  font-family: AvenirLTStd-Black;
+  border: #ec4a3e;
+  border-style: solid;
+}
+.buttonFlagged:hover{
+  background-position:100%;
+  transition-duration: 1s;
+}
+
 .buttonLarge{
   font-size: 26px;
   padding-top: 13px;

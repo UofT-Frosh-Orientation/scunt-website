@@ -23,6 +23,10 @@ const SubmittedMissionSchema = new mongoose.Schema({
 		required: false,
 		default: ''
 	},
+	submitterDiscordId: {
+		type: String,
+		required: false
+	},
     submissionLink: {
 		type: String,
 		required: false,
@@ -30,6 +34,7 @@ const SubmittedMissionSchema = new mongoose.Schema({
     achievedPoints: {
 		type: Number,
 		required: false,
+		default: 0
 	},
     totalPoints: {
 		type: Number,
@@ -40,10 +45,15 @@ const SubmittedMissionSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
+	isMediaConsent: {
+		type: Boolean,
+		required: false
+	},
 	timeCreated:{
 		type: Date,
-		required: true
-	}
+		required: true,
+		default: new Date()
+	},
 })
 
 const SubmittedMission = mongoose.model('SubmittedMission', SubmittedMissionSchema);

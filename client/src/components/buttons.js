@@ -8,7 +8,7 @@ export class ButtonBubble extends Component {
   render(){
     if(this.props.link){
       return(
-        <Link to={this.props.link} className="noUnderline">
+        <Link to={this.props.link} className="noUnderline" { ... this.props.openInNewTab ? {target:"_blank"} : {}}>
           <div onClick={this.props.onClick} className={"buttonBubble"+(this.props.accent?" buttonBubbleAccent":"")}>
             <TextParagraph>{this.props.label}</TextParagraph>
           </div>
@@ -46,6 +46,12 @@ export class Button extends Component {
     }else if(this.props.primary || this.props.primary===undefined){
       return(
         <div onClick={this.props.onClick} className={"button" + (this.props.large?" buttonLarge":"")}>
+          {this.props.label}
+        </div>
+      )
+    }else if(this.props.flagged){
+      return(
+        <div onClick={this.props.onClick} className={"buttonFlagged" + (this.props.large?" buttonLarge":"")}>
           {this.props.label}
         </div>
       )

@@ -29,10 +29,11 @@ const JudgeSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    // bribes: {
-    //     type: [Bribe],
-    //     required: false
-    // },
+    bribePointsLeft: {
+        type: Number,
+        default: 2500,
+        required: false
+    },
     accountType: {
         type: String,
         required: true,
