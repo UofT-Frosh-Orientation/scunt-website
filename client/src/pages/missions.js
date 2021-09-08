@@ -38,7 +38,10 @@ export default function Missions() {
     if(isSearching) {
       isSearching(false)
     }
-    setMissionsInView(missions.filter(m => m.category === category))
+    setMissionsInView(
+      category === "All" ? missions : 
+        missions.filter(m => m.category === category)
+    )
   }
 
   function formatStrings(string){
@@ -61,35 +64,39 @@ export default function Missions() {
       <br/>
       <Container>
         <HeaderSection> Missions </HeaderSection>
-        <br/>
         { loading ? <p>Loading ...</p> : hasStarted && missions.length <= 0 && <h4>There are currently no missions</h4> }
         { 
           hasStarted ? 
             missions.length > 0 && 
             <>
-              {
-                categories.length > 0 &&
-                <FormDropdownMenu 
-                    label={isSearching ? "Stop searching to Filter by category" : "Filter by category"}
-                    items={categories}
-                    onChange={(idx, item) => {
-                      setCurrCategory(item)
-                      selectCategory(item)
-                    }}
-                    disabled={isSearching}
+              <div style={{display: "flex", flexDirection:"row", justifyContent:"center", alignItems:"flex-end", flexWrap:"wrap"}}>
+                <FormTextBox 
+                  style={{width:"100%"}} 
+                  ref={searchRef} 
+                  inputId={'missionSearchBar'} 
+                  type={"text"} 
+                  label={"Search for a Mission Name, Category or Number"} 
+                  description={"Looking for a Mission?"} 
+                  onChange={handleSearch}
+                  small
+                  clearButton
                 />
-              }
-              <FormTextBox 
-                style={{width:"50%", margin: '0.75rem auto'}} 
-                ref={searchRef} 
-                inputId={'missionSearchBar'} 
-                type={"text"} 
-                label={"Search for a Mission Name, Category or Number"} 
-                description={"Looking for a Mission?"} 
-                onChange={handleSearch}
-              />
+                <div style={{width:"10px"}}/>
+                {
+                  categories.length > 0 &&
+                  <FormDropdownMenu 
+                      // label={isSearching ? "Stop searching to Filter by category" : "Filter by category"}
+                      items={categories}
+                      onChange={(idx, item) => {
+                        setCurrCategory(item)
+                        selectCategory(item)
+                      }}
+                      disabled={isSearching}
+                  />
+                }
+              </div>
               {
-                (isSearching ? searchResults : missions)
+                (isSearching ? searchResults : missionsInView)
                 .filter(m => currCategory === "All" ? m : m.category === currCategory)
                 .map(m => 
                   <MissionGeneralContainer 

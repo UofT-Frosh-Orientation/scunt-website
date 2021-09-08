@@ -461,14 +461,14 @@ module.exports = (app) => {
     // discord bot
     app.get('/get/leaderboard/scores', async (req, res) => {
         try {
-            const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
-            if(!event.startEvent) {
-                res.send({
-                    status: 69,
-                    errorMsg: 'The event has not started yet!'
-                })
-                return
-            }
+            // const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
+            // if(!event.startEvent) {
+            //     res.send({
+            //         status: 69,
+            //         errorMsg: 'The event has not started yet!'
+            //     })
+            //     return
+            // }
 
             const calledFromDiscord = req.query.discord === 'true'
 
@@ -497,10 +497,18 @@ module.exports = (app) => {
             for(let k = 0; k < teamScores.length; k++){
                 const team = {
                     name: `${teamNames[k].num} - ${teamNames[k].name}`,
-                    score: teamDisplayScores[k]
+                    score: teamDisplayScores[k],
+                    num: teamNames[k].num
                 };
                 aggregatedTeams.push(team);
                 maxScore = Math.max(maxScore, team.score)
+            }
+
+            if (maxScore === 0) {
+                maxScore = 10
+                aggregatedTeams.sort((a, b) => a.num - b.num);
+            } else {
+                aggregatedTeams.sort((a, b) => b.score - a.score);
             }
 
             if (calledFromDiscord) {
@@ -509,8 +517,6 @@ module.exports = (app) => {
                     teamScores: teamDisplayScores
                 })
             } else {
-                aggregatedTeams.sort((a, b) => b.score - a.score);
-
                 res.send({
                     status: OK,
                     teams: aggregatedTeams,

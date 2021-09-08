@@ -122,7 +122,7 @@ module.exports = (app) => {
                     return;
                 } else if (action === "update") {
                     // check new points range
-                    if (isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints * 1.5) {
+                    if (!newPoints || isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints * 1.5) {
                         res.send({
                             status: NOT_ACCEPTED,
                             errorMsg: "New score should be higher than current score and lower than total score x 1.5"
@@ -138,12 +138,11 @@ module.exports = (app) => {
                         })
                         return;
                     }
-                    team.score = team.score - submittedmission.achievedPoints + newPoints;
-                    submittedmission.achievedPoints = newPoints;
+                    team.score = team.score - submittedmission.achievedPoints + parseInt(newPoints);
+                    team.save();
+                    submittedmission.achievedPoints = parseInt(newPoints);
                     submittedmission.status = COMPLETE;
                     submittedmission.save();
-                    team.save();
-
                     res.send({status: OK});
                     return;
                 } else if (action === "screen") {
@@ -198,7 +197,7 @@ module.exports = (app) => {
             const submittedmission = await SubmittedMission.findOne({number: number, teamNumber: teamNumber});
             if(submittedmission) {
                 // check new points range
-                if (isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints * 1.5) {
+                if (!newPoints || isNaN(newPoints) || newPoints <  submittedmission.achievedPoints || newPoints > submittedmission.totalPoints * 1.5) {
                     res.send({
                         status: NOT_ACCEPTED,
                         errorMsg: "New score should be higher than current score and lower than total score x 1.5"
@@ -214,11 +213,11 @@ module.exports = (app) => {
                     })
                     return;
                 }
-                team.score = team.score - submittedmission.achievedPoints + newPoints;
-                submittedmission.achievedPoints = newPoints;
+                team.score = team.score - submittedmission.achievedPoints + parseInt(newPoints);
+                team.save();
+                submittedmission.achievedPoints = parseInt(newPoints);
                 submittedmission.status = COMPLETE;
                 submittedmission.save();
-                team.save();
                 res.send({status: OK});
                 return;
             } else {
@@ -232,7 +231,7 @@ module.exports = (app) => {
                     return;
                 }
                 // check new points range
-                if (isNaN(newPoints) || newPoints > mission.totalPoints * 1.5) {
+                if (!newPoints || isNaN(newPoints) || newPoints > mission.totalPoints * 1.5) {
                     res.send({
                         status: NOT_ACCEPTED,
                         errorMsg: "New score should be higher than current score and lower than total score x 1.5"
@@ -254,13 +253,13 @@ module.exports = (app) => {
                     category: mission.category,
                     status: COMPLETE,
                     submitter: "in-person hero",
-                    achievedPoints: newPoints,
+                    achievedPoints: parseInt(newPoints),
                     totalPoints: mission.totalPoints, 
                     teamNumber: teamNumber,
                     timeCreated: new Date()
                 });
                 newSubmittedmission.save();
-                team.score = team.score + newPoints;
+                team.score = team.score + parseInt(newPoints);
                 team.save();
                 res.send({status: OK});
                 return;
@@ -332,7 +331,7 @@ module.exports = (app) => {
             console.log(pointsChanged)
             if (action === 'bribes'){
                 // check bribes range
-                if (isNaN(pointsChanged) || pointsChanged < 0 || pointsChanged > req.user.bribePointsLeft) {
+                if (!pointsChanged || isNaN(pointsChanged) || pointsChanged < 0 || pointsChanged > req.user.bribePointsLeft) {
                     res.send({
                         status: NOT_ACCEPTED,
                         errorMsg: "bribes points out of range"
@@ -355,6 +354,7 @@ module.exports = (app) => {
                 const newBribe = new SubmittedMission({
                     name: "Bribe",
                     number: -1,
+                    achievedPoints: pointsChanged,
                     totalPoints: pointsChanged,
                     teamNumber: team.number,
                     category: judge.name
@@ -363,7 +363,6 @@ module.exports = (app) => {
 
                 // add bribe to team score
                 team.score += parseInt(pointsChanged);
-                console.log(team)
                 team.save();
                 judge.bribePointsLeft -= parseInt(pointsChanged);
                 judge.save();   
@@ -372,10 +371,10 @@ module.exports = (app) => {
                 return;
             } else if (action === 'deductions') {
                 // check deductions range
-                if (isNaN(pointsChanged) || pointsChanged < 0) {
+                if (isNaN(pointsChanged) || pointsChanged <= 0 || pointsChanged > 500) {
                     res.send({
                         status: NOT_ACCEPTED,
-                        errorMsg: "Make sure you input a positive number"
+                        errorMsg: "Make sure you input a positive number between 0 - 500"
                     })
                     return;
                 }
@@ -395,6 +394,7 @@ module.exports = (app) => {
                 const newDeduc = new SubmittedMission({
                     name: "Deduction",
                     number: -1,
+                    achievedPoints: pointsChanged,
                     totalPoints: pointsChanged,
                     teamNumber: team.number,
                     category: judge.name

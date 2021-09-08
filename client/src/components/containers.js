@@ -505,14 +505,15 @@ export function MissionGeneralContainer ({
 }) {
   return <div className="mission-row">
     <Row>
-      <Col md={1}>
-        <h6>{number}</h6>
-      </Col>
       <Col md={7}>
-        <h6>{name}</h6>
+        <h6>{number}. {name}</h6>
       </Col>
-      <Col md={3}> {<p>{category}</p>} </Col>
-      <Col md={1}> { totalPoints } </Col>
+      <Col md={5}> 
+        <div style={{display: "flex", flexDirection:"row", justifyContent:"space-between"}}>
+          <p>{category}</p>
+          <p style={{textAlign:"right"}}><b>{totalPoints}</b></p>
+        </div>
+      </Col>
     </Row>
   </div>
 }
