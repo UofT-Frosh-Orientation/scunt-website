@@ -461,18 +461,18 @@ module.exports = (app) => {
     // discord bot
     app.get('/get/leaderboard/scores', async (req, res) => {
         try {
-            // const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
-            // if(!event.startEvent) {
-            //     res.send({
-            //         status: 69,
-            //         errorMsg: 'The event has not started yet!'
-            //     })
-            //     return
-            // }
+            const event = await EventSettings.findOne({ name: 'Scunt 2T1' })
+            if(!event.startEvent) {
+                res.send({
+                    status: 69,
+                    errorMsg: 'The event has not started yet!'
+                })
+                return
+            }
 
             const calledFromDiscord = req.query.discord === 'true'
 
-            const teams = await Team.find()
+            const teams = await Team.find().sort({number: 1})
             const teamScores = teams.flatMap(t => t.score)
             const teamNames = teams.flatMap(t => ({
                 name: t.name,
