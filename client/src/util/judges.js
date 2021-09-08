@@ -1,13 +1,28 @@
 export const JUDGES_DATA = [
     {
+        name: "Tech Team",
+        content: [
+            "Buy (ALL OF) us a lavish dinner (before 8pm please)",
+            "Bubble Tea for James Kokoska (or all of us)",
+            "Buy Tech Team a Nintendo Switch",
+            "Get 69 People to sign up for NewHacks",
+            "Rate the F!rosh App 5 stars on the App Store",
+            "Draw something beautiful for Alice"
+        ],
+        img: require('../assets/judges/techTeam.jpg').default
+    },
+    {
         name : "Dhruv Sharma",
        
         content : 
-       [ "Impress me with any talent that you have in 10s.", 
-       "Make the sickest transitions video you can with your F!rosh kits", 
-       "I like Pizza, and I’m vegetarian, you know where this is going.", 
-       "Rap Any top 100 billboard song or sing/play an anime opening and great things will happen","LITERALLY any dessert.", 
-       "Make a cheer about yours truly and recite it with your group/send a vid!", "Follow insta at @dhruv_sharma___"],
+       [ 
+           "Impress me with any talent that you have in 10s.", 
+            "Make the sickest transitions video you can with your F!rosh kits", 
+            "I like Pizza, and I’m vegetarian, you know where this is going.", 
+            "Rap Any top 100 billboard song or sing/play an anime opening and great things will happen","LITERALLY any dessert.", 
+            "Make a cheer about yours truly and recite it with your group/send a vid!", 
+            "Follow insta at @dhruv_sharma___ and help me get verified"
+        ],
        
        img : require("../assets/judges/Dhruv_1000.png").default
        },
