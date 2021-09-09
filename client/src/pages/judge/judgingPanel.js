@@ -46,7 +46,7 @@ export default function JudgingPanel() {
                 const oldMissionIdx = oldSubmittedmissions.findIndex(m => m._id === data._id)
                 if (oldMissionIdx === -1) {
                     // Add to collection
-                    return [data,...oldSubmittedmissions];
+                    return [...oldSubmittedmissions, data];
                 }else {
                     // Update old list
                     oldSubmittedmissions[oldMissionIdx] = data;
@@ -166,6 +166,7 @@ export default function JudgingPanel() {
                     submittedmissions.filter(m => m.status === "submitted(live)" || m.status === "judging(live)")
                     .map(m => 
                       <MissionJudgeContainer
+                          key={m._id}
                           ticketId={m._id}
                           number={m.number} 
                           teamNumber={m.teamNumber}
