@@ -109,7 +109,7 @@ export default function Missions() {
                 )
               }
             </> :
-            <h3 className="center-text"> Scunt starts on September 8th at 5:30pm, see you then! </h3>
+            <h3 className="center-text"> The game has ended! </h3>
         }
         { hasStarted && isSearching && searchResults.length <= 0 && missions.length > 0 && <h4>There are no results for your search.</h4>}
       </Container>

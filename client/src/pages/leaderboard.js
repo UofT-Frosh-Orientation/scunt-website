@@ -52,7 +52,8 @@ export default function Leaderboard () {
                 <HeaderSection> Leaderboard </HeaderSection>
                 <br/>
                 {
-                    hasStarted ?
+                    // hasStarted ?
+                    true ? 
                     <div className="graph" style={{height: 80*teams.length, margin: "1.5% 0 0 5vw"}}>
                         {
                             teams.length > 0 && teams.map((t, index) => 
@@ -60,7 +61,7 @@ export default function Leaderboard () {
                             )
                         }
                     </div> :
-                    <h3 className="center-text"> Scunt starts on September 8th at 5:30pm, see you then! </h3>
+                    <h3 className="center-text"> The game has ended! </h3>
                 }
         </div>
     )

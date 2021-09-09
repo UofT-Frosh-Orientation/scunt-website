@@ -51,7 +51,7 @@ function EventNotStarted() {
             <HeaderPage img={require("../assets/banners/about_us.svg").default}> Event hasn't started yet </HeaderPage>
             <br/>
             <Container>
-                <h3> Scunt starts on September 8th at 5:30pm, see you then! </h3>
+                <h3> The game has ended! </h3>
             </Container>
         </div>
     )
