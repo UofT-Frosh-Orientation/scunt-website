@@ -27,6 +27,7 @@ module.exports = (app) => {
 
     const sheets = google.sheets({ version: 'v4', auth: jwt })
     const TEAMS_SHEET = '16pHJ-zPHcD-O31082k_aLgdUQIfwnhlXGTWIkQI_fB4'
+    const SCUNT_EXEC_SHEET = '15Ibu46muUwAFDNLgwfLVUlI_iHtV6J_N-qNMRuhEo_I'
 
     app.post('/post/admin/create', async (req, res) => {
         if(req.isAuthenticated() && req.user.accountType === "admin") {
@@ -681,4 +682,98 @@ module.exports = (app) => {
         }
     })
 
+    app.post('/admin/updateScuntSpreadsheet', async (req, res) => {
+        try {
+            const headers = Object.keys(SubmittedMission.schema.paths);
+            // Write mission data to spreadsheet
+            const allSubmittedMissions = await SubmittedMission.find({
+                name: {$nin: ['Bribe', 'Deduction']}
+            })
+            const allSubmittedMissions_values = allSubmittedMissions.map(mission =>
+                headers.map(field => mission[field])
+            )
+            // creating header
+            await sheets.spreadsheets.values.update({
+                spreadsheetId: SCUNT_EXEC_SHEET,
+                range: `Submissions!A1`,
+                valueInputOption: 'USER_ENTERED',
+                resource: {
+                    majorDimension: 'ROWS',
+                    values: [headers]
+                }
+            })
+            // populating with current submission data (may take a while)
+            await sheets.spreadsheets.values.update({
+                spreadsheetId: SCUNT_EXEC_SHEET,
+                range: `Submissions!A2`,
+                valueInputOption: 'USER_ENTERED',
+                resource: {
+                    majorDimension: 'ROWS',
+                    values: allSubmittedMissions_values
+                }
+            })
+
+            // Write bribes & deductions data to spreadsheet
+            const bribesAndDeductions = await SubmittedMission.find({
+                number: -1,
+                name: { $in: ['Bribe', 'Deduction'] },
+            })
+            const bribesAndDeductions_values = bribesAndDeductions.map(mission =>
+                headers.map(field => mission[field])
+            )
+            // creating header
+            await sheets.spreadsheets.values.update({
+                spreadsheetId: SCUNT_EXEC_SHEET,
+                range: `BribesAndDeductions!A1`,
+                valueInputOption: 'USER_ENTERED',
+                resource: {
+                    majorDimension: 'ROWS',
+                    values: [headers]
+                }
+            })
+            // populating with current submission data (may take a while)
+            await sheets.spreadsheets.values.update({
+                spreadsheetId: SCUNT_EXEC_SHEET,
+                range: `BribesAndDeductions!A2`,
+                valueInputOption: 'USER_ENTERED',
+                resource: {
+                    majorDimension: 'ROWS',
+                    values: bribesAndDeductions_values
+                }
+            })
+
+            // Some other stats
+            mostPopularMission = await SubmittedMission.aggregate([
+                { $sortByCount: "$number" }, 
+                { $match: {count: { $gt: 11 }}}
+            ]);
+            console.log(mostPopularMission.map(mission=>mission._id))
+
+            mostPopularCategory = await SubmittedMission.aggregate([
+                { $sortByCount: "$category" }, 
+            ]);
+            console.log(mostPopularCategory)
+
+            highestBribes = await SubmittedMission.aggregate([
+                { $match: {number: { $eq: -1 }}},
+                { $group: { 
+                    _id: "$teamNumber", 
+                    totalBribePoints: { $sum : "$achievedPoints"},
+                    bribesCount: { $sum: 1 }
+                }},
+                { $sort: { totalBribePoints : -1 }}
+            ]);
+            console.log(highestBribes) 
+
+            highestPoints = await SubmittedMission.aggregate([
+                { $match: {number: { $ne: -1 }}},
+                { $group: { _id: "$teamNumber", max: { $max : "$achievedPoints"}}},
+            ]);
+            console.log(highestPoints) 
+
+            res.send({status: OK})
+        } catch(err) {
+            res.send({status: INTERNAL_ERROR, errMsg: err})
+        }
+    });
 }
