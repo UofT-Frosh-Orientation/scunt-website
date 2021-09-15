@@ -213,6 +213,10 @@ Some notable points:
   - Sometimes frosh submits a google drive link without making it viewable. We can explore ways to force them share the file before submitting
 - Contact Meetups Subcom earlier than the week before F!rosh to figure out team assignments
 - Add unit testing + integration tests
+- Open pop up to assign points - to avoid stuff from scrolling
+- Relay the type of file that has been uploaded (video or image or drive etc)
+- Add support for multiple submissions (Discord bot may support this - people can upload more than one attachment in one message in discord)
+- Clear all missions that are repeated submissions (have already been assigned a score)
 
 # Support
 
